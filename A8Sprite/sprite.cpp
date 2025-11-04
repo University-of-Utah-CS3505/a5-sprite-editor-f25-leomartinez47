@@ -4,8 +4,19 @@
 
 #include "sprite.h"
 
-Sprite::Sprite()
-{
-
+Sprite::Sprite() {
 
 }
+
+void Sprite::deleteFrame(int currentFrame)
+{
+    frames.erase(frames.begin() + currentFrame);
+}
+
+void Sprite::saveSprite(string filePath)
+{
+    // TODO: serialize here
+}
+
+
+
