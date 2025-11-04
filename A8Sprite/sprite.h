@@ -16,6 +16,7 @@ using std::string;
 class Sprite {
     /// The frames of this Sprite.
     vector<QImage> frames;
+    QSize dimensions;
 
 public:
     /// Construct a Sprite with dimensions selected by the user.
