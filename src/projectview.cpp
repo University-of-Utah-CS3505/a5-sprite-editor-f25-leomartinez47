@@ -5,10 +5,30 @@ ProjectView::ProjectView(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ProjectView)
 {
-    ui->setupUi(this);
+    this->ui->setupUi(this);
+
+    this->toolPane = new ToolPane();
+    this->embedWidget(this->ui->toolboxFrame, this->toolPane);
+
+    this->previewPane = new PreviewPane();
+    this->embedWidget(this->ui->previewFrame, this->previewPane);
+
+    this->canvasPane = new CanvasPane();
+    this->embedWidget(this->ui->canvasFrame, this->canvasPane);
+
+    this->frameSelectionPane = new FrameSelectionPane();
+    this->embedWidget(this->ui->frameSelectorFrame, this->frameSelectionPane);
 }
 
 ProjectView::~ProjectView()
 {
     delete ui;
+}
+
+void ProjectView::embedWidget(QWidget *container, QWidget *child)
+{
+    QVBoxLayout *layout = new QVBoxLayout();
+    layout->addWidget(child);
+    layout->setContentsMargins(0, 0, 0, 0);
+    container->setLayout(layout);
 }

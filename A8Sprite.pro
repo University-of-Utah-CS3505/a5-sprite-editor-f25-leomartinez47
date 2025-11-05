@@ -14,15 +14,27 @@ SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
     src/projectview.cpp \
-    src/sprite.cpp
+    src/sprite.cpp \
+    src/canvaspane.cpp \
+    src/frameselectionpane.cpp \
+    src/previewpane.cpp \
+    src/toolpane.cpp
 
 HEADERS += \
     include/mainwindow.h \
     include/sprite.h \
-    include/projectview.h
+    include/projectview.h \
+    include/canvaspane.h \
+    include/frameselectionpane.h \
+    include/previewpane.h \
+    include/toolpane.h
 
 FORMS += \
-    ui/projectview.ui
+    ui/canvaspane.ui \
+    ui/frameselectionpane.ui \
+    ui/previewpane.ui \
+    ui/projectview.ui \
+    ui/toolpane.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

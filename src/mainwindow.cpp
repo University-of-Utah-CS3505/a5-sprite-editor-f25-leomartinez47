@@ -11,7 +11,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    this->setGeometry(QRect(0, 0, 800, 600));
+    this->setGeometry(QRect(0, 0, 1000, 800));
     this->setWindowTitle("Sprite Editor");
 
     this->createActions();
