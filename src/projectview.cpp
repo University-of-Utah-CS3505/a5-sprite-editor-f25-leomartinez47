@@ -1,11 +1,14 @@
 #include "projectview.h"
 #include "ui_projectview.h"
 
-ProjectView::ProjectView(QWidget *parent)
+ProjectView::ProjectView(Project *project, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ProjectView)
 {
     this->ui->setupUi(this);
+
+    this->project = project;
+    // TODO: pass `project` into each pane constructor and set up signals there.
 
     this->toolPane = new ToolPane();
     this->embedWidget(this->ui->toolboxFrame, this->toolPane);
@@ -22,7 +25,8 @@ ProjectView::ProjectView(QWidget *parent)
 
 ProjectView::~ProjectView()
 {
-    delete ui;
+    delete this->ui;
+    delete this->project;
 }
 
 void ProjectView::embedWidget(QWidget *container, QWidget *child)

@@ -17,15 +17,14 @@ class Sprite {
     /// The frames of this Sprite.
     vector<QImage> frames;
     QSize dimensions;
+    // Note: the framerate (in gap ms) should probably be stored here to be serialized.
 
 public:
     /// Construct a Sprite with dimensions selected by the user.
     Sprite(QSize dimensions);
 
-    /// Eventually construct from a deserialized JSON sprite project
-    /// Note: this is currently replacing loadSprite since we don't
-    /// necessarily want the deserialization to happen in a Sprite itself.
-    Sprite();
+    /// Construct a Sprite from a path to our JSON format.
+    Sprite(const std::string &path);
 
     /// Add a new frame to this Sprite.
     void addFrame();
@@ -33,9 +32,14 @@ public:
     /// Delete the currently selected frame of this Sprite.
     void deleteFrame(int currentFrame);
 
-    /// Serialize this Sprite to JSON and return the serialized string.
-    string saveSprite(string filePath);
+    /// Get a frame by its index.
+    const QImage &getFrame(int index) const;
 
+    /// Get the number of frames this Sprite contains.
+    int frameCount();
+
+    /// Serialize this Sprite to JSON and return the serialized string.
+    void saveSprite(const std::string &filePath);
 };
 
 #endif

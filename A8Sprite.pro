@@ -11,6 +11,7 @@ CONFIG += c++17
 INCLUDEPATH += include
 
 SOURCES += \
+    src/project.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/projectview.cpp \
@@ -27,7 +28,8 @@ HEADERS += \
     include/canvaspane.h \
     include/frameselectionpane.h \
     include/previewpane.h \
-    include/toolpane.h
+    include/toolpane.h \
+    include/project.h
 
 FORMS += \
     ui/canvaspane.ui \

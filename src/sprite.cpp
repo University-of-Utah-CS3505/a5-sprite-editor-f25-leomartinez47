@@ -4,8 +4,12 @@
 
 #include "sprite.h"
 
-Sprite::Sprite() {}
+Sprite::Sprite(const std::string &path) {
+    // TODO (grant): read from path and deserialize format.
+    // for now this is a stub.
 
+    this->addFrame();
+}
 
 Sprite::Sprite(QSize dimensions) : dimensions(dimensions)
 {
@@ -21,10 +25,23 @@ void Sprite::addFrame()
 
 void Sprite::deleteFrame(int currentFrame)
 {
+    if (currentFrame < 0 || currentFrame >= frames.size()) {
+        return;
+    }
+
     frames.erase(frames.begin() + currentFrame);
 }
 
-string Sprite::saveSprite(string filePath)
+const QImage &Sprite::getFrame(int index) const {
+    // TODO: handle errors?
+    return this->frames[index];
+}
+
+int Sprite::frameCount() {
+    return this->frames.size();
+}
+
+void Sprite::saveSprite(const std::string &filePath)
 {
-    // TODO: serialize here
+    // TODO (grant): serialize here
 }

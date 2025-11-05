@@ -8,6 +8,8 @@
 #include <QAction>
 #include <QTabBar>
 
+const QSize DEFAULT_DIMENSIONS = QSize(25, 25);
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -20,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->tabs = new QTabWidget(this);
     this->tabs->tabBar()->setMovable(true);
     this->tabs->setTabsClosable(true);
+
     connect(this->tabs, &QTabWidget::tabCloseRequested,
             this, &MainWindow::handleCloseTabRequested);
 
@@ -30,7 +33,10 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 void MainWindow::newProject() {
-    this->tabs->addTab(new ProjectView(), "<New Project>");
+    // TODO: prompt the user to configure the dimensions before creating it.
+    // TODO (grant): set up fileNameChanged signal to change tab title.
+    Project *project = new Project(DEFAULT_DIMENSIONS);
+    this->tabs->addTab(new ProjectView(project), "<New Project>");
 }
 
 void MainWindow::handleCloseTabRequested(int index) {
@@ -39,6 +45,8 @@ void MainWindow::handleCloseTabRequested(int index) {
     }
 
     QWidget *page = tabs->widget(index);
+
+    // TODO (grant): check is saved and if not prompt the user.
 
     this->tabs->removeTab(index);
 
