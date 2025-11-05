@@ -3,21 +3,26 @@
 
 #include <QMainWindow>
 
-QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
-QT_END_NAMESPACE
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
+    void createActions();
+    void createMenus();
+
+    QTabWidget *tabs;
+
+    // File Menu:
+    QMenu *fileMenu;
+    QAction *newAct;
+    QAction *exitAct;
+
+private slots:
+    void newProject();
+    void handleCloseTabRequested(int index);
 };
 #endif // MAINWINDOW_H

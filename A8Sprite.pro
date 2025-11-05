@@ -13,14 +13,16 @@ INCLUDEPATH += include
 SOURCES += \
     src/main.cpp \
     src/mainwindow.cpp \
+    src/projectview.cpp \
     src/sprite.cpp
 
 HEADERS += \
     include/mainwindow.h \
-    include/sprite.h
+    include/sprite.h \
+    include/projectview.h
 
 FORMS += \
-    ui/mainwindow.ui
+    ui/projectview.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

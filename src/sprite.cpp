@@ -28,6 +28,3 @@ string Sprite::saveSprite(string filePath)
 {
     // TODO: serialize here
 }
-
-
-
