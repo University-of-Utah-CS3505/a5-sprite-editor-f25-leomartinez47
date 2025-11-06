@@ -3,16 +3,16 @@
 
 #include <QPoint>
 #include <QColor>
-#include <QObject>
+#include <QWidget>
 
 /*Abstract Class*/
-class Tool : public QObject{
+class Tool : public QWidget{
 
     Q_OBJECT
 
 public:
 
-    explicit Tool(QObject *parent = nullptr);
+    explicit Tool(QWidget *parent = nullptr);
 
     virtual void applyChange(QPoint currentPoint, QColor currentColor);
 
