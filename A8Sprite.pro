@@ -11,6 +11,8 @@ CONFIG += c++17
 INCLUDEPATH += include
 
 SOURCES += \
+    src/eraser.cpp \
+    src/pencil.cpp \
     src/project.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
@@ -19,15 +21,20 @@ SOURCES += \
     src/canvaspane.cpp \
     src/frameselectionpane.cpp \
     src/previewpane.cpp \
+    src/tool.cpp \
     src/toolpane.cpp
 
 HEADERS += \
+    include/Tool.h \
+    include/eraser.h \
     include/mainwindow.h \
+    include/pencil.h \
     include/sprite.h \
     include/projectview.h \
     include/canvaspane.h \
     include/frameselectionpane.h \
     include/previewpane.h \
+    include/tool.h \
     include/toolpane.h \
     include/project.h
 
