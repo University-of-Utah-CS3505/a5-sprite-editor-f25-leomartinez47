@@ -42,9 +42,9 @@ const QImage &Project::getCurrentFrame() const
     return this->sprite->getFrame(this->currentFrame);
 }
 
-void Project::onToolChanged(/* TODO: add tool here */)
+void Project::onToolChanged(Tool updatedTool)
 {
-    // this->currentTool = tool;
+    this->currentTool = updatedTool;
 }
 
 void Project::onColorChanged(QColor color)
@@ -54,7 +54,7 @@ void Project::onColorChanged(QColor color)
 
 void Project::onPixelClicked(QPoint point)
 {
-    // this->currentTool->apply(point, this->getCurrentFrame(), this->currentColor);
+    // this->currentTool->applyChange(point, this->getCurrentFrame(), this->currentColor);
 }
 
 void Project::onCurrentFrameChanged(int index)

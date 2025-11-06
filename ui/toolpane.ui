@@ -50,16 +50,16 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
-     <widget class="QPushButton" name="colorPickButton">
+     <widget class="QPushButton" name="fillButton">
       <property name="text">
-       <string>PushButton</string>
+       <string>Fill Bucket</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="fillButton">
+     <widget class="QPushButton" name="colorPickButton">
       <property name="text">
-       <string>Fill Bucket</string>
+       <string>PushButton</string>
       </property>
      </widget>
     </item>

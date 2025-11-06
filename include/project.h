@@ -4,7 +4,7 @@
 #include <QObject>
 #include <string>
 #include "sprite.h"
-
+#include "tool.h"
 
 class Project : public QObject
 {
@@ -25,7 +25,7 @@ signals:
     void frameChanged(const QImage &frame);
 
 public slots:
-    void onToolChanged(/* TODO: add tool here */);
+    void onToolChanged(Tool updatedTool);
     void onColorChanged(QColor color);
     void onPixelClicked(QPoint point);
     // From Frame Selection
@@ -56,6 +56,7 @@ private:
     Sprite *sprite;
 
     // TODO: store the tool here
+    Tool currentTool;
     QColor currentColor;
     int currentFrame;
 
