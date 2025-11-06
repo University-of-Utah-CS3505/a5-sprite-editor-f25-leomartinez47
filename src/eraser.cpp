@@ -2,7 +2,9 @@
 #include "eraser.h"
 #include "ui_toolpane.h"
 
-Eraser::Eraser(){
+Eraser::Eraser(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::Eraser){
 
 }
 
@@ -15,5 +17,5 @@ void Eraser::drawPoint(QPoint currentPoint, QColor color){
 }
 
 Eraser::~Eraser(){
-
+    delete ui;
 }

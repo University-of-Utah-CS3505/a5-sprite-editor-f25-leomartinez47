@@ -4,12 +4,19 @@
 #include <QPoint>
 #include <QColor>
 #include "pencil.h"
+#include <QWidget>
 
-class Eraser : public Pencil{
+namespace Ui {
+class Eraser;
+}
+
+class Eraser : public Pencil
+{
+    Q_OBJECT
 
 public:
 
-    Eraser();
+    explicit Eraser(QWidget *parent = nullptr);
 
     void drawPoint(QPoint currentPoint, QColor currentColor);
 
@@ -17,6 +24,10 @@ public:
 
     ~Eraser();
 
+private:
+    Ui::Eraser *ui;
+
+    Tool currentTool;
 };
 
 #endif // ERASER_H
