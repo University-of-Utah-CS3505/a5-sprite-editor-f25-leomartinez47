@@ -20,13 +20,15 @@ public:
     int getCurrentFrameIndex() const;
 
 signals:
+    // To Canvas, emit whenever the canvas needs to be update
+    // like on frame change and on editing the image
     void frameChanged(const QImage &frame);
 
 public slots:
     void onToolChanged(/* TODO: add tool here */);
     void onColorChanged(QColor color);
     void onPixelClicked(QPoint point);
-    // Canvas
+    // From Frame Selection
     void onCurrentFrameChanged(int index);
 
     // Frame Selection Methods
