@@ -26,10 +26,29 @@ public slots:
     void onToolChanged(/* TODO: add tool here */);
     void onColorChanged(QColor color);
     void onPixelClicked(QPoint point);
+    // Canvas
     void onCurrentFrameChanged(int index);
+
+    // Frame Selection Methods
     void onFrameAdded();
     void onFrameRemoved(int index);
+
     void onSaveRequested();
+
+
+    ///
+    void addFrame();
+
+    ///
+    void deleteFrame();
+
+    ///
+    void nextFrame();
+
+    ///
+    void previousFrame();
+
+
 
 private:
     Sprite *sprite;

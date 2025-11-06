@@ -18,7 +18,8 @@ Project::Project(const std::string &path, QObject *parent)
     this->path = new std::string(path);
 }
 
-Project::~Project() {
+Project::~Project()
+{
     if (this->path) {
         delete this->path;
     }
@@ -26,31 +27,38 @@ Project::~Project() {
     delete this->sprite;
 }
 
-const QColor &Project::getCurrentColor() const {
+const QColor &Project::getCurrentColor() const
+{
     return this->currentColor;
 }
 
-int Project::getCurrentFrameIndex() const {
+int Project::getCurrentFrameIndex() const
+{
     return this->currentFrame;
 }
 
-const QImage &Project::getCurrentFrame() const {
+const QImage &Project::getCurrentFrame() const
+{
     return this->sprite->getFrame(this->currentFrame);
 }
 
-void Project::onToolChanged(/* TODO: add tool here */) {
+void Project::onToolChanged(/* TODO: add tool here */)
+{
     // this->currentTool = tool;
 }
 
-void Project::onColorChanged(QColor color) {
+void Project::onColorChanged(QColor color)
+{
     this->currentColor = color;
 }
 
-void Project::onPixelClicked(QPoint point) {
+void Project::onPixelClicked(QPoint point)
+{
     // this->currentTool->apply(point, this->getCurrentFrame(), this->currentColor);
 }
 
-void Project::onCurrentFrameChanged(int index) {
+void Project::onCurrentFrameChanged(int index)
+{
     if (index < 0 || index >= this->sprite->frameCount()) {
         return;
     }
@@ -59,14 +67,16 @@ void Project::onCurrentFrameChanged(int index) {
     emit this->frameChanged(this->getCurrentFrame());
 }
 
-void Project::onFrameAdded() {
+void Project::onFrameAdded()
+{
     this->sprite->addFrame();
     this->currentFrame++;
 
     emit this->frameChanged(this->getCurrentFrame());
 }
 
-void Project::onFrameRemoved(int index) {
+void Project::onFrameRemoved(int index)
+{
     if (index < 0 || index >= this->sprite->frameCount()) {
         return;
     }
@@ -79,7 +89,8 @@ void Project::onFrameRemoved(int index) {
     emit this->frameChanged(this->getCurrentFrame());
 }
 
-void Project::onSaveRequested() {
+void Project::onSaveRequested()
+{
     if (!this->path) {
         // TODO (grant): prompt user for save file, then set it.
         return;

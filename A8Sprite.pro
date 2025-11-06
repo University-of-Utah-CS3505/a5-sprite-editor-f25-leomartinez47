@@ -22,10 +22,10 @@ SOURCES += \
     src/frameselectionpane.cpp \
     src/previewpane.cpp \
     src/tool.cpp \
+    src/tool.cpp \
     src/toolpane.cpp
 
 HEADERS += \
-    include/Tool.h \
     include/eraser.h \
     include/mainwindow.h \
     include/pencil.h \

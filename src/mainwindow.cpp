@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include <QRect>
-#include <QMenuBar>
 #include <QAction>
+#include <QMenuBar>
+#include <QRect>
 #include <QTabBar>
 
 const QSize DEFAULT_DIMENSIONS = QSize(25, 25);
@@ -23,8 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->tabs->tabBar()->setMovable(true);
     this->tabs->setTabsClosable(true);
 
-    connect(this->tabs, &QTabWidget::tabCloseRequested,
-            this, &MainWindow::handleCloseTabRequested);
+    connect(this->tabs, &QTabWidget::tabCloseRequested, this, &MainWindow::handleCloseTabRequested);
 
     this->setCentralWidget(tabs);
 
@@ -32,14 +31,16 @@ MainWindow::MainWindow(QWidget *parent)
     this->newProject();
 }
 
-void MainWindow::newProject() {
+void MainWindow::newProject()
+{
     // TODO: prompt the user to configure the dimensions before creating it.
     // TODO (grant): set up fileNameChanged signal to change tab title.
     Project *project = new Project(DEFAULT_DIMENSIONS);
     this->tabs->addTab(new ProjectView(project), "<New Project>");
 }
 
-void MainWindow::handleCloseTabRequested(int index) {
+void MainWindow::handleCloseTabRequested(int index)
+{
     if (index < 0 || index >= tabs->count()) {
         return;
     }
@@ -55,13 +56,15 @@ void MainWindow::handleCloseTabRequested(int index) {
     }
 }
 
-void MainWindow::createMenus() {
+void MainWindow::createMenus()
+{
     this->fileMenu = this->menuBar()->addMenu("File");
     this->fileMenu->addAction(this->newAct);
     this->fileMenu->addAction(this->exitAct);
 }
 
-void MainWindow::createActions() {
+void MainWindow::createActions()
+{
     this->newAct = new QAction("New", this);
     this->newAct->setShortcuts(QKeySequence::New);
     this->newAct->setStatusTip("Create a new project");
