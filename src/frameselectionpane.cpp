@@ -1,7 +1,8 @@
 #include "frameselectionpane.h"
 #include "ui_frameselectionpane.h"
+#include "project.h"
 
-FrameSelectionPane::FrameSelectionPane(QWidget *parent)
+FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::FrameSelectionPane)
 {
@@ -11,4 +12,12 @@ FrameSelectionPane::FrameSelectionPane(QWidget *parent)
 FrameSelectionPane::~FrameSelectionPane()
 {
     delete ui;
+}
+
+void FrameSelectionPane::onUpdate(){
+
+}
+
+void FrameSelectionPane::displaySpriteFrames(){
+
 }

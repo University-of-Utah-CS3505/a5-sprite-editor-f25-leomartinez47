@@ -27,7 +27,7 @@ public:
     Sprite(const std::string &path);
 
     /// Add a new frame to this Sprite.
-    void addFrame();
+    void addFrame(int index);
 
     /// Delete the currently selected frame of this Sprite.
     void deleteFrame(int currentFrame);

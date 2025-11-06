@@ -9,20 +9,20 @@ Sprite::Sprite(const std::string &path)
     // TODO (grant): read from path and deserialize format.
     // for now this is a stub.
 
-    this->addFrame();
+    this->addFrame(0);
 }
 
 Sprite::Sprite(QSize dimensions)
     : dimensions(dimensions)
 {
-    addFrame();
+    addFrame(0);
 }
 
-void Sprite::addFrame()
+void Sprite::addFrame(int index)
 {
     QImage frame(dimensions, QImage::Format_ARGB32);
     frame.fill(0);
-    frames.push_back(frame);
+    frames.insert(frames.begin() + index, frame);
 }
 
 void Sprite::deleteFrame(int currentFrame)

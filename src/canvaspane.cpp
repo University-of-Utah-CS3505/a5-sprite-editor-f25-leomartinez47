@@ -1,11 +1,11 @@
 #include "canvaspane.h"
-#include "ui_canvaspane.h"
-#include "project.h"
-#include <QPixmap>
 #include <QGraphicsPixmapItem>
-#include <QMouseEvent>
-#include <QWheelEvent>
 #include <QKeyEvent>
+#include <QMouseEvent>
+#include <QPixmap>
+#include <QWheelEvent>
+#include "project.h"
+#include "ui_canvaspane.h"
 
 CanvasPane::CanvasPane(Project *project, QWidget *parent)
     : QWidget(parent)
@@ -19,10 +19,7 @@ CanvasPane::CanvasPane(Project *project, QWidget *parent)
     ui->view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
     ui->view->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
 
-    connect(project,
-            &Project::frameChanged,
-            this,
-            &CanvasPane::showFrame);
+    connect(project, &Project::frameChanged, this, &CanvasPane::showFrame);
 }
 
 CanvasPane::~CanvasPane()
@@ -40,32 +37,35 @@ void CanvasPane::showFrame(const QImage &frame)
     scene->addItem(item);
 }
 
-void CanvasPane::mousePressEvent(QMouseEvent *event) {
+void CanvasPane::mousePressEvent(QMouseEvent *event)
+{
     if (event->button() == Qt::LeftButton && !isPanning) {
         emit pointClicked(ui->view->mapToScene(event->pos()));
     }
 }
 
-void CanvasPane::wheelEvent(QWheelEvent *event){
+void CanvasPane::wheelEvent(QWheelEvent *event)
+{
     const double factor = 1.15;
-    if (event->angleDelta().y() >0){
+    if (event->angleDelta().y() > 0) {
         ui->view->scale(factor, factor);
-    }
-    else {
+    } else {
         ui->view->scale(1.0 / factor, 1.0 / factor);
     }
 }
 
-void CanvasPane::keyPressEvent(QKeyEvent *event){
-    if (event->key() == Qt::Key_Space && !isPanning){
+void CanvasPane::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Space && !isPanning) {
         isPanning = true;
         ui->view->setDragMode(QGraphicsView::ScrollHandDrag);
         setCursor(Qt::OpenHandCursor);
     }
 }
 
-void CanvasPane::keyReleaseEvent(QKeyEvent *event){
-    if (event->key() == Qt::Key_Space){
+void CanvasPane::keyReleaseEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Space) {
         isPanning = false;
         ui->view->setDragMode(QGraphicsView::NoDrag);
         setCursor(Qt::ArrowCursor);

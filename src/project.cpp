@@ -67,12 +67,12 @@ void Project::onCurrentFrameChanged(int index)
     emit this->frameChanged(this->getCurrentFrame());
 }
 
-void Project::onFrameAdded()
+void Project::onFrameAdded(int index)
 {
-    this->sprite->addFrame();
-    this->currentFrame++;
-
-    emit this->frameChanged(this->getCurrentFrame());
+    // adds a frame at the index to the sprite
+    this->sprite->addFrame(index);
+    // changes the current frame to the newest frame
+    this->onCurrentFrameChanged(index);
 }
 
 void Project::onFrameRemoved(int index)
@@ -86,7 +86,9 @@ void Project::onFrameRemoved(int index)
     }
 
     this->sprite->deleteFrame(index);
-    emit this->frameChanged(this->getCurrentFrame());
+    if (0 < index && index < this->sprite->frameCount()) {
+        this->onCurrentFrameChanged(index);
+    }
 }
 
 void Project::onSaveRequested()

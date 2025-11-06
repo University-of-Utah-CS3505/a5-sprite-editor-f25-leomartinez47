@@ -32,23 +32,22 @@ public slots:
     void onCurrentFrameChanged(int index);
 
     // Frame Selection Methods
-    void onFrameAdded();
+
+    ///
+    /// \brief onFrameAdded : When a frame needs to be added, adds it at the
+    /// index provided, move current frame to the added frame
+    /// \param index : The index to add a frame
+    ///
+    void onFrameAdded(int index);
+
+    ///
+    /// \brief onFrameRemoved : When a frame needs to be deleted, delete it at
+    /// the index provided, move the current frame to the one before the deleted one.
+    /// \param index ; The index to delete a frame
+    ///
     void onFrameRemoved(int index);
 
     void onSaveRequested();
-
-
-    ///
-    void addFrame();
-
-    ///
-    void deleteFrame();
-
-    ///
-    void nextFrame();
-
-    ///
-    void previousFrame();
 
 
 

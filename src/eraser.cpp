@@ -1,21 +1,17 @@
-#include "tool.h"
 #include "eraser.h"
+#include "tool.h"
 #include "ui_toolpane.h"
 
 Eraser::Eraser(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::Eraser){
+    , ui(new Ui::Eraser)
+{}
 
-}
+void Tool::applyChange(QPoint currentPoint, QColor color) {}
 
-void Tool::applyChange(QPoint currentPoint, QColor color){
+void Eraser::drawPoint(QPoint currentPoint, QColor color) {}
 
-}
-
-void Eraser::drawPoint(QPoint currentPoint, QColor color){
-
-}
-
-Eraser::~Eraser(){
+Eraser::~Eraser()
+{
     delete ui;
 }
