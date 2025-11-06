@@ -8,7 +8,6 @@
 
 #include <QWidget>
 #include "project.h"
-#include <QGraphicsScene>
 
 namespace Ui {
 class CanvasPane;
@@ -23,28 +22,32 @@ public:
     ~CanvasPane();
 
 signals:
+    /// @brief Signal to the project model that the user has clicked on the
+    /// canvas at a specific coordinate point.
+    /// @param coordinates - The QPointF coordinate point of the click with
+    /// respect to the QImage frame itself.
     void pointClicked(QPointF coordinates);
 
 public slots:
-    // Recieve what frame to display from the project model
+    /// @brief Recieve a QImage frame from the project model and display it.
+    /// @param frame - A QImage to be displayed in the CanvasPane QWidget.
     void showFrame(const QImage &frame);
 
 protected:
+    /// @brief Enter a drawing loop and emit pointClicked until released.
+    /// @param event - A mouse press QMouseEvent.
     void mousePressEvent(QMouseEvent *event) override;
-    void wheelEvent(QWheelEvent *event) override;
-    void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override;
+
+    /// @brief Sets isDrawing to false therefore exiting drawing loop.
+    /// @param event - A mouse release QMouseEvent.
+    void mouseReleaseEvent(QMouseEvent *event) override;
 private:
+    /// The CanvasPane ui form.
     Ui::CanvasPane *ui;
 
-
-    // scene queen
-    QGraphicsScene* scene;
-
-
-    // cant draw while panning
-    bool isPanning;
-
+    /// If the user is currently drawing on the frame,
+    /// that is they have clicked on the canvas and are yet to release.
+    bool isDrawing;
 };
 
 #endif

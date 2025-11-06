@@ -1,23 +1,19 @@
+/*
+    Contributors: Bryce Wiley and Leo Martinez
+    Date: 11/06/2025
+*/
+
 #include "canvaspane.h"
 #include "ui_canvaspane.h"
 #include "project.h"
 #include <QPixmap>
-#include <QGraphicsPixmapItem>
 #include <QMouseEvent>
-#include <QWheelEvent>
-#include <QKeyEvent>
 
 CanvasPane::CanvasPane(Project *project, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::CanvasPane)
 {
     ui->setupUi(this);
-
-    this->scene = new QGraphicsScene(this);
-
-    ui->view->setScene(scene);
-    ui->view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-    ui->view->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
 
     connect(project,
             &Project::frameChanged,
@@ -28,46 +24,29 @@ CanvasPane::CanvasPane(Project *project, QWidget *parent)
 CanvasPane::~CanvasPane()
 {
     delete ui;
-    delete scene;
 }
 
 void CanvasPane::showFrame(const QImage &frame)
 {
-    // remove current frame from scene??
-
-    QPixmap pixmap = QPixmap::fromImage(frame);
-    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(pixmap);
-    scene->addItem(item);
+    QPixmap framePixmap = QPixmap::fromImage(frame);
+    framePixmap = framePixmap.scaled(ui->view->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    ui->view->setPixmap(framePixmap);
+    ui->view->setAlignment(Qt::AlignCenter);
 }
 
-void CanvasPane::mousePressEvent(QMouseEvent *event) {
-    if (event->button() == Qt::LeftButton && !isPanning) {
-        emit pointClicked(ui->view->mapToScene(event->pos()));
+void CanvasPane::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        this->isDrawing = true;
+        while(this->isDrawing) {
+            emit pointClicked(event->position());
+        }
     }
 }
 
-void CanvasPane::wheelEvent(QWheelEvent *event){
-    const double factor = 1.15;
-    if (event->angleDelta().y() >0){
-        ui->view->scale(factor, factor);
-    }
-    else {
-        ui->view->scale(1.0 / factor, 1.0 / factor);
-    }
-}
-
-void CanvasPane::keyPressEvent(QKeyEvent *event){
-    if (event->key() == Qt::Key_Space && !isPanning){
-        isPanning = true;
-        ui->view->setDragMode(QGraphicsView::ScrollHandDrag);
-        setCursor(Qt::OpenHandCursor);
-    }
-}
-
-void CanvasPane::keyReleaseEvent(QKeyEvent *event){
-    if (event->key() == Qt::Key_Space){
-        isPanning = false;
-        ui->view->setDragMode(QGraphicsView::NoDrag);
-        setCursor(Qt::ArrowCursor);
+void CanvasPane::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton && this->isDrawing) {
+        this->isDrawing = false;
     }
 }
