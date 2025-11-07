@@ -9,6 +9,9 @@
 #include <QImage>
 #include <string>
 #include <QSize>
+#include <QJsonArray>
+#include <QJsonObject>
+#include "external/base64.h"
 
 class Sprite {
     /// The frames of this Sprite.
@@ -21,7 +24,7 @@ public:
     Sprite(QSize dimensions);
 
     /// Construct a Sprite from our JSON format.
-    Sprite(const std::string &json);
+    Sprite(QJsonObject &json);
 
     /// Add a new frame to this Sprite.
     void addFrame();
@@ -36,7 +39,7 @@ public:
     int frameCount();
 
     /// Serialize this Sprite to JSON.
-    std::string toJson();
+    QJsonObject toJson();
 };
 
 #endif

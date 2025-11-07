@@ -15,11 +15,26 @@
 
 #include "sprite.h"
 
-Sprite::Sprite(const std::string &json)
-{
-    // TODO: deserialize JSON
+QString imageToString(const QImage &image);
+QImage imageFromString(const QString &base64);
 
-    this->addFrame();
+
+Sprite::Sprite(QJsonObject &json)
+{
+    //TODO : error checking for json?
+    // deserialize JSON
+    QJsonObject sprite = json.value("sprite").toObject();
+    QJsonArray jsonFrames = sprite.value("frames").toArray();
+
+    QJsonValue frame;
+    foreach(frame, jsonFrames){
+        //call imageFromString
+        QImage image = imageFromString(frame.toString());
+        //take returned image and put in frames vector
+        this->frames.push_back(image);
+    }
+
+    //this->addFrame();
 }
 
 Sprite::Sprite(QSize dimensions)
@@ -63,13 +78,39 @@ QImage imageFromString(const QString &base64) {
     return QImage::fromData(QByteArray::fromBase64(base64.toUtf8()));
 }
 
-std::string Sprite::toJson()
-{
-    // TODO: serialize JSON to string
-    for(auto frame : frames){
-        //QImage to byte array
-        //byte array as a string
+QJsonObject Sprite::toJson(){
+    QJsonArray spriteFrames;
+    QImage frame;
+    foreach(frame, frames){
+        //QImage to byte array; byte array as a string
+        QString base64 = imageToString(frame);
         //put string in JsonArray
+        spriteFrames.push_back(base64);
     }
-    return std::string("{}");
+    QJsonObject sprite;
+    sprite["frames"] = spriteFrames;
+
+    sprite["width"] = this->dimensions.width();
+    sprite["height"] = this->dimensions.height();
+
+    QJsonObject spriteInfo;
+    spriteInfo["sprite"] = sprite;
+
+    return spriteInfo;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

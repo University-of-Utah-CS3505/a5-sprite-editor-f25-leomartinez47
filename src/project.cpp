@@ -12,7 +12,8 @@ Project::Project(QSize dimensions, QObject *parent)
 Project::Project(const std::string &path, QObject *parent)
     : QObject{parent}
 {
-    this->sprite = new Sprite(path);
+    //TODO : read in a file and call the constructor that takes a Json
+    //this->sprite = new Sprite(path);
     this->currentFrame = 0;
     this->path = new std::string(path);
     this->currentTool = new Pencil();
@@ -99,7 +100,7 @@ void Project::onSaveRequested()
         return;
     }
 
-    std::string json = this->sprite->toJson();
+    QJsonObject json = this->sprite->toJson();
 
     // TODO: write JSON to path
 }
