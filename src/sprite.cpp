@@ -34,6 +34,7 @@ Sprite::Sprite(QJsonObject &json)
         this->frames.push_back(image);
     }
 
+    QSize dim(sprite["width"].toInteger(), sprite["height"].toInteger());
     //this->addFrame();
 }
 

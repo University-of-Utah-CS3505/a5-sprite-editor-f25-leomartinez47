@@ -12,6 +12,7 @@ Project::Project(QSize dimensions, QObject *parent)
 Project::Project(const std::string &path, QObject *parent)
     : QObject{parent}
 {
+    //TODO error checking?
     //read in a file and call the Sprite constructor that takes a Json
     QFile jsonFile(QString::fromStdString(path));
     jsonFile.open(QIODevice::ReadWrite);
