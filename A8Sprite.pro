@@ -14,24 +14,24 @@ SOURCES += \
     src/main.cpp \
     src/project.cpp \
     src/sprite.cpp \
-    src/tools.cpp
+    src/tools.cpp \
     src/mainwindow.cpp \
     src/projectview.cpp \
     src/canvaspane.cpp \
     src/frameselectionpane.cpp \
     src/previewpane.cpp \
-    src/toolpane.cpp \
+    src/toolpane.cpp
 
 HEADERS += \
     include/project.h \
     include/sprite.h \
-    include/tools.h
+    include/tools.h \
     include/mainwindow.h \
     include/projectview.h \
     include/canvaspane.h \
     include/frameselectionpane.h \
     include/previewpane.h \
-    include/toolpane.h \
+    include/toolpane.h
 
 FORMS += \
     ui/canvaspane.ui \
