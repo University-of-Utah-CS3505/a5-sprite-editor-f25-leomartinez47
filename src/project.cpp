@@ -12,8 +12,13 @@ Project::Project(QSize dimensions, QObject *parent)
 Project::Project(const std::string &path, QObject *parent)
     : QObject{parent}
 {
-    //TODO : read in a file and call the constructor that takes a Json
-    //this->sprite = new Sprite(path);
+    //read in a file and call the Sprite constructor that takes a Json
+    QFile jsonFile(QString::fromStdString(path));
+    jsonFile.open(QIODevice::ReadWrite);
+    QJsonDocument doc = QJsonDocument::fromJson(jsonFile.readAll());
+    QJsonObject json = doc.object();
+
+    this->sprite = new Sprite(json);
     this->currentFrame = 0;
     this->path = new std::string(path);
     this->currentTool = new Pencil();

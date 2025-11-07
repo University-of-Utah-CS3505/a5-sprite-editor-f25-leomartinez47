@@ -2,6 +2,7 @@
 #define PROJECT_H
 
 #include <QObject>
+#include <QFile>
 #include <string>
 #include "sprite.h"
 #include "tools.h"
