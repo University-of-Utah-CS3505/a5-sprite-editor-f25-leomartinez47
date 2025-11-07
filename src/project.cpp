@@ -6,6 +6,7 @@ Project::Project(QSize dimensions, QObject *parent)
     this->sprite = new Sprite(dimensions);
     this->currentFrame = 0;
     this->path = nullptr;
+    this->currentTool = new Pencil();
 }
 
 Project::Project(const std::string &path, QObject *parent)
@@ -13,9 +14,8 @@ Project::Project(const std::string &path, QObject *parent)
 {
     this->sprite = new Sprite(path);
     this->currentFrame = 0;
-
-    // make a copy to own it.
     this->path = new std::string(path);
+    this->currentTool = new Pencil();
 }
 
 Project::~Project()
@@ -25,6 +25,7 @@ Project::~Project()
     }
 
     delete this->sprite;
+    delete this->currentTool;
 }
 
 const QColor &Project::getCurrentColor() const
@@ -37,14 +38,16 @@ int Project::getCurrentFrameIndex() const
     return this->currentFrame;
 }
 
-const QImage &Project::getCurrentFrame() const
+QImage &Project::getCurrentFrame() const
 {
     return this->sprite->getFrame(this->currentFrame);
 }
 
-void Project::onToolChanged(/* TODO: add tool here */)
+void Project::onToolChanged(Tool *tool)
 {
-    // this->currentTool = tool;
+    if (tool != nullptr) {
+        this->currentTool = tool;
+    }
 }
 
 void Project::onColorChanged(QColor color)
@@ -54,7 +57,7 @@ void Project::onColorChanged(QColor color)
 
 void Project::onPixelClicked(QPoint point)
 {
-    // this->currentTool->apply(point, this->getCurrentFrame(), this->currentColor);
+    this->currentTool->apply(point, this->getCurrentFrame(), this->currentColor);
 }
 
 void Project::onCurrentFrameChanged(int index)
@@ -96,5 +99,7 @@ void Project::onSaveRequested()
         return;
     }
 
-    this->sprite->saveSprite(*this->path);
+    std::string json = this->sprite->toJson();
+
+    // TODO: write JSON to path
 }
