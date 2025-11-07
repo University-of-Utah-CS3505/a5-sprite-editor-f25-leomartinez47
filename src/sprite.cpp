@@ -4,10 +4,9 @@
 
 #include "sprite.h"
 
-Sprite::Sprite(const std::string &path)
+Sprite::Sprite(const std::string &json)
 {
-    // TODO (grant): read from path and deserialize format.
-    // for now this is a stub.
+    // TODO: deserialize JSON
 
     this->addFrame();
 }
@@ -34,7 +33,7 @@ void Sprite::deleteFrame(int currentFrame)
     frames.erase(frames.begin() + currentFrame);
 }
 
-const QImage &Sprite::getFrame(int index) const
+QImage &Sprite::getFrame(int index)
 {
     // TODO: handle errors?
     return this->frames[index];
@@ -45,7 +44,8 @@ int Sprite::frameCount()
     return this->frames.size();
 }
 
-void Sprite::saveSprite(const std::string &filePath)
+std::string Sprite::toJson()
 {
-    // TODO (grant): serialize here
+    // TODO: serialize JSON to string
+    return std::string("{}");
 }

@@ -10,12 +10,9 @@
 #include <string>
 #include <QSize>
 
-using std::vector;
-using std::string;
-
 class Sprite {
     /// The frames of this Sprite.
-    vector<QImage> frames;
+    std::vector<QImage> frames;
     QSize dimensions;
     // Note: the framerate (in gap ms) should probably be stored here to be serialized.
 
@@ -23,8 +20,8 @@ public:
     /// Construct a Sprite with dimensions selected by the user.
     Sprite(QSize dimensions);
 
-    /// Construct a Sprite from a path to our JSON format.
-    Sprite(const std::string &path);
+    /// Construct a Sprite from our JSON format.
+    Sprite(const std::string &json);
 
     /// Add a new frame to this Sprite.
     void addFrame();
@@ -33,13 +30,13 @@ public:
     void deleteFrame(int currentFrame);
 
     /// Get a frame by its index.
-    const QImage &getFrame(int index) const;
+    QImage &getFrame(int index);
 
     /// Get the number of frames this Sprite contains.
     int frameCount();
 
-    /// Serialize this Sprite to JSON and return the serialized string.
-    void saveSprite(const std::string &filePath);
+    /// Serialize this Sprite to JSON.
+    std::string toJson();
 };
 
 #endif
