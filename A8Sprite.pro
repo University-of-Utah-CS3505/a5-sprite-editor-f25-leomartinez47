@@ -11,6 +11,7 @@ CONFIG += c++17
 INCLUDEPATH += include
 
 SOURCES += \
+    external/base64.cpp \
     src/main.cpp \
     src/project.cpp \
     src/sprite.cpp \
@@ -23,6 +24,7 @@ SOURCES += \
     src/toolpane.cpp
 
 HEADERS += \
+    external/base64.h \
     include/project.h \
     include/sprite.h \
     include/tools.h \

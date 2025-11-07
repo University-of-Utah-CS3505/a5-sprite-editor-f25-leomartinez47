@@ -66,5 +66,10 @@ QImage imageFromString(const QString &base64) {
 std::string Sprite::toJson()
 {
     // TODO: serialize JSON to string
+    for(auto frame : frames){
+        //QImage to byte array
+        //byte array as a string
+        //put string in JsonArray
+    }
     return std::string("{}");
 }
