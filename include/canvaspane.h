@@ -7,6 +7,7 @@
 #define CANVASPANE_H
 
 #include <QWidget>
+#include <QLabel>
 #include "project.h"
 
 namespace Ui {
@@ -26,7 +27,7 @@ signals:
     /// canvas at a specific coordinate point.
     /// @param coordinates - The QPointF coordinate point of the click with
     /// respect to the QImage frame itself.
-    void pointClicked(QPointF coordinates);
+    void pixelClicked(QPoint coordinates);
 
 public slots:
     /// @brief Recieve a QImage frame from the project model and display it.
@@ -34,13 +35,21 @@ public slots:
     void showFrame(const QImage &frame);
 
 protected:
-    /// @brief Enter a drawing loop and emit pointClicked until released.
+    /// @brief Sets isDrawing to true and emit pointClicked.
     /// @param event - A mouse press QMouseEvent.
     void mousePressEvent(QMouseEvent *event) override;
 
-    /// @brief Sets isDrawing to false therefore exiting drawing loop.
+    /// @brief Sets isDrawing to false.
     /// @param event - A mouse release QMouseEvent.
     void mouseReleaseEvent(QMouseEvent *event) override;
+
+    /// @brief If isDrawing emits pointClicked.
+    /// @param event - A mouse move QMouseEvent.
+    void mouseMoveEvent(QMouseEvent *event) override;
+
+    /// @brief Draws currentFrame scaled to fit the canvas widget.
+    void paintEvent(QPaintEvent*) override;
+
 private:
     /// The CanvasPane ui form.
     Ui::CanvasPane *ui;
@@ -48,6 +57,22 @@ private:
     /// If the user is currently drawing on the frame,
     /// that is they have clicked on the canvas and are yet to release.
     bool isDrawing;
+
+    /// The sprite frame currently being displayed.
+    QImage currentFrame;
+
+    /// @brief Maps canvas coordinates to pixel coordinates relative to the sprite.
+    /// @param widgetPos - The cursor position relative to the canvas.
+    QPoint mapToSprite(const QPoint &widgetPos) const;
+
+    /// Scale factor applied to the frame to fit the canvas.
+    int scaleFactor;
+
+    /// Offset to center the frame horizontally.
+    int xOffset;
+
+    /// Offset to center the frame vertically.
+    int yOffset;
 };
 
 #endif
