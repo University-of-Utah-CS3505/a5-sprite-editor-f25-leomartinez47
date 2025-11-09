@@ -13,7 +13,7 @@ class Project : public QObject
 
 public:
     explicit Project(QSize dimensions, QObject *parent = nullptr);
-    explicit Project(const std::string &path, QObject *parent = nullptr);
+    explicit Project(const QString &path, QObject *parent = nullptr);
     ~Project();
 
     const QColor &getCurrentColor() const;
@@ -51,7 +51,8 @@ private:
 
     // the saved path to the sprite
     // possibly null if not saved yet.
-    std::string *path;
+    //std::string *path;
+    QString *path;
 };
 
 #endif // PROJECT_H

@@ -9,7 +9,7 @@ Project::Project(QSize dimensions, QObject *parent)
     this->currentTool = new Pencil();
 }
 
-Project::Project(const std::string &path, QObject *parent)
+Project::Project(const QString &path, QObject *parent)
     : QObject{parent}
 {
     //TODO error checking?
@@ -21,7 +21,7 @@ Project::Project(const std::string &path, QObject *parent)
 
     this->sprite = new Sprite(json);
     this->currentFrame = 0;
-    this->path = new std::string(path);
+    this->path = new QString(path);
     this->currentTool = new Pencil();
 }
 
@@ -99,8 +99,7 @@ void Project::onFrameRemoved(int index)
     emit this->frameChanged(this->getCurrentFrame());
 }
 
-void Project::onSaveRequested()
-{
+void Project::onSaveRequested(){
     if (!this->path) {
         // TODO (grant): prompt user for save file, then set it.
         return;
@@ -108,5 +107,13 @@ void Project::onSaveRequested()
 
     QJsonObject json = this->sprite->toJson();
 
-    // TODO: write JSON to path
+    // TODO: add to json any other information we want
+
+    // write JSON to path
+    QByteArray jsonArr = QJsonDocument(json).toJson();
+    QFile saveFile(*path);
+    saveFile.open(QIODevice::ReadWrite);
+
+    QTextStream qStream(&saveFile);
+    qStream << jsonArr;
 }
