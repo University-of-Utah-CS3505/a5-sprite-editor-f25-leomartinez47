@@ -1,17 +1,27 @@
 /*
     Written by Leo Martinez and Kailee Kim
+
+    This object matches this JSON schema:
+
+    {
+        "frames": [ "<image data encoded as base64>", ... ],
+        "width": <integer>,
+        "height": <integer>
+    }
+
+    All frames are checked on deserialization to verify that they
+    match the specified width and height.
 */
 
 #ifndef SPRITE_H
 #define SPRITE_H
 
 #include <vector>
+
 #include <QImage>
-#include <string>
 #include <QSize>
 #include <QJsonArray>
 #include <QJsonObject>
-#include "external/base64.h"
 
 class Sprite {
     /// The frames of this Sprite.
@@ -24,7 +34,7 @@ public:
     Sprite(QSize dimensions);
 
     /// Construct a Sprite from our JSON format.
-    Sprite(QJsonObject &json);
+    Sprite(const QJsonObject &json);
 
     /// Add a new frame to this Sprite.
     void addFrame();

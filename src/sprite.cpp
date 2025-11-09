@@ -1,41 +1,27 @@
 /*
     Written by Leo Martinez, Kailee Kim, and Grant Handy
-
-    JSON Schema:
-
-    {
-        "frames": [ "<image data encoded as base64>", ... ],
-        "width": ...,
-        "height": ...
-    }
-
-    All frames are checked on deserialization to verify that they
-    match the specified width and height.
 */
 
 #include "sprite.h"
 
-QString imageToString(const QImage &image);
-QImage imageFromString(const QString &base64);
-
-
-Sprite::Sprite(QJsonObject &json)
+Sprite::Sprite(const QJsonObject &sprite)
 {
-    //TODO : error checking for json?
-    // deserialize JSON
-    QJsonObject sprite = json.value("sprite").toObject();
+    this->dimensions = QSize(
+        sprite.value("width").toInteger(),
+        sprite.value("height").toInteger()
+    );
+
+    // TODO: fix QJsonObject::value ambiguous warning?
     QJsonArray jsonFrames = sprite.value("frames").toArray();
 
-    QJsonValue frame;
-    foreach(frame, jsonFrames){
-        //call imageFromString
-        QImage image = imageFromString(frame.toString());
-        //take returned image and put in frames vector
+    for (QJsonValue &&frame : jsonFrames) {
+        QImage image = QImage::fromData(QByteArray::fromBase64(frame.toString().toUtf8()));
+
+        // TODO: throw exception and catch in parent?
+        Q_ASSERT(this->dimensions == image.size());
+
         this->frames.push_back(image);
     }
-
-    QSize dim(sprite["width"].toInteger(), sprite["height"].toInteger());
-    //this->addFrame();
 }
 
 Sprite::Sprite(QSize dimensions)
@@ -71,47 +57,18 @@ int Sprite::frameCount()
     return this->frames.size();
 }
 
-QString imageToString(const QImage &image) {
-    return QByteArray::fromRawData((const char*)image.bits(), image.sizeInBytes()).toBase64();
-}
-
-QImage imageFromString(const QString &base64) {
-    return QImage::fromData(QByteArray::fromBase64(base64.toUtf8()));
-}
-
 QJsonObject Sprite::toJson(){
-    QJsonArray spriteFrames;
-    QImage frame;
-    foreach(frame, frames){
-        //QImage to byte array; byte array as a string
-        QString base64 = imageToString(frame);
-        //put string in JsonArray
-        spriteFrames.push_back(base64);
+    QJsonArray jsonFrames;
+
+    // TODO: make sure we aren't copying data in the range for-loop
+    for (QImage &image : frames) {
+        QByteArray data = QByteArray::fromRawData((const char*)image.bits(), image.sizeInBytes());
+        jsonFrames.push_back(QString(data.toBase64()));
     }
-    QJsonObject sprite;
-    sprite["frames"] = spriteFrames;
 
-    sprite["width"] = this->dimensions.width();
-    sprite["height"] = this->dimensions.height();
-
-    QJsonObject spriteInfo;
-    spriteInfo["sprite"] = sprite;
-
-    return spriteInfo;
+    return QJsonObject({
+        { "frames", jsonFrames },
+        { "width", this->dimensions.width() },
+        { "height", this->dimensions.height() },
+    });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

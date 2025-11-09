@@ -12,14 +12,16 @@ Project::Project(QSize dimensions, QObject *parent)
 Project::Project(const QString &path, QObject *parent)
     : QObject{parent}
 {
-    //TODO error checking?
-    //read in a file and call the Sprite constructor that takes a Json
-    QFile jsonFile(QString::fromStdString(path));
-    jsonFile.open(QIODevice::ReadWrite);
-    QJsonDocument doc = QJsonDocument::fromJson(jsonFile.readAll());
-    QJsonObject json = doc.object();
+    // TODO: check for errors or propagate exceptions?
+    QFile file = QFile(path);
+    file.open(QIODevice::ReadOnly);
 
-    this->sprite = new Sprite(json);
+    QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
+
+    this->sprite = new Sprite(json.value("sprite").toObject());
+
+    // TODO: parse tool, current color, current frame, etc. from JSON
+
     this->currentFrame = 0;
     this->path = new QString(path);
     this->currentTool = new Pencil();
@@ -105,15 +107,15 @@ void Project::onSaveRequested(){
         return;
     }
 
-    QJsonObject json = this->sprite->toJson();
-
-    // TODO: add to json any other information we want
-
-    // write JSON to path
-    QByteArray jsonArr = QJsonDocument(json).toJson();
-    QFile saveFile(*path);
+    QFile saveFile = QFile(*this->path);
     saveFile.open(QIODevice::ReadWrite);
 
-    QTextStream qStream(&saveFile);
-    qStream << jsonArr;
+    QTextStream qStream = QTextStream(&saveFile);
+
+    // TODO: add tool, current color, current frame, etc.
+    QJsonObject obj = QJsonObject({
+        { "sprite", this->sprite->toJson() }
+    });
+
+    qStream << QJsonDocument(obj).toJson();
 }

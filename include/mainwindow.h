@@ -21,6 +21,8 @@ private:
     QAction *newAct;
     QAction *exitAct;
 
+    // TODO: add saveAct and openAct
+
 private slots:
     void newProject();
     void handleCloseTabRequested(int index);

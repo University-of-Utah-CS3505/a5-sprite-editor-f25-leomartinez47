@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QFile>
-#include <string>
+
 #include "sprite.h"
 #include "tools.h"
 
@@ -48,10 +48,6 @@ private:
     Tool *currentTool;
     QColor currentColor;
     int currentFrame;
-
-    // the saved path to the sprite
-    // possibly null if not saved yet.
-    //std::string *path;
     QString *path;
 };
 
