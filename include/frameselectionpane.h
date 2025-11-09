@@ -14,8 +14,6 @@ class FrameSelectionPane : public QWidget
     Q_OBJECT
 
 public:
-    QListWidget listWidget;
-
     explicit FrameSelectionPane(Project *project, QWidget *parent = nullptr);
     ~FrameSelectionPane();
 
@@ -43,7 +41,6 @@ public slots:
 
 private:
     Ui::FrameSelectionPane *ui;
-    int currentIndex;
     ///
     /// \brief displaySpriteFrames : private helper method to display all of the frames in the sprite
     ///

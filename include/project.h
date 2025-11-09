@@ -19,10 +19,19 @@ public:
     QImage &getCurrentFrame() const;
     int getCurrentFrameIndex() const;
 
+    // TEMP: Both getters below are only used for frameSelectionPane
+    // TODO: Either centralize here if we dont want chained getters
+    //       or keep. More info in commit message.
+    int frameCount() const;
+    const QImage &frameAt(int index) const;
+
 signals:
     // To Canvas, emit whenever the canvas needs to be update
     // like on frame change and on editing the image
     void frameChanged(const QImage &frame);
+
+    // For frame pane. Called after internal changes are applied (add/del).
+    void frameListChanged();
 
 public slots:
     void onToolChanged(Tool *tool);
