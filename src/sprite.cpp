@@ -37,16 +37,16 @@ void Sprite::addFrame()
     frames.push_back(frame);
 }
 
-void Sprite::deleteFrame(int currentFrame)
+void Sprite::deleteFrame(std::size_t currentFrame)
 {
-    if (currentFrame < 0 || currentFrame >= frames.size()) {
+    if (currentFrame >= frames.size()) {
         return;
     }
 
     frames.erase(frames.begin() + currentFrame);
 }
 
-QImage &Sprite::getFrame(int index)
+QImage &Sprite::getFrame(std::size_t index)
 {
     // TODO: handle errors?
     return this->frames[index];
@@ -60,8 +60,7 @@ int Sprite::frameCount()
 QJsonObject Sprite::toJson(){
     QJsonArray jsonFrames;
 
-    // TODO: make sure we aren't copying data in the range for-loop
-    for (QImage &image : frames) {
+    for (const QImage &image : frames) {
         QByteArray data = QByteArray::fromRawData((const char*)image.bits(), image.sizeInBytes());
         jsonFrames.push_back(QString(data.toBase64()));
     }

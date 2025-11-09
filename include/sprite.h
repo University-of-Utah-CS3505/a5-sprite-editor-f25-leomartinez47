@@ -23,6 +23,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
+
 class Sprite {
     /// The frames of this Sprite.
     std::vector<QImage> frames;
@@ -40,10 +41,10 @@ public:
     void addFrame();
 
     /// Delete the currently selected frame of this Sprite.
-    void deleteFrame(int currentFrame);
+    void deleteFrame(std::size_t currentFrame);
 
     /// Get a frame by its index.
-    QImage &getFrame(int index);
+    QImage &getFrame(std::size_t index);
 
     /// Get the number of frames this Sprite contains.
     int frameCount();
