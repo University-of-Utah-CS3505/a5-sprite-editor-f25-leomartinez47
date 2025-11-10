@@ -2,7 +2,14 @@
     Written by Leo Martinez, Kailee Kim, and Grant Handy
 */
 
+#include <QIODevice>
+#include <QBuffer>
+
 #include "sprite.h"
+
+// QImage expects a C-style string.
+// TODO: check if PNG is supported and fail if it doesn't with supportedFormats()
+const char *FORMAT = "PNG";
 
 Sprite::Sprite(const QJsonObject &sprite)
 {
@@ -14,10 +21,9 @@ Sprite::Sprite(const QJsonObject &sprite)
     // TODO: fix QJsonObject::value ambiguous warning?
     QJsonArray jsonFrames = sprite.value("frames").toArray();
 
-    qDebug() << this->dimensions << " sprite created with " << jsonFrames.size() << " frames";
-
     for (QJsonValue &&frame : jsonFrames) {
-        QImage image = QImage::fromData(QByteArray::fromBase64(frame.toString().toUtf8()));
+        QImage image;
+        image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT);
 
         // TODO: throw exception and catch in parent?
         Q_ASSERT(this->dimensions == image.size());
@@ -63,7 +69,13 @@ QJsonObject Sprite::toJson(){
     QJsonArray jsonFrames;
 
     for (const QImage &image : frames) {
-        QByteArray data = QByteArray::fromRawData((const char*)image.bits(), image.sizeInBytes());
+        QByteArray data;
+
+        QBuffer buffer = QBuffer(&data);
+        buffer.open(QIODevice::WriteOnly);
+        image.save(&buffer, FORMAT); // TODO: check success value.
+        buffer.close();
+
         jsonFrames.push_back(QString(data.toBase64()));
     }
 
