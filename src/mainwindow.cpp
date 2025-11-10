@@ -41,7 +41,7 @@ void MainWindow::onNewProjectRequested()
 
     int newIndex = this->tabs->addTab(setup, NEW_PROJECT_TITLE);
 
-    if (newIndex != 0) {
+    if (this->tabs->count() != 0) {
         this->tabs->setCurrentIndex(newIndex);
     }
 }
@@ -52,7 +52,7 @@ void MainWindow::onHandleCloseTabRequested(int index)
         return;
     }
 
-    if (index == 0) {
+    if (tabs->count() == 1) {
         emit this->close();
         return;
     }
@@ -104,7 +104,7 @@ void MainWindow::onFinishSetup(QWidget* setupView, Project *project) {
     // Add the new project view with the associated project as the visible tab.
     int newIndex = this->tabs->insertTab(index, view, NEW_PROJECT_TITLE);
 
-    if (newIndex != 0) {
+    if (this->tabs->count() != 1) {
         this->tabs->setCurrentIndex(newIndex);
     }
 }
