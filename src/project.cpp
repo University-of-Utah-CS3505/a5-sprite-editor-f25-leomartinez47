@@ -119,10 +119,15 @@ void Project::save(std::function<QString()> requestPath) {
     }
 
     QFile saveFile = QFile(*this->path);
-    saveFile.open(QIODevice::ReadWrite);
+
+    // TODO: check for errors
+    saveFile.open(QIODevice::ReadWrite | QIODevice::Truncate);
 
     QTextStream qStream = QTextStream(&saveFile);
-    qStream << QJsonDocument(this->toJson()).toJson();
+    qStream << QJsonDocument(this->toJson()).toJson(QJsonDocument::Indented);
+    qStream.flush();
+
+    saveFile.close();
 }
 
 QJsonObject Project::toJson() {
