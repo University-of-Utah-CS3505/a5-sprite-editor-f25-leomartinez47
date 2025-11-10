@@ -1,5 +1,6 @@
 #include "project.h"
 
+
 Project::Project(QSize dimensions, QObject *parent)
     : QObject{parent}
 {
@@ -9,12 +10,20 @@ Project::Project(QSize dimensions, QObject *parent)
     this->currentTool = new Pencil();
 }
 
-Project::Project(const std::string &path, QObject *parent)
+Project::Project(const QString &path, QObject *parent)
     : QObject{parent}
 {
-    this->sprite = new Sprite(path);
+    this->path = new std::filesystem::path(path.toStdString());
+
+    // TODO: check for errors or propagate exceptions?
+    QFile file = QFile(path);
+    file.open(QIODevice::ReadOnly);
+
+    QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
+    this->sprite = new Sprite(json.value("sprite").toObject());
+
+    // TODO: parse tool, current color, current frame, etc. from JSON
     this->currentFrame = 0;
-    this->path = new std::string(path);
     this->currentTool = new Pencil();
 }
 
@@ -92,14 +101,46 @@ void Project::onFrameRemoved(int index)
     emit this->frameChanged(this->getCurrentFrame());
 }
 
-void Project::onSaveRequested()
-{
+void Project::save(std::function<QString()> requestPath) {
     if (!this->path) {
-        // TODO (grant): prompt user for save file, then set it.
-        return;
+        QString userPath = requestPath();
+
+        if (userPath.isEmpty()) {
+            return;
+        }
+
+        this->path = new std::filesystem::path(userPath.toStdString());
+
+        if (!this->path->has_extension()) {
+            this->path->replace_extension(PROJECT_FILE_EXTENSION.toStdString());
+        }
+
+        emit this->nameChanged(this->name());
     }
 
-    std::string json = this->sprite->toJson();
+    QFile saveFile = QFile(*this->path);
 
-    // TODO: write JSON to path
+    // TODO: check for errors
+    saveFile.open(QIODevice::ReadWrite | QIODevice::Truncate);
+
+    QTextStream qStream = QTextStream(&saveFile);
+    qStream << QJsonDocument(this->toJson()).toJson(QJsonDocument::Indented);
+    qStream.flush();
+
+    saveFile.close();
+}
+
+QJsonObject Project::toJson() {
+    // TODO: add tool, current color, current frame, etc.
+    return QJsonObject({
+        { "sprite", this->sprite->toJson() }
+    });
+}
+
+QString Project::name() {
+    if (this->path != nullptr) {
+        return QString::fromStdString(this->path->stem().string());
+    }
+
+    return QString();
 }

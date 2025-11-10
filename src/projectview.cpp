@@ -1,6 +1,8 @@
 #include "projectview.h"
 #include "ui_projectview.h"
 
+#include <QTabWidget>
+
 ProjectView::ProjectView(Project *project, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ProjectView)
@@ -8,7 +10,9 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
     this->ui->setupUi(this);
 
     this->project = project;
-    // TODO: pass `project` into each pane constructor and set up signals there.
+
+    connect(this->project, &Project::nameChanged,
+            this, &ProjectView::handleModelNameChange);
 
     this->toolPane = new ToolPane();
     this->embedWidget(this->ui->toolboxFrame, this->toolPane);
@@ -35,4 +39,13 @@ void ProjectView::embedWidget(QWidget *container, QWidget *child)
     layout->addWidget(child);
     layout->setContentsMargins(0, 0, 0, 0);
     container->setLayout(layout);
+}
+
+Project *ProjectView::getProject() {
+    return this->project;
+}
+
+void ProjectView::handleModelNameChange(const QString& name)
+{
+    emit this->wantsTabTitleUpdate(this, name);
 }

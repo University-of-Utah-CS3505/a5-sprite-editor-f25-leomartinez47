@@ -1,14 +1,35 @@
 /*
-    Written by Leo Martinez and Kailee Kim
+    Written by Leo Martinez, Kailee Kim, and Grant Handy
 */
+
+#include <QIODevice>
+#include <QBuffer>
 
 #include "sprite.h"
 
-Sprite::Sprite(const std::string &json)
-{
-    // TODO: deserialize JSON
+// QImage expects a C-style string.
+// TODO: check if PNG is supported and fail if it doesn't with supportedFormats()
+const char *FORMAT = "PNG";
 
-    this->addFrame();
+Sprite::Sprite(const QJsonObject &sprite)
+{
+    this->dimensions = QSize(
+        sprite.value("width").toInteger(),
+        sprite.value("height").toInteger()
+    );
+
+    // TODO: fix QJsonObject::value ambiguous warning?
+    QJsonArray jsonFrames = sprite.value("frames").toArray();
+
+    for (QJsonValue &&frame : jsonFrames) {
+        QImage image;
+        image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT);
+
+        // TODO: throw exception and catch in parent?
+        Q_ASSERT(this->dimensions == image.size());
+
+        this->frames.push_back(image);
+    }
 }
 
 Sprite::Sprite(QSize dimensions)
@@ -24,16 +45,16 @@ void Sprite::addFrame()
     frames.push_back(frame);
 }
 
-void Sprite::deleteFrame(int currentFrame)
+void Sprite::deleteFrame(std::size_t currentFrame)
 {
-    if (currentFrame < 0 || currentFrame >= frames.size()) {
+    if (currentFrame >= frames.size()) {
         return;
     }
 
     frames.erase(frames.begin() + currentFrame);
 }
 
-QImage &Sprite::getFrame(int index)
+QImage &Sprite::getFrame(std::size_t index)
 {
     // TODO: handle errors?
     return this->frames[index];
@@ -44,8 +65,23 @@ int Sprite::frameCount()
     return this->frames.size();
 }
 
-std::string Sprite::toJson()
-{
-    // TODO: serialize JSON to string
-    return std::string("{}");
+QJsonObject Sprite::toJson(){
+    QJsonArray jsonFrames;
+
+    for (const QImage &image : frames) {
+        QByteArray data;
+
+        QBuffer buffer = QBuffer(&data);
+        buffer.open(QIODevice::WriteOnly);
+        image.save(&buffer, FORMAT); // TODO: check success value.
+        buffer.close();
+
+        jsonFrames.push_back(QString(data.toBase64()));
+    }
+
+    return QJsonObject({
+        { "frames", jsonFrames },
+        { "width", this->dimensions.width() },
+        { "height", this->dimensions.height() },
+    });
 }

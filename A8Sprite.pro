@@ -11,6 +11,7 @@ CONFIG += c++17
 INCLUDEPATH += include
 
 SOURCES += \
+    src/spritesetup.cpp \
     src/main.cpp \
     src/project.cpp \
     src/sprite.cpp \
@@ -31,9 +32,11 @@ HEADERS += \
     include/canvaspane.h \
     include/frameselectionpane.h \
     include/previewpane.h \
-    include/toolpane.h
+    include/toolpane.h \
+    include/spritesetup.h
 
 FORMS += \
+    ui/spritesetup.ui \
     ui/canvaspane.ui \
     ui/frameselectionpane.ui \
     ui/previewpane.ui \
