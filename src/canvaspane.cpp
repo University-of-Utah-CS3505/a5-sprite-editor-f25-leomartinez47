@@ -3,19 +3,17 @@
     Date: 11/06/2025
 */
 
-#include "canvaspane.h"
-#include "ui_canvaspane.h"
-#include "project.h"
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QPainter>
 
+#include "canvaspane.h"
+#include "project.h"
+
+
 CanvasPane::CanvasPane(Project *project, QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::CanvasPane)
 {
-    ui->setupUi(this);
-
     showFrame(project->getCurrentFrame());
 
     connect(project,
@@ -27,11 +25,6 @@ CanvasPane::CanvasPane(Project *project, QWidget *parent)
             &CanvasPane::pixelClicked,
             project,
             &Project::onPixelClicked);
-}
-
-CanvasPane::~CanvasPane()
-{
-    delete ui;
 }
 
 void CanvasPane::showFrame(const QImage &frame)

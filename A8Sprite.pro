@@ -37,7 +37,6 @@ HEADERS += \
 
 FORMS += \
     ui/spritesetup.ui \
-    ui/canvaspane.ui \
     ui/frameselectionpane.ui \
     ui/previewpane.ui \
     ui/projectview.ui \

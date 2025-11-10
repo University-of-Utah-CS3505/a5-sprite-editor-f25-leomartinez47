@@ -40,8 +40,8 @@ Sprite::Sprite(QSize dimensions)
 
 void Sprite::addFrame()
 {
-    QImage frame(dimensions, QImage::Format_ARGB32);
-    frame.fill(0);
+    QImage frame = QImage(dimensions, QImage::Format_ARGB32);
+    frame.fill(Qt::transparent);
     frames.push_back(frame);
 }
 

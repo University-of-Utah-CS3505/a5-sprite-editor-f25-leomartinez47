@@ -8,11 +8,8 @@
 
 #include <QWidget>
 #include <QLabel>
-#include "project.h"
 
-namespace Ui {
-class CanvasPane;
-}
+#include "project.h"
 
 class CanvasPane : public QWidget
 {
@@ -20,7 +17,6 @@ class CanvasPane : public QWidget
 
 public:
     explicit CanvasPane(Project *project, QWidget *parent = nullptr);
-    ~CanvasPane();
 
 signals:
     /// @brief Signal to the project model that the user has clicked on the
@@ -51,9 +47,6 @@ protected:
     void paintEvent(QPaintEvent*) override;
 
 private:
-    /// The CanvasPane ui form.
-    Ui::CanvasPane *ui;
-
     /// If the user is currently drawing on the frame,
     /// that is they have clicked on the canvas and are yet to release.
     bool isDrawing;
