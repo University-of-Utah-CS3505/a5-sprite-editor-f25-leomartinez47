@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QString>
 
 class MainWindow : public QMainWindow
 {
@@ -19,12 +20,15 @@ private:
     // File Menu:
     QMenu *fileMenu;
     QAction *newAct;
+    QAction *openAct;
+    QAction *saveAct;
     QAction *exitAct;
 
-    // TODO: add saveAct and openAct
-
 private slots:
-    void newProject();
-    void handleCloseTabRequested(int index);
+    void onNewProjectRequested();
+    void onHandleCloseTabRequested(int index);
+    void onSaveRequested();
+    void onOpenRequested();
+    void updateTabViewTitle(QWidget* senderView, const QString& newTitle);
 };
 #endif // MAINWINDOW_H

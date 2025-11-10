@@ -19,8 +19,16 @@ class ProjectView : public QWidget
 
 public:
     /// Create a new ProjectView, taking *ownership* over `project`.
+    /// Project view must always be in a QTabWidget.
     explicit ProjectView(Project *project, QWidget *parent = nullptr);
     ~ProjectView();
+    Project *getProject();
+
+signals:
+    void wantsTabTitleUpdate(QWidget* sender, const QString& newTitle);
+
+private slots:
+    void handleModelNameChange(const QString &name);
 
 private:
     void embedWidget(QWidget *container, QWidget *child);

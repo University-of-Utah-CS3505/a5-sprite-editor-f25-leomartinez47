@@ -14,6 +14,8 @@ Sprite::Sprite(const QJsonObject &sprite)
     // TODO: fix QJsonObject::value ambiguous warning?
     QJsonArray jsonFrames = sprite.value("frames").toArray();
 
+    qDebug() << this->dimensions << " sprite created with " << jsonFrames.size() << " frames";
+
     for (QJsonValue &&frame : jsonFrames) {
         QImage image = QImage::fromData(QByteArray::fromBase64(frame.toString().toUtf8()));
 

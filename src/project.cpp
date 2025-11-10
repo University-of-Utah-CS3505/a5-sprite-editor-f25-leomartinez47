@@ -1,5 +1,6 @@
 #include "project.h"
 
+
 Project::Project(QSize dimensions, QObject *parent)
     : QObject{parent}
 {
@@ -12,18 +13,18 @@ Project::Project(QSize dimensions, QObject *parent)
 Project::Project(const QString &path, QObject *parent)
     : QObject{parent}
 {
+    this->path = new std::filesystem::path(path.toStdString());
+
     // TODO: check for errors or propagate exceptions?
     QFile file = QFile(path);
     file.open(QIODevice::ReadOnly);
 
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
-
     this->sprite = new Sprite(json.value("sprite").toObject());
 
     // TODO: parse tool, current color, current frame, etc. from JSON
 
     this->currentFrame = 0;
-    this->path = new QString(path);
     this->currentTool = new Pencil();
 }
 
@@ -101,21 +102,36 @@ void Project::onFrameRemoved(int index)
     emit this->frameChanged(this->getCurrentFrame());
 }
 
-void Project::onSaveRequested(){
+void Project::save(std::function<QString()> requestPath) {
     if (!this->path) {
-        // TODO (grant): prompt user for save file, then set it.
-        return;
+        QString userPath = requestPath();
+
+        if (userPath.isEmpty()) {
+            return;
+        }
+
+        this->path = new std::filesystem::path(userPath.toStdString());
+        emit this->nameChanged(this->name());
     }
 
     QFile saveFile = QFile(*this->path);
     saveFile.open(QIODevice::ReadWrite);
 
     QTextStream qStream = QTextStream(&saveFile);
+    qStream << QJsonDocument(this->toJson()).toJson();
+}
 
+QJsonObject Project::toJson() {
     // TODO: add tool, current color, current frame, etc.
-    QJsonObject obj = QJsonObject({
+    return QJsonObject({
         { "sprite", this->sprite->toJson() }
     });
+}
 
-    qStream << QJsonDocument(obj).toJson();
+QString Project::name() {
+    if (this->path != nullptr) {
+        return QString::fromStdString(this->path->stem().string());
+    }
+
+    return QString();
 }
