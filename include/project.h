@@ -11,7 +11,8 @@
 #include "sprite.h"
 #include "tools.h"
 
-const QString PROJECT_FILE_EXTENSION = "Sprite Project (*.sprite)";
+const QString PROJECT_FILE_EXTENSION = ".sprite";
+const QString PROJECT_FILE_EXTENSION_DESCRIPTION = "Sprite Project (*.sprite)";
 
 class Project : public QObject
 {

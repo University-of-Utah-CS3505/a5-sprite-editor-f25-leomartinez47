@@ -23,7 +23,6 @@ Project::Project(const QString &path, QObject *parent)
     this->sprite = new Sprite(json.value("sprite").toObject());
 
     // TODO: parse tool, current color, current frame, etc. from JSON
-
     this->currentFrame = 0;
     this->currentTool = new Pencil();
 }
@@ -111,6 +110,11 @@ void Project::save(std::function<QString()> requestPath) {
         }
 
         this->path = new std::filesystem::path(userPath.toStdString());
+
+        if (!this->path->has_extension()) {
+            this->path->replace_extension(PROJECT_FILE_EXTENSION.toStdString());
+        }
+
         emit this->nameChanged(this->name());
     }
 

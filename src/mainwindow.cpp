@@ -6,8 +6,9 @@
 
 #include "mainwindow.h"
 #include "projectview.h"
+#include "spritesetup.h"
 
-const QSize DEFAULT_DIMENSIONS = QSize(25, 25);
+const QString NEW_PROJECT_TITLE = "<New Project>";
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -33,15 +34,16 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::onNewProjectRequested()
 {
-    // TODO: prompt the user to configure the dimensions before creating it.
-    // TODO (grant): set up fileNameChanged signal to change tab title.
-    Project *project = new Project(DEFAULT_DIMENSIONS);
-    ProjectView *view = new ProjectView(project);
+    SpriteSetup *setup = new SpriteSetup();
 
-    connect(view, &ProjectView::wantsTabTitleUpdate,
-            this, &MainWindow::updateTabViewTitle);
+    connect(setup, &SpriteSetup::setupFinished,
+            this, &MainWindow::onFinishSetup);
 
-    this->tabs->addTab(view, "<New Project>");
+    int newIndex = this->tabs->addTab(setup, NEW_PROJECT_TITLE);
+
+    if (newIndex != 0) {
+        this->tabs->setCurrentIndex(newIndex);
+    }
 }
 
 void MainWindow::onHandleCloseTabRequested(int index)
@@ -50,10 +52,14 @@ void MainWindow::onHandleCloseTabRequested(int index)
         return;
     }
 
+    if (index == 0) {
+        emit this->close();
+        return;
+    }
+
+    // TODO: possibly check if project isn't saved?
+
     QWidget *page = tabs->widget(index);
-
-    // TODO (grant): maybe check is saved and if not prompt the user.
-
     this->tabs->removeTab(index);
 
     if (page) {
@@ -61,35 +67,69 @@ void MainWindow::onHandleCloseTabRequested(int index)
     }
 }
 
-void MainWindow::updateTabViewTitle(QWidget* senderView, const QString& newTitle)
+void MainWindow::onHandleCloseCurrentTabRequested() {
+    this->onHandleCloseTabRequested(this->tabs->currentIndex());
+}
+
+void MainWindow::onUpdateTabViewTitle(QWidget* senderView, const QString& newTitle)
 {
     int index = this->tabs->indexOf(senderView);
 
-    if (index != -1)
-    {
-        this->tabs->setTabText(index, newTitle);
-    }
-    else
+    if (index == -1)
     {
         qWarning() << "Update failed: sender view not found in QTabWidget.";
+        return;
+    }
+
+    this->tabs->setTabText(index, newTitle);
+}
+
+void MainWindow::onFinishSetup(QWidget* setupView, Project *project) {
+    int index = this->tabs->indexOf(setupView);
+
+    if (index == -1) {
+        qWarning() << "Update failed: sender view not found in QTabWidget.";
+        return;
+    }
+
+    ProjectView *view = new ProjectView(project);
+
+    connect(view, &ProjectView::wantsTabTitleUpdate,
+            this, &MainWindow::onUpdateTabViewTitle);
+
+    // Remove the old setup view
+    this->tabs->removeTab(index);
+    setupView->deleteLater();
+
+    // Add the new project view with the associated project as the visible tab.
+    int newIndex = this->tabs->insertTab(index, view, NEW_PROJECT_TITLE);
+
+    if (newIndex != 0) {
+        this->tabs->setCurrentIndex(newIndex);
     }
 }
 
 void MainWindow::onSaveRequested() {
+    ProjectView *currentView = qobject_cast<ProjectView*>(this->tabs->currentWidget());
 
-    Project *currentProject = qobject_cast<ProjectView*>(this->tabs->currentWidget())->getProject();
+    // Save has been requested during setup.
+    if (currentView == nullptr) {
+        return;
+    }
+
+    Project *currentProject = currentView->getProject();
 
     currentProject->save([this]() {
         return QFileDialog::getSaveFileName(this, "Save Project File",
             QDir::home().absolutePath(),
-            PROJECT_FILE_EXTENSION);
+            PROJECT_FILE_EXTENSION_DESCRIPTION);
     });
 }
 
 void MainWindow::onOpenRequested() {
     QString fileName = QFileDialog::getOpenFileName(this, "Open Project File",
                                                     QDir::home().absolutePath(),
-                                                    PROJECT_FILE_EXTENSION);
+                                                    PROJECT_FILE_EXTENSION_DESCRIPTION);
 
     if (fileName.isEmpty()) {
         return;
@@ -122,9 +162,15 @@ void MainWindow::createActions()
     this->saveAct->setShortcuts(QKeySequence::Save);
     connect(this->saveAct, &QAction::triggered, this, &MainWindow::onSaveRequested);
 
-    this->exitAct = new QAction("Exit", this);
-    this->exitAct->setShortcuts(QKeySequence::Quit);
+    this->closeTabAct = new QAction(this);
+    this->closeTabAct->setShortcuts(QKeySequence::Close);
+    connect(this->closeTabAct, &QAction::triggered,
+            this, &MainWindow::onHandleCloseCurrentTabRequested);
+    // closeTabAct is not registered in the file menu.
+    this->addAction(this->closeTabAct);
 
     // TODO: maybe ask the user if they've saved the file.
+    this->exitAct = new QAction("Exit", this);
+    this->exitAct->setShortcuts(QKeySequence::Quit);
     connect(this->exitAct, &QAction::triggered, this, &QWidget::close);
 }

@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QString>
 
+#include "project.h"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -22,13 +24,18 @@ private:
     QAction *newAct;
     QAction *openAct;
     QAction *saveAct;
+    QAction *closeTabAct;
     QAction *exitAct;
 
 private slots:
     void onNewProjectRequested();
+    void onHandleCloseCurrentTabRequested();
     void onHandleCloseTabRequested(int index);
     void onSaveRequested();
     void onOpenRequested();
-    void updateTabViewTitle(QWidget* senderView, const QString& newTitle);
+    void onFinishSetup(QWidget* senderView, Project *project);
+    void onUpdateTabViewTitle(QWidget* senderView, const QString& newTitle);
 };
+
+
 #endif // MAINWINDOW_H
