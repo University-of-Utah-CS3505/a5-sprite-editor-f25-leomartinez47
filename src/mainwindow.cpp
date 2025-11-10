@@ -131,12 +131,24 @@ void MainWindow::onOpenRequested() {
                                                     QDir::home().absolutePath(),
                                                     PROJECT_FILE_EXTENSION_DESCRIPTION);
 
+    // Dialog was canceled
     if (fileName.isEmpty()) {
         return;
     }
 
+    // Don't open the same file multiple times.
+    for (int i = 0; i < this->tabs->count(); i++) {
+        ProjectView *view = qobject_cast<ProjectView*>(this->tabs->widget(i));
+
+        if (view != nullptr && fileName == view->getProject()->getPath()) {
+            this->tabs->setCurrentIndex(i);
+            return;
+        }
+    }
+
     Project *project = new Project(fileName);
-    this->tabs->setCurrentIndex(this->tabs->addTab(new ProjectView(project), project->name()));
+    int newIndex = this->tabs->addTab(new ProjectView(project), project->getName());
+    this->tabs->setCurrentIndex(newIndex);
 }
 
 void MainWindow::createMenus()
