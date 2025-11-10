@@ -1,11 +1,14 @@
+/*
+    Contributors: Bryce Wiley and Leo Martinez
+    Date: 11/06/2025
+*/
+
 #include "canvaspane.h"
 #include "ui_canvaspane.h"
 #include "project.h"
 #include <QPixmap>
-#include <QGraphicsPixmapItem>
 #include <QMouseEvent>
-#include <QWheelEvent>
-#include <QKeyEvent>
+#include <QPainter>
 
 CanvasPane::CanvasPane(Project *project, QWidget *parent)
     : QWidget(parent)
@@ -13,61 +16,105 @@ CanvasPane::CanvasPane(Project *project, QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->scene = new QGraphicsScene(this);
-
-    ui->view->setScene(scene);
-    ui->view->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-    ui->view->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
+    showFrame(project->getCurrentFrame());
 
     connect(project,
             &Project::frameChanged,
             this,
             &CanvasPane::showFrame);
+
+    connect(this,
+            &CanvasPane::pixelClicked,
+            project,
+            &Project::onPixelClicked);
 }
 
 CanvasPane::~CanvasPane()
 {
     delete ui;
-    delete scene;
 }
 
 void CanvasPane::showFrame(const QImage &frame)
 {
-    // remove current frame from scene??
-
-    QPixmap pixmap = QPixmap::fromImage(frame);
-    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(pixmap);
-    scene->addItem(item);
+    currentFrame = frame;
+    update();
 }
 
-void CanvasPane::mousePressEvent(QMouseEvent *event) {
-    if (event->button() == Qt::LeftButton && !isPanning) {
-        emit pointClicked(ui->view->mapToScene(event->pos()));
+void CanvasPane::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() != Qt::LeftButton) {
+        return;
     }
-}
 
-void CanvasPane::wheelEvent(QWheelEvent *event){
-    const double factor = 1.15;
-    if (event->angleDelta().y() >0){
-        ui->view->scale(factor, factor);
-    }
-    else {
-        ui->view->scale(1.0 / factor, 1.0 / factor);
+    isDrawing = true;
+
+    QPoint spritePos = mapToSprite(event->pos());
+    if (!spritePos.isNull()) {
+        emit pixelClicked(spritePos);
     }
 }
 
-void CanvasPane::keyPressEvent(QKeyEvent *event){
-    if (event->key() == Qt::Key_Space && !isPanning){
-        isPanning = true;
-        ui->view->setDragMode(QGraphicsView::ScrollHandDrag);
-        setCursor(Qt::OpenHandCursor);
+void CanvasPane::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton && this->isDrawing) {
+        this->isDrawing = false;
     }
 }
 
-void CanvasPane::keyReleaseEvent(QKeyEvent *event){
-    if (event->key() == Qt::Key_Space){
-        isPanning = false;
-        ui->view->setDragMode(QGraphicsView::NoDrag);
-        setCursor(Qt::ArrowCursor);
+void CanvasPane::mouseMoveEvent(QMouseEvent *event)
+{
+    if (!rect().contains(event->pos()) || !this->isDrawing) {
+        return;
     }
+
+    QPoint spritePos = mapToSprite(event->pos());
+    if (!spritePos.isNull()) {
+        emit pixelClicked(spritePos);
+    }
+}
+
+void CanvasPane::paintEvent(QPaintEvent*)
+{
+    if (currentFrame.isNull()) {
+        return;
+    }
+
+    QPainter painter(this);
+    QPixmap framePixmap = QPixmap::fromImage(currentFrame);
+
+    // Calculate the scale factor and offsets for the current frame
+    int scaleFactorX = this->width() / currentFrame.width();
+    int scaleFactorY = this->height() / currentFrame.height();
+    this->scaleFactor = qMax(1, qMin(scaleFactorX, scaleFactorY));
+
+    int scaledWidth = currentFrame.width() * this->scaleFactor;
+    int scaledHeight = currentFrame.height() * this->scaleFactor;
+    this->xOffset = (this->width() - scaledWidth) / 2;
+    this->yOffset = (this->height() - scaledHeight) / 2;
+
+    // Draw the scaled frame
+    painter.drawPixmap(xOffset, yOffset,
+                       framePixmap.scaled(
+                           scaledWidth, scaledHeight,
+                           Qt::KeepAspectRatio, Qt::FastTransformation));
+
+}
+
+QPoint CanvasPane::mapToSprite(const QPoint &widgetPos) const
+{
+    if (currentFrame.isNull()) {
+        // Null QPoint if no frame
+        return QPoint();
+    }
+
+    int imgX = (widgetPos.x() - this->xOffset) / this->scaleFactor;
+    int imgY = (widgetPos.y() - this->yOffset) / this->scaleFactor;
+
+    if (imgX < 0 || imgX >= currentFrame.width() ||
+        imgY < 0 || imgY >= currentFrame.height()) {
+        // Null QPoint if out of bounds
+        return QPoint();
+    }
+
+    return QPoint(imgX, imgY);
 }
