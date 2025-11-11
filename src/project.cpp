@@ -9,8 +9,7 @@ Project::Project(QSize dimensions, QObject *parent)
     this->path = nullptr;
     this->currentTool = new Pencil();
 
-    //TODO: decide on a default color
-    this->currentColor = QColor(255, 255, 255);
+    this->currentColor = QColor(0, 0, 0);
 }
 
 Project::Project(const QString &path, QObject *parent)
@@ -26,7 +25,7 @@ Project::Project(const QString &path, QObject *parent)
 
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
     if(!json.contains("sprite") || !json.contains("currentFrame") || !json.contains("currentTool")
-        || !json.contains("curentColor")){
+        || !json.contains("currentColor")){
         throw std::invalid_argument("Project information could not be retrieved.");
     }
 

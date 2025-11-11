@@ -30,10 +30,6 @@ Sprite::Sprite(const QJsonObject &sprite)
             throw std::invalid_argument("Unsupported format.");
         }
 
-        // TODO: throw exception and catch in parent?
-        qDebug() << this->dimensions << image.size();
-        Q_ASSERT(this->dimensions == image.size());
-
         this->frames.push_back(image);
     }
 }
@@ -83,8 +79,7 @@ QJsonObject Sprite::toJson()
         QBuffer buffer = QBuffer(&data);
         buffer.open(QIODevice::WriteOnly);
         if(!image.save(&buffer, FORMAT)){
-            // throw an exception?
-            qDebug() << "Sprite was not saved";
+            throw std::invalid_argument("Could not save to file");
         }
         buffer.close();
 
