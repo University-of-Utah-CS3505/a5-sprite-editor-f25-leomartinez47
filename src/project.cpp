@@ -18,7 +18,6 @@ Project::Project(const QString &path, QObject *parent)
 {
     this->path = new std::filesystem::path(path.toStdString());
 
-    // TODO: check for errors or propagate exceptions?
     QFile file = QFile(path);
     if(!file.open(QIODevice::ReadOnly)){
         // TODO : will this ever happen? Since we have a file dialog?
@@ -26,9 +25,14 @@ Project::Project(const QString &path, QObject *parent)
 
 
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
-    this->sprite = new Sprite(json.value("srite").toObject());
+    if(!json.contains("sprite") || !json.contains("currentFrame") || !json.contains("currentTool")
+        || !json.contains("curentColor")){
+        throw std::invalid_argument("Project information could not be retrieved.");
+    }
 
-    // TODO: etc. from JSON
+    this->sprite = new Sprite(json.value("sprite").toObject());
+
+    // TODO: other from JSON
     this->currentFrame = json.value("currentFrame").toInteger();
 
     currentTool = new Pencil();
@@ -50,23 +54,19 @@ Project::~Project()
     delete this->currentTool;
 }
 
-const QColor &Project::getCurrentColor() const
-{
+const QColor &Project::getCurrentColor() const{
     return this->currentColor;
 }
 
-int Project::getCurrentFrameIndex() const
-{
+int Project::getCurrentFrameIndex() const{
     return this->currentFrame;
 }
 
-QImage &Project::getCurrentFrame() const
-{
+QImage &Project::getCurrentFrame() const{
     return this->sprite->getFrame(this->currentFrame);
 }
 
-void Project::onToolChanged(Tool *tool)
-{
+void Project::onToolChanged(Tool *tool){
     if (tool != nullptr) {
         this->currentTool = tool;
     }

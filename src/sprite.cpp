@@ -12,10 +12,9 @@
 // TODO: check if PNG is supported and fail if it doesn't with supportedFormats()
 const char *FORMAT = "PNG";
 
-Sprite::Sprite(const QJsonObject &sprite)
-{
+Sprite::Sprite(const QJsonObject &sprite){
     if(!sprite.contains("frames") || !sprite.contains("width") || !sprite.contains("height")){
-        throw std::invalid_argument("Sprite information not saved properly.");
+        throw std::invalid_argument("Sprite information could not be retrieved.");
     }
 
     this->dimensions = QSize(
@@ -23,16 +22,15 @@ Sprite::Sprite(const QJsonObject &sprite)
         sprite.value("height").toInteger()
     );
 
-    // TODO: fix QJsonObject::value ambiguous warning?
-
     QJsonArray jsonFrames = sprite.value("frames").toArray();
     for (QJsonValue &&frame : jsonFrames) {
         QImage image;
-        image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT);
+        if(!image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT)){
+            throw std::invalid_argument("Unsupported format.");
+        }
 
         // TODO: throw exception and catch in parent?
-        qDebug() << this->dimensions << image.size() << (frame.toString());
-        qDebug() << image.colorTable();
+        qDebug() << this->dimensions << image.size();
         Q_ASSERT(this->dimensions == image.size());
 
         this->frames.push_back(image);
@@ -45,15 +43,13 @@ Sprite::Sprite(QSize dimensions)
     addFrame();
 }
 
-void Sprite::addFrame()
-{
+void Sprite::addFrame(){
     QImage frame = QImage(dimensions, QImage::Format_ARGB32);
     frame.fill(Qt::transparent);
     frames.push_back(frame);
 }
 
-void Sprite::deleteFrame(std::size_t currentFrame)
-{
+void Sprite::deleteFrame(std::size_t currentFrame){
     if (currentFrame >= frames.size()) {
         return;
     }
@@ -61,14 +57,14 @@ void Sprite::deleteFrame(std::size_t currentFrame)
     frames.erase(frames.begin() + currentFrame);
 }
 
-QImage &Sprite::getFrame(std::size_t index)
-{
-    // TODO: handle errors?
+QImage &Sprite::getFrame(std::size_t index){
+    if(index < 0 || index >= frames.size()){
+        throw std::invalid_argument("Invalid index.");
+    }
     return this->frames[index];
 }
 
-int Sprite::frameCount()
-{
+int Sprite::frameCount(){
     return this->frames.size();
 }
 
