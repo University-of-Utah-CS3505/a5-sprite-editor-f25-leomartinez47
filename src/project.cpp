@@ -54,19 +54,23 @@ Project::~Project()
     delete this->currentTool;
 }
 
-const QColor &Project::getCurrentColor() const{
+const QColor &Project::getCurrentColor() const
+{
     return this->currentColor;
 }
 
-int Project::getCurrentFrameIndex() const{
+int Project::getCurrentFrameIndex() const
+{
     return this->currentFrame;
 }
 
-QImage &Project::getCurrentFrame() const{
+QImage &Project::getCurrentFrame() const
+{
     return this->sprite->getFrame(this->currentFrame);
 }
 
-void Project::onToolChanged(Tool *tool){
+void Project::onToolChanged(Tool *tool)
+{
     if (tool != nullptr) {
         this->currentTool = tool;
     }
@@ -133,7 +137,7 @@ void Project::save(std::function<QString()> requestPath) {
 
     QFile saveFile = QFile(*this->path);
 
-    if(!saveFile.open(QIODevice::ReadWrite | QIODevice::Truncate)){
+    if(!saveFile.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
         throw std::invalid_argument("Could not open selected file.");
     }
 
@@ -144,7 +148,8 @@ void Project::save(std::function<QString()> requestPath) {
     saveFile.close();
 }
 
-QJsonObject Project::toJson() {
+QJsonObject Project::toJson()
+{
     // TODO: add anything else?
     QJsonArray rgb;
     rgb.push_back(this->currentColor.red());
@@ -159,7 +164,8 @@ QJsonObject Project::toJson() {
     });
 }
 
-QString Project::name() {
+QString Project::name()
+{
     if (this->path != nullptr) {
         return QString::fromStdString(this->path->stem().string());
     }

@@ -12,8 +12,9 @@
 // TODO: check if PNG is supported and fail if it doesn't with supportedFormats()
 const char *FORMAT = "PNG";
 
-Sprite::Sprite(const QJsonObject &sprite){
-    if(!sprite.contains("frames") || !sprite.contains("width") || !sprite.contains("height")){
+Sprite::Sprite(const QJsonObject &sprite)
+{
+    if(!sprite.contains("frames") || !sprite.contains("width") || !sprite.contains("height")) {
         throw std::invalid_argument("Sprite information could not be retrieved.");
     }
 
@@ -43,13 +44,15 @@ Sprite::Sprite(QSize dimensions)
     addFrame();
 }
 
-void Sprite::addFrame(){
+void Sprite::addFrame()
+{
     QImage frame = QImage(dimensions, QImage::Format_ARGB32);
     frame.fill(Qt::transparent);
     frames.push_back(frame);
 }
 
-void Sprite::deleteFrame(std::size_t currentFrame){
+void Sprite::deleteFrame(std::size_t currentFrame)
+{
     if (currentFrame >= frames.size()) {
         return;
     }
@@ -57,18 +60,21 @@ void Sprite::deleteFrame(std::size_t currentFrame){
     frames.erase(frames.begin() + currentFrame);
 }
 
-QImage &Sprite::getFrame(std::size_t index){
-    if(index < 0 || index >= frames.size()){
+QImage &Sprite::getFrame(std::size_t index)
+{
+    if(index < 0 || index >= frames.size()) {
         throw std::invalid_argument("Invalid index.");
     }
     return this->frames[index];
 }
 
-int Sprite::frameCount(){
+int Sprite::frameCount()
+{
     return this->frames.size();
 }
 
-QJsonObject Sprite::toJson(){
+QJsonObject Sprite::toJson()
+{
     QJsonArray jsonFrames;
 
     for (const QImage &image : frames) {
