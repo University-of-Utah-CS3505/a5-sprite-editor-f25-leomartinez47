@@ -26,7 +26,7 @@ Sprite::Sprite(const QJsonObject &sprite)
     QJsonArray jsonFrames = sprite.value("frames").toArray();
     for (QJsonValue &&frame : jsonFrames) {
         QImage image;
-        if(!image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT)){
+        if(!image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT)) {
             throw std::invalid_argument("Unsupported format.");
         }
 

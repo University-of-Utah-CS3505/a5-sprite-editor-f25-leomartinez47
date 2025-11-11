@@ -22,7 +22,6 @@ Project::Project(const QString &path, QObject *parent)
         throw std::invalid_argument("File could not be opened.");
     }
 
-
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
     if(!json.contains("sprite") || !json.contains("currentFrame") || !json.contains("currentTool")
         || !json.contains("currentColor")){
@@ -30,7 +29,6 @@ Project::Project(const QString &path, QObject *parent)
     }
 
     this->sprite = new Sprite(json.value("sprite").toObject());
-
     // TODO: other from JSON
     this->currentFrame = json.value("currentFrame").toInteger();
 
@@ -66,6 +64,11 @@ int Project::getCurrentFrameIndex() const
 QImage &Project::getCurrentFrame() const
 {
     return this->sprite->getFrame(this->currentFrame);
+}
+
+Tool &Project::getCurrentTool() const
+{
+    return *(this->currentTool);
 }
 
 void Project::onToolChanged(Tool *tool)
