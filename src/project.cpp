@@ -8,6 +8,8 @@ Project::Project(QSize dimensions, QObject *parent)
     this->currentFrame = 0;
     this->path = nullptr;
     this->currentTool = new Pencil();
+
+    this->currentColor = QColor(0, 0, 0);
 }
 
 Project::Project(const QString &path, QObject *parent)
@@ -15,16 +17,30 @@ Project::Project(const QString &path, QObject *parent)
 {
     this->path = new std::filesystem::path(path.toStdString());
 
-    // TODO: check for errors or propagate exceptions?
     QFile file = QFile(path);
-    file.open(QIODevice::ReadOnly);
+    if(!file.open(QIODevice::ReadOnly)){
+        throw std::invalid_argument("File could not be opened.");
+    }
+
 
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
+    if(!json.contains("sprite") || !json.contains("currentFrame") || !json.contains("currentTool")
+        || !json.contains("currentColor")){
+        throw std::invalid_argument("Project information could not be retrieved.");
+    }
+
     this->sprite = new Sprite(json.value("sprite").toObject());
 
-    // TODO: parse tool, current color, current frame, etc. from JSON
-    this->currentFrame = 0;
-    this->currentTool = new Pencil();
+    // TODO: other from JSON
+    this->currentFrame = json.value("currentFrame").toInteger();
+
+    currentTool = new Pencil();
+    if(json.value("currentTool").toString() == "Eraser"){
+        currentTool = new Eraser();
+    }
+
+    QJsonArray rgb = json.value("currentColor").toArray();
+    this->currentColor = QColor(rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger());
 }
 
 Project::~Project()
@@ -120,8 +136,9 @@ void Project::save(std::function<QString()> requestPath) {
 
     QFile saveFile = QFile(*this->path);
 
-    // TODO: check for errors
-    saveFile.open(QIODevice::ReadWrite | QIODevice::Truncate);
+    if(!saveFile.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
+        throw std::invalid_argument("Could not open selected file.");
+    }
 
     QTextStream qStream = QTextStream(&saveFile);
     qStream << QJsonDocument(this->toJson()).toJson(QJsonDocument::Indented);
@@ -130,10 +147,19 @@ void Project::save(std::function<QString()> requestPath) {
     saveFile.close();
 }
 
-QJsonObject Project::toJson() {
-    // TODO: add tool, current color, current frame, etc.
+QJsonObject Project::toJson()
+{
+    // TODO: add anything else?
+    QJsonArray rgb;
+    rgb.push_back(this->currentColor.red());
+    rgb.push_back(this->currentColor.green());
+    rgb.push_back(this->currentColor.blue());
+
     return QJsonObject({
-        { "sprite", this->sprite->toJson() }
+        { "sprite", this->sprite->toJson() },
+        { "currentFrame", this->currentFrame },
+        { "currentTool", this->currentTool->toString() },
+        { "currentColor", rgb }
     });
 }
 

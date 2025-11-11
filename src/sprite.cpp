@@ -4,6 +4,7 @@
 
 #include <QIODevice>
 #include <QBuffer>
+#include <QDebug>
 
 #include "sprite.h"
 
@@ -13,20 +14,21 @@ const char *FORMAT = "PNG";
 
 Sprite::Sprite(const QJsonObject &sprite)
 {
+    if(!sprite.contains("frames") || !sprite.contains("width") || !sprite.contains("height")) {
+        throw std::invalid_argument("Sprite information could not be retrieved.");
+    }
+
     this->dimensions = QSize(
         sprite.value("width").toInteger(),
         sprite.value("height").toInteger()
     );
 
-    // TODO: fix QJsonObject::value ambiguous warning?
     QJsonArray jsonFrames = sprite.value("frames").toArray();
-
     for (QJsonValue &&frame : jsonFrames) {
         QImage image;
-        image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT);
-
-        // TODO: throw exception and catch in parent?
-        Q_ASSERT(this->dimensions == image.size());
+        if(!image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT)){
+            throw std::invalid_argument("Unsupported format.");
+        }
 
         this->frames.push_back(image);
     }
@@ -56,7 +58,9 @@ void Sprite::deleteFrame(std::size_t currentFrame)
 
 QImage &Sprite::getFrame(std::size_t index)
 {
-    // TODO: handle errors?
+    if(index < 0 || index >= frames.size()) {
+        throw std::invalid_argument("Invalid index.");
+    }
     return this->frames[index];
 }
 
@@ -65,7 +69,8 @@ int Sprite::frameCount()
     return this->frames.size();
 }
 
-QJsonObject Sprite::toJson(){
+QJsonObject Sprite::toJson()
+{
     QJsonArray jsonFrames;
 
     for (const QImage &image : frames) {
@@ -73,7 +78,9 @@ QJsonObject Sprite::toJson(){
 
         QBuffer buffer = QBuffer(&data);
         buffer.open(QIODevice::WriteOnly);
-        image.save(&buffer, FORMAT); // TODO: check success value.
+        if(!image.save(&buffer, FORMAT)){
+            throw std::invalid_argument("Could not save to file");
+        }
         buffer.close();
 
         jsonFrames.push_back(QString(data.toBase64()));

@@ -145,8 +145,16 @@ void MainWindow::onOpenRequested() {
             return;
         }
     }
-
-    Project *project = new Project(fileName);
+  
+    Project *project;
+    try
+    {
+        project = new Project(fileName);
+    }
+    catch(std::invalid_argument ex) { //an exception isn't being thrown right now. Project is making a Sprite out of a bad Json
+        qWarning() << ex.what();
+        return;
+    }
     int newIndex = this->tabs->addTab(new ProjectView(project), project->getName());
     this->tabs->setCurrentIndex(newIndex);
 }
