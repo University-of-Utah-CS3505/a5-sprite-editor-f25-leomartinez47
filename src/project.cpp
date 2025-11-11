@@ -67,6 +67,7 @@ void Project::onCurrentFrameChanged(int index)
     }
 
     this->currentFrame = index;
+    emit this->frameSelectionChanged(index);
     emit this->frameChanged(this->getCurrentFrame());
 }
 
@@ -74,9 +75,10 @@ void Project::onFrameAdded(int index)
 {
     // adds a frame at the index to the sprite
     this->sprite->addFrame(index);
+    emit this->frameAdded(index);
+
     // changes the current frame to the newest frame
     this->onCurrentFrameChanged(index);
-    emit this->frameListChanged();
 }
 
 void Project::onFrameRemoved(int index)
@@ -85,15 +87,25 @@ void Project::onFrameRemoved(int index)
         return;
     }
 
-    if (this->currentFrame == index && index != 0) {
-        this->currentFrame--;
+    // 3 Cases:
+    // - only 1 frame in list: skip frame selection signal
+    // - between frames or first frame: stay in same index
+    // - deleting last frame: select previous index
+    int next;
+    if (this->sprite->frameCount() == 1) {
+        next = -1;
+    } else if (index == this->sprite->frameCount() - 1) {
+        next = index - 1;
+    } else {
+        next = index;
+    }
+
+    if (next >= 0) {
+        this->onCurrentFrameChanged(next);
     }
 
     this->sprite->deleteFrame(index);
-    if (0 < index && index < this->sprite->frameCount()) {
-        this->onCurrentFrameChanged(index);
-    }
-    emit this->frameListChanged();
+    emit this->frameRemoved(index);
 }
 
 void Project::onSaveRequested()

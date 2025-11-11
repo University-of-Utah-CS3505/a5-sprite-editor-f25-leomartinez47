@@ -30,13 +30,16 @@ signals:
     // like on frame change and on editing the image
     void frameChanged(const QImage &frame);
 
-    // For frame pane. Called after internal changes are applied (add/del).
-    void frameListChanged();
+    // Called when the frame selected is changed (ie, whenever another frame is set active)
+    void frameSelectionChanged(int index);
+    void frameAdded(int index);
+    void frameRemoved(int index);
 
 public slots:
     void onToolChanged(Tool *tool);
     void onColorChanged(QColor color);
     void onPixelClicked(QPoint point);
+
     // From Frame Selection
     void onCurrentFrameChanged(int index);
 
