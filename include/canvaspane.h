@@ -44,7 +44,9 @@ protected:
     /// @param event - A mouse move QMouseEvent.
     void mouseMoveEvent(QMouseEvent *event) override;
 
-    /// @brief Draws currentFrame scaled to fit the canvas widget.
+    /// @brief Draws currentFrame scaled to fit the canvas widget,
+    /// and adds a png-style grid background to represent the transparent
+    /// parts of the frame.
     void paintEvent(QPaintEvent*) override;
 
 private:
@@ -64,7 +66,7 @@ private:
     /// Offset to center the frame vertically.
     int yOffset;
 
-    /// @brief Maps canvas coordinates to pixel coordinates relative to the sprite.
+    /// @brief Maps canvas coordinates to the sprite's pixel coordinates.
     /// @param widgetPos - The cursor position relative to the canvas.
     QPoint mapToSprite(const QPoint &widgetPos) const;
 };
