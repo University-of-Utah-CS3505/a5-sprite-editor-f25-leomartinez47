@@ -6,6 +6,12 @@ ToolPane::ToolPane(QWidget *parent)
     , ui(new Ui::ToolPane)
 {
     ui->setupUi(this);
+    ui->pencilButton->setIcon(QIcon(":/icons/pencil.png"));
+    qDebug() << ui->pencilButton->size();
+    ui->pencilButton->setIconSize(ui->pencilButton->size());
+    ui->eraserButton->setIcon(QIcon(":/icons/eraser.png"));
+    ui->eraserButton->setIconSize(ui->eraserButton->size());
+
 
     connect(this->ui->pencilButton, &QPushButton::clicked,
             this, &ToolPane::onPencilSelected);
