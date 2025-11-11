@@ -18,6 +18,8 @@ CanvasPane::CanvasPane(Project *project, QWidget *parent)
     // Draw the initial frame
     onFrameChanged(project->getCurrentFrame());
 
+    this->setMinimumSize(200, 200);
+
     connect(project,
             &Project::frameChanged,
             this,
@@ -95,7 +97,7 @@ void CanvasPane::paintEvent(QPaintEvent*)
     // Transparency grid
     QRect gridArea(this->xOffset, this->yOffset, scaledWidth, scaledHeight);
 
-    const int gridSize = this->scaleFactor;
+    const int gridSize = this->scaleFactor / 2;
     QColor lightGray(0xCC, 0xCC, 0xCC);
     QColor darkGray(0xAA, 0xAA, 0xAA);
 
