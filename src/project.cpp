@@ -20,10 +20,13 @@ Project::Project(const QString &path, QObject *parent)
 
     // TODO: check for errors or propagate exceptions?
     QFile file = QFile(path);
-    file.open(QIODevice::ReadOnly);
+    if(!file.open(QIODevice::ReadOnly)){
+        // TODO : will this ever happen? Since we have a file dialog?
+    }
+
 
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
-    this->sprite = new Sprite(json.value("sprite").toObject());
+    this->sprite = new Sprite(json.value("srite").toObject());
 
     // TODO: etc. from JSON
     this->currentFrame = json.value("currentFrame").toInteger();

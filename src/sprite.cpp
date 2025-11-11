@@ -14,14 +14,18 @@ const char *FORMAT = "PNG";
 
 Sprite::Sprite(const QJsonObject &sprite)
 {
+    if(!sprite.contains("frames") || !sprite.contains("width") || !sprite.contains("height")){
+        throw std::invalid_argument("Sprite information not saved properly.");
+    }
+
     this->dimensions = QSize(
         sprite.value("width").toInteger(),
         sprite.value("height").toInteger()
     );
 
     // TODO: fix QJsonObject::value ambiguous warning?
-    QJsonArray jsonFrames = sprite.value("frames").toArray();
 
+    QJsonArray jsonFrames = sprite.value("frames").toArray();
     for (QJsonValue &&frame : jsonFrames) {
         QImage image;
         image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT);

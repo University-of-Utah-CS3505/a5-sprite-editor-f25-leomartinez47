@@ -136,7 +136,15 @@ void MainWindow::onOpenRequested() {
     }
 
     // TODO : possibly catch an error
-    Project *project = new Project(fileName);
+    Project *project;
+    try
+    {
+        project = new Project(fileName);
+    }
+    catch(std::invalid_argument ex) { //an exception isn't being thrown right now. Project is making a Sprite out of a bad Json
+        qWarning() << "The file has been corrupted." << ex.what();
+        return;
+    }
     this->tabs->setCurrentIndex(this->tabs->addTab(new ProjectView(project), project->name()));
 }
 
