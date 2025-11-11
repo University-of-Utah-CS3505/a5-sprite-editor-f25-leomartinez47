@@ -19,12 +19,15 @@
      <x>10</x>
      <y>60</y>
      <width>169</width>
-     <height>31</height>
+     <height>32</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QPushButton" name="pencilButton">
+      <property name="focusPolicy">
+       <enum>Qt::FocusPolicy::NoFocus</enum>
+      </property>
       <property name="text">
        <string>Pencil</string>
       </property>
@@ -32,6 +35,9 @@
     </item>
     <item>
      <widget class="QPushButton" name="eraserButton">
+      <property name="focusPolicy">
+       <enum>Qt::FocusPolicy::NoFocus</enum>
+      </property>
       <property name="text">
        <string>Eraser</string>
       </property>
@@ -45,12 +51,15 @@
      <x>10</x>
      <y>160</y>
      <width>187</width>
-     <height>31</height>
+     <height>32</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <item>
      <widget class="QPushButton" name="fillButton">
+      <property name="focusPolicy">
+       <enum>Qt::FocusPolicy::NoFocus</enum>
+      </property>
       <property name="text">
        <string>Fill Bucket</string>
       </property>
