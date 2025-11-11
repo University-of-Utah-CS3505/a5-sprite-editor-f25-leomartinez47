@@ -9,6 +9,7 @@
 #include <QWidget>
 #include <QLabel>
 
+
 #include "project.h"
 
 class CanvasPane : public QWidget
@@ -28,7 +29,7 @@ signals:
 public slots:
     /// @brief Recieve a QImage frame from the project model and display it.
     /// @param frame - A QImage to be displayed in the CanvasPane QWidget.
-    void showFrame(const QImage &frame);
+    void onFrameChanged(const QImage &frame);
 
 protected:
     /// @brief Sets isDrawing to true and emit pointClicked.
@@ -52,11 +53,7 @@ private:
     bool isDrawing;
 
     /// The sprite frame currently being displayed.
-    QImage currentFrame;
-
-    /// @brief Maps canvas coordinates to pixel coordinates relative to the sprite.
-    /// @param widgetPos - The cursor position relative to the canvas.
-    QPoint mapToSprite(const QPoint &widgetPos) const;
+    const QImage *currentFrame;
 
     /// Scale factor applied to the frame to fit the canvas.
     int scaleFactor;
@@ -66,6 +63,10 @@ private:
 
     /// Offset to center the frame vertically.
     int yOffset;
+
+    /// @brief Maps canvas coordinates to pixel coordinates relative to the sprite.
+    /// @param widgetPos - The cursor position relative to the canvas.
+    QPoint mapToSprite(const QPoint &widgetPos) const;
 };
 
 #endif

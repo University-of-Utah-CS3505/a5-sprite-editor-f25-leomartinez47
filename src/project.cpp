@@ -8,6 +8,10 @@ Project::Project(QSize dimensions, QObject *parent)
     this->currentFrame = 0;
     this->path = nullptr;
     this->currentTool = new Pencil();
+
+
+    // DELETE BEFORE MERGE
+    this->currentColor = QColorConstants::Blue;
 }
 
 Project::Project(const QString &path, QObject *parent)
@@ -25,6 +29,9 @@ Project::Project(const QString &path, QObject *parent)
     // TODO: parse tool, current color, current frame, etc. from JSON
     this->currentFrame = 0;
     this->currentTool = new Pencil();
+
+    // DELETE BEFORE MERGE
+    this->currentColor = QColorConstants::Blue;
 }
 
 Project::~Project()
