@@ -20,7 +20,7 @@ Project::Project(const QString &path, QObject *parent)
 
     QFile file = QFile(path);
     if(!file.open(QIODevice::ReadOnly)){
-        // TODO : will this ever happen? Since we have a file dialog?
+        throw std::invalid_argument("File could not be opened.");
     }
 
 
@@ -133,8 +133,9 @@ void Project::save(std::function<QString()> requestPath) {
 
     QFile saveFile = QFile(*this->path);
 
-    // TODO: check for errors
-    saveFile.open(QIODevice::ReadWrite | QIODevice::Truncate);
+    if(!saveFile.open(QIODevice::ReadWrite | QIODevice::Truncate)){
+        throw std::invalid_argument("Could not open selected file.");
+    }
 
     QTextStream qStream = QTextStream(&saveFile);
     qStream << QJsonDocument(this->toJson()).toJson(QJsonDocument::Indented);
@@ -144,11 +145,12 @@ void Project::save(std::function<QString()> requestPath) {
 }
 
 QJsonObject Project::toJson() {
-    // TODO: add tool, current color, current frame, etc.
+    // TODO: add anything else?
     QJsonArray rgb;
     rgb.push_back(this->currentColor.red());
     rgb.push_back(this->currentColor.green());
     rgb.push_back(this->currentColor.blue());
+
     return QJsonObject({
         { "sprite", this->sprite->toJson() },
         { "currentFrame", this->currentFrame },
