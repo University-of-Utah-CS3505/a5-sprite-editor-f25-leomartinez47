@@ -4,6 +4,7 @@
 
 #include <QIODevice>
 #include <QBuffer>
+#include <QDebug>
 
 #include "sprite.h"
 
@@ -26,6 +27,8 @@ Sprite::Sprite(const QJsonObject &sprite)
         image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT);
 
         // TODO: throw exception and catch in parent?
+        qDebug() << this->dimensions << image.size() << (frame.toString());
+        qDebug() << image.colorTable();
         Q_ASSERT(this->dimensions == image.size());
 
         this->frames.push_back(image);
@@ -73,7 +76,10 @@ QJsonObject Sprite::toJson(){
 
         QBuffer buffer = QBuffer(&data);
         buffer.open(QIODevice::WriteOnly);
-        image.save(&buffer, FORMAT); // TODO: check success value.
+        if(!image.save(&buffer, FORMAT)){
+            // throw an exception?
+            qDebug() << "Sprite was not saved";
+        }
         buffer.close();
 
         jsonFrames.push_back(QString(data.toBase64()));

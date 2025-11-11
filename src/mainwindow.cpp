@@ -135,6 +135,7 @@ void MainWindow::onOpenRequested() {
         return;
     }
 
+    // TODO : possibly catch an error
     Project *project = new Project(fileName);
     this->tabs->setCurrentIndex(this->tabs->addTab(new ProjectView(project), project->name()));
 }
