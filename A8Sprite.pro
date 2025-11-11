@@ -11,6 +11,7 @@ CONFIG += c++17
 INCLUDEPATH += include
 
 SOURCES += \
+    src/colorpicker.cpp \
     src/spritesetup.cpp \
     src/main.cpp \
     src/project.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
     src/toolpane.cpp
 
 HEADERS += \
+    include/colorpicker.h \
     include/project.h \
     include/sprite.h \
     include/tools.h \

@@ -26,7 +26,8 @@ public:
     const QColor &getCurrentColor() const;
     QImage &getCurrentFrame() const;
     int getCurrentFrameIndex() const;
-    QString name();
+    QString getName() const;
+    QString getPath() const;
     void save(std::function<QString()> requestPath);
 
 signals:

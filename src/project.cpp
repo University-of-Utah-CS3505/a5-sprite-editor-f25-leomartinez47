@@ -131,7 +131,7 @@ void Project::save(std::function<QString()> requestPath) {
             this->path->replace_extension(PROJECT_FILE_EXTENSION.toStdString());
         }
 
-        emit this->nameChanged(this->name());
+        emit this->nameChanged(this->getName());
     }
 
     QFile saveFile = QFile(*this->path);
@@ -163,10 +163,17 @@ QJsonObject Project::toJson()
     });
 }
 
-QString Project::name()
-{
+QString Project::getName() const {
     if (this->path != nullptr) {
         return QString::fromStdString(this->path->stem().string());
+    }
+
+    return QString();
+}
+
+QString Project::getPath() const {
+    if (this->path != nullptr) {
+        return QString::fromStdString(this->path->string());
     }
 
     return QString();
