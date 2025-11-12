@@ -40,7 +40,9 @@ Sprite::Sprite(const QJsonObject &sprite) {
     }
 }
 
-Sprite::Sprite(QSize dimensions) : dimensions(dimensions) {
+Sprite::Sprite(QSize dimensions)
+    : dimensions(dimensions), frameRate(30)
+{
     addFrame();
 }
 
@@ -103,7 +105,7 @@ void Sprite::writeToGif(const QString &path) const {
             + QStringLiteral("frame%1.png").arg(i, 3, 10, QLatin1Char('0'));
 
         // TODO: check errors
-        this->frames[i].save(framePath, "PNG");
+        this->frames[i].save(framePath, FORMAT);
     }
 
     QStringList ffmpegArgs;
@@ -172,5 +174,13 @@ void Sprite::writeToGif(const QString &path) const {
                      });
 
     qDebug() << "Starting ffmpeg with args:" << ffmpegArgs;
-    process->start("ffmpeg", ffmpegArgs);
+    process->start("ffmpeg", ffmpegArgs); 
+}
+
+void Sprite::setFrameRate(int frameRate) {
+    this->frameRate = frameRate;
+}
+
+int Sprite::getFrameRate() {
+    return this->frameRate;
 }

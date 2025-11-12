@@ -20,8 +20,7 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
     connect(this->toolPane, &ToolPane::toolSelected,
             this->project, &Project::onToolChanged);
 
-    // TODO : once it's set up, pass in currentFrameRate from project
-    this->previewPane = new PreviewPane();
+    this->previewPane = new PreviewPane(project);
     this->embedWidget(this->ui->previewFrame, this->previewPane);
 
     this->canvasPane = new CanvasPane(project);
