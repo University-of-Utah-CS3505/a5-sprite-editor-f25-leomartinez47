@@ -17,7 +17,6 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
     this->toolPane = new ToolPane();
     this->toolPane->focusATool(project->getCurrentTool().toString());
     this->embedWidget(this->ui->toolboxFrame, this->toolPane);
-    // TODO : move this into toolPane. Pass project into toolPane
     connect(this->toolPane, &ToolPane::toolSelected,
             this->project, &Project::onToolChanged);
 
