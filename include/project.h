@@ -33,6 +33,7 @@ public:
     QString getName() const;
     QString getPath() const;
     void save(std::function<QString()> requestPath);
+    void exportFile(const QString &path);
     Tool &getCurrentTool() const;
 
 signals:

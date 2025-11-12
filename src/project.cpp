@@ -158,9 +158,17 @@ void Project::save(std::function<QString()> requestPath) {
     saveFile.close();
 }
 
+void Project::exportFile(const QString &path) {
+    if (path.endsWith("gif")) {
+        this->sprite->writeToGif(path);
+    } else { // assumed to be .png
+        // TODO: handle errors
+        this->getCurrentFrame().save(path, "PNG");
+    }
+}
+
 QJsonObject Project::toJson()
 {
-    // TODO: add anything else?
     QJsonArray rgb;
     rgb.push_back(this->currentColor.red());
     rgb.push_back(this->currentColor.green());

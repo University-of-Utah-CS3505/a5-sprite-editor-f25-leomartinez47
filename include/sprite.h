@@ -53,6 +53,8 @@ public:
     /// Serialize this Sprite to JSON.
     QJsonObject toJson();
 
+    void writeToGif(const QString &path) const;
+
     /// Set the frame rate of this Sprite's animation.
     void setFrameRate(int frameRate);
 
