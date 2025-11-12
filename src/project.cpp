@@ -5,6 +5,17 @@ Project::Project(QSize dimensions, QObject *parent)
     : QObject{parent}
 {
     this->sprite = new Sprite(dimensions);
+
+    // DELETE BEFORE MERGE
+    this->sprite->addFrame();
+    this->sprite->addFrame();
+    this->sprite->addFrame();
+    this->sprite->addFrame();
+    this->sprite->addFrame();
+    this->sprite->addFrame();
+    this->sprite->addFrame();
+    this->sprite->addFrame();
+
     this->currentFrame = 0;
     this->path = nullptr;
     this->currentTool = new Pencil();
@@ -66,6 +77,11 @@ int Project::getCurrentFrameIndex() const
 QImage &Project::getCurrentFrame() const
 {
     return this->sprite->getFrame(this->currentFrame);
+}
+
+Sprite *Project::getSprite() const
+{
+    return this->sprite;
 }
 
 void Project::onToolChanged(Tool *tool)

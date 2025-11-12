@@ -17,7 +17,7 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
     this->toolPane = new ToolPane();
     this->embedWidget(this->ui->toolboxFrame, this->toolPane);
 
-    this->previewPane = new PreviewPane();
+    this->previewPane = new PreviewPane(project);
     this->embedWidget(this->ui->previewFrame, this->previewPane);
 
     this->canvasPane = new CanvasPane(project);
