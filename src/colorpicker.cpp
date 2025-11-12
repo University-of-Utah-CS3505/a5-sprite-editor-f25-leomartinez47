@@ -4,7 +4,7 @@ colorpicker::colorpicker(QWidget *parent)
     : QWidget(parent)
 {
 
-
+thissssss
 }
 
 colorpicker::~colorpicker(){
