@@ -65,6 +65,9 @@ QImage &Project::getCurrentFrame() const
     return this->sprite->getFrame(this->currentFrame);
 }
 
+Sprite *Project::getSprite() const
+{
+    return this->sprite;
 Tool &Project::getCurrentTool() const
 {
     return *(this->currentTool);
@@ -117,6 +120,10 @@ void Project::onFrameRemoved(int index)
 
     this->sprite->deleteFrame(index);
     emit this->frameChanged(this->getCurrentFrame());
+}
+
+void Project::onFrameRateSet(int frameRate) {
+    this->sprite->setFrameRate(frameRate);
 }
 
 void Project::save(std::function<QString()> requestPath) {

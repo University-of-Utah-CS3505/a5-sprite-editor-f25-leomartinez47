@@ -38,7 +38,7 @@ Sprite::Sprite(const QJsonObject &sprite)
 }
 
 Sprite::Sprite(QSize dimensions)
-    : dimensions(dimensions)
+    : dimensions(dimensions), frameRate(30)
 {
     addFrame();
 }
@@ -95,4 +95,12 @@ QJsonObject Sprite::toJson()
         { "width", this->dimensions.width() },
         { "height", this->dimensions.height() },
     });
+}
+
+void Sprite::setFrameRate(int frameRate) {
+    this->frameRate = frameRate;
+}
+
+int Sprite::getFrameRate() {
+    return this->frameRate;
 }
