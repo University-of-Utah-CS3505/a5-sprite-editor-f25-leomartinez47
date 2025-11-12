@@ -9,7 +9,6 @@
 #include "sprite.h"
 
 // QImage expects a C-style string.
-// TODO: check if PNG is supported and fail if it doesn't with supportedFormats()
 const char *FORMAT = "PNG";
 
 Sprite::Sprite(const QJsonObject &sprite)
@@ -82,7 +81,7 @@ QJsonObject Sprite::toJson()
         QBuffer buffer = QBuffer(&data);
         buffer.open(QIODevice::WriteOnly);
         if(!image.save(&buffer, FORMAT)){
-            throw std::invalid_argument("Could not save to file");
+            throw std::invalid_argument("Could not save the file.");
         }
         buffer.close();
 

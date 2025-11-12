@@ -24,7 +24,7 @@ Project::Project(const QString &path, QObject *parent)
 
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
     if(!json.contains("sprite") || !json.contains("currentFrame") || !json.contains("currentTool")
-        || !json.contains("currentColor")){
+        || !json.contains("currentColor")) {
         throw std::invalid_argument("Project information could not be retrieved.");
     }
 
@@ -32,8 +32,11 @@ Project::Project(const QString &path, QObject *parent)
     this->currentFrame = json.value("currentFrame").toInteger();
 
     currentTool = new Pencil();
-    if(json.value("currentTool").toString() == "Eraser"){
+    if(json.value("currentTool").toString() == "Eraser") {
         currentTool = new Eraser();
+    }
+    if(json.value("currentTool").toString() == "Fill") {
+        // currentTool = new FillBucket(); TODO
     }
 
     QJsonArray rgb = json.value("currentColor").toArray();
