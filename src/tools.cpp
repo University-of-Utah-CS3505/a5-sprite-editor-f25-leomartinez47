@@ -14,5 +14,13 @@ void Pencil::apply(QPoint point, QImage &frame,  QColor color)
 
 void Eraser::apply(QPoint point, QImage &frame,  QColor /* color unused */)
 {
-    setPixel(point, frame, QColor(255, 255, 255));
+    setPixel(point, frame, QColor(255, 255, 255, 0));
+}
+
+QString Pencil::toString(){
+    return "Pencil";
+}
+
+QString Eraser::toString(){
+    return "Eraser";
 }

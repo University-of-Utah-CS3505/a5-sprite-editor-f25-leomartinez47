@@ -13,15 +13,15 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     ui->setupUi(this);
 
     // Buttons -> code // TODO: have buttons emit signals instead and connect signals to project slots in mainWindow (more in commit msg)
-    connect(ui->AddFrame, &QPushButton::clicked, project, [this, project]{ project->onFrameAdded(ui->listWidget->currentRow() + 1); });
-    connect(ui->DeleteFrame, &QPushButton::clicked, project, [this, project]{ project->onFrameRemoved(ui->listWidget->currentRow()); });
+    connect(ui->AddFrame, &QPushButton::clicked, this, &FrameSelectionPane::buttonAdd);
+    connect(ui->DeleteFrame, &QPushButton::clicked, this, &FrameSelectionPane::buttonDelete);
     connect(ui->listWidget, &QListWidget::currentRowChanged, project, &Project::onCurrentFrameChanged);
 
     // Pane -> Project
-    //connect(this, &FrameSelectionPane::addFrame, project, &Project::onFrameAdded);
-    //connect(this, &FrameSelectionPane::deleteFrame, project, &Project::onFrameRemoved);
+    connect(this, &FrameSelectionPane::frameAdded, project, &Project::onFrameAdded);
+    connect(this, &FrameSelectionPane::frameDeleted, project, &Project::onFrameRemoved);
 
-    // Project -> Pain
+    // Project -> Pane
     //connect(project, &Project::frameListChanged, this, &FrameSelectionPane::setupQList);
     connect(project, &Project::frameAdded, this, &FrameSelectionPane::addFrame);
     connect(project, &Project::frameRemoved, this, &FrameSelectionPane::deleteFrame);
@@ -29,8 +29,7 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     connect(project, &Project::frameChanged, this, [this, project](const QImage& img){
         this->onUpdate(project->getCurrentFrameIndex(), img);
     });
-
-    this->setupQList();
+    connect(project, &Project::initialFrames, this, &FrameSelectionPane::setupQList);
 }
 
 FrameSelectionPane::~FrameSelectionPane() {
@@ -51,11 +50,12 @@ void FrameSelectionPane::onUpdate(int index, const QImage &img) {
         item->setIcon(QIcon(makeIcon(img)));
 }
 
-void FrameSelectionPane::setupQList() {
+void FrameSelectionPane::setupQList(std::vector<QImage> frames) {
     ui->listWidget->clear();
-    // TODO: My idea was to refresh the list every time the list is updated.
-    //       But I realized that view doesn't have access to project, and therefore
-    //       woudln't be able to access frameCount and frameAt
+    for (int i = 0; i < static_cast<int>(frames.size()); i++){
+        addFrame(i);
+        onUpdate(i, frames[i]);
+    }
 }
 
 // Temporary checkerboard
@@ -76,4 +76,12 @@ QPixmap FrameSelectionPane::makeIcon(const QImage &img) {
     QImage scaled = img.scaled(S, S, Qt::KeepAspectRatio, Qt::FastTransformation);
     p.drawImage(QPoint((S - scaled.width())/2, (S - scaled.height())/2), scaled);
     return pm;
+}
+
+void FrameSelectionPane::buttonAdd() {
+    emit frameAdded(ui->listWidget->currentRow() + 1);
+}
+
+void FrameSelectionPane::buttonDelete(){
+    emit frameDeleted(ui->listWidget->currentRow());
 }

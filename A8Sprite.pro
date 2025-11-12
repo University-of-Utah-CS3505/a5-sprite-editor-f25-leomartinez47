@@ -11,6 +11,8 @@ CONFIG += c++17
 INCLUDEPATH += include
 
 SOURCES += \
+    src/colorpicker.cpp \
+    src/spritesetup.cpp \
     src/main.cpp \
     src/project.cpp \
     src/sprite.cpp \
@@ -23,6 +25,7 @@ SOURCES += \
     src/toolpane.cpp
 
 HEADERS += \
+    include/colorpicker.h \
     include/project.h \
     include/sprite.h \
     include/tools.h \
@@ -31,10 +34,11 @@ HEADERS += \
     include/canvaspane.h \
     include/frameselectionpane.h \
     include/previewpane.h \
-    include/toolpane.h
+    include/toolpane.h \
+    include/spritesetup.h
 
 FORMS += \
-    ui/canvaspane.ui \
+    ui/spritesetup.ui \
     ui/frameselectionpane.ui \
     ui/previewpane.ui \
     ui/projectview.ui \
@@ -44,3 +48,7 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources.qrc \
+    resources/resources.qrc

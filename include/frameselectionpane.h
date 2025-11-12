@@ -18,13 +18,18 @@ public:
     ~FrameSelectionPane();
 
 signals:
-
+    void frameAdded(int index);
+    void frameDeleted(int index);
 
 
 
 public slots:
+
+    void buttonAdd();
+    void buttonDelete();
+    void addLast();
     ///
-    /// \brief AddFrame : adds a frame at the index provided
+    /// \brief addFrame : adds a frame at the index provided
     /// \param index : the index to add a frame at
     ///
     void addFrame(int index);

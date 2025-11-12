@@ -1,6 +1,8 @@
 #include "projectview.h"
 #include "ui_projectview.h"
 
+#include <QTabWidget>
+
 ProjectView::ProjectView(Project *project, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ProjectView)
@@ -8,11 +10,17 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
     this->ui->setupUi(this);
 
     this->project = project;
-    // TODO: pass `project` into each pane constructor and set up signals there.
+
+    connect(this->project, &Project::nameChanged,
+            this, &ProjectView::handleModelNameChange);
 
     this->toolPane = new ToolPane();
+    this->toolPane->focusATool(project->getCurrentTool().toString());
     this->embedWidget(this->ui->toolboxFrame, this->toolPane);
+    connect(this->toolPane, &ToolPane::toolSelected,
+            this->project, &Project::onToolChanged);
 
+    // TODO : once it's set up, pass in currentFrameRate from project
     this->previewPane = new PreviewPane();
     this->embedWidget(this->ui->previewFrame, this->previewPane);
 
@@ -21,6 +29,8 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
 
     this->frameSelectionPane = new FrameSelectionPane(project);
     this->embedWidget(this->ui->frameSelectorFrame, this->frameSelectionPane);
+
+    // TODO : once colorPickerPane is implemented, pass in currentColor from project
 }
 
 ProjectView::~ProjectView()
@@ -35,4 +45,14 @@ void ProjectView::embedWidget(QWidget *container, QWidget *child)
     layout->addWidget(child);
     layout->setContentsMargins(0, 0, 0, 0);
     container->setLayout(layout);
+}
+
+Project *ProjectView::getProject()
+{
+    return this->project;
+}
+
+void ProjectView::handleModelNameChange(const QString& name)
+{
+    emit this->wantsTabTitleUpdate(this, name);
 }

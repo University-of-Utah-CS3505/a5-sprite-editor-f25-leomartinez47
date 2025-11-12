@@ -7,6 +7,8 @@ Project::Project(QSize dimensions, QObject *parent)
     this->currentFrame = 0;
     this->path = nullptr;
     this->currentTool = new Pencil();
+
+    emit this->initialFrames(this->initialImages());
 }
 
 Project::Project(const std::string &path, QObject *parent)
@@ -16,6 +18,8 @@ Project::Project(const std::string &path, QObject *parent)
     this->currentFrame = 0;
     this->path = new std::string(path);
     this->currentTool = new Pencil();
+
+    emit this->initialFrames(this->initialImages());
 }
 
 Project::~Project()
@@ -108,14 +112,10 @@ void Project::onFrameRemoved(int index)
     emit this->frameRemoved(index);
 }
 
-void Project::onSaveRequested()
-{
-    if (!this->path) {
-        // TODO (grant): prompt user for save file, then set it.
-        return;
+std::vector<QImage> Project::initialImages(){
+    std::vector<QImage> outList;
+    for (int i = 0; i < this->sprite->frameCount(); i++) {
+        outList.push_back(this->sprite->getFrame(i));
     }
-
-    std::string json = this->sprite->toJson();
-
-    // TODO: write JSON to path
+    return outList;
 }
