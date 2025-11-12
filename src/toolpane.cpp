@@ -1,22 +1,25 @@
 #include "toolpane.h"
 #include "ui_toolpane.h"
 
+#include "tools.h"
+
 ToolPane::ToolPane(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ToolPane)
 {
-    ui->setupUi(this);
-    ui->pencilButton->setIcon(QIcon(":/icons/pencil.png"));
-    qDebug() << ui->pencilButton->size();
-    ui->pencilButton->setIconSize(ui->pencilButton->size());
-    ui->eraserButton->setIcon(QIcon(":/icons/eraser.png"));
-    ui->eraserButton->setIconSize(ui->eraserButton->size());
+    this->ui->setupUi(this);
+    this->ui->pencilButton->setIcon(QIcon(":/icons/pencil.png"));
+    this->ui->pencilButton->setIconSize(this->ui->pencilButton->size());
 
+    this->ui->eraserButton->setIcon(QIcon(":/icons/eraser.png"));
+    this->ui->eraserButton->setIconSize(this->ui->eraserButton->size());
 
     connect(this->ui->pencilButton, &QPushButton::clicked,
             this, &ToolPane::onPencilSelected);
     connect(this->ui->eraserButton, &QPushButton::clicked,
             this, &ToolPane::onEraserSelected);
+    connect(this->ui->fillButton, &QPushButton::clicked,
+            this, &ToolPane::onFillSelected);
 }
 
 ToolPane::~ToolPane()
@@ -36,15 +39,21 @@ void ToolPane::onEraserSelected()
     emit this->toolSelected(new Eraser());
 }
 
-void ToolPane::focusATool(QString tool)
+void ToolPane::onFillSelected()
 {
-    qDebug() << tool;
-    if(tool == "Pencil"){
+    this->ui->fillButton->setFocus();
+    emit this->toolSelected(new FillBucket());
+}
+
+void ToolPane::focusATool(const QString &tool)
+{
+    if (tool == PENCIL) {
         this->ui->pencilButton->setFocus();
-        qDebug() << "focus was set to pencil";
-    }
-    else{
+    } else if (tool == ERASER) {
         this->ui->eraserButton->setFocus();
-        qDebug() << "focus was set to eraser";
+    } else if (tool == FILL_BUCKET) {
+        this->ui->fillButton->setFocus();
     }
+
+    qDebug() << "focus was set to" << tool;
 }

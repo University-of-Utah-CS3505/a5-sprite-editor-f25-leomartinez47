@@ -15,7 +15,7 @@ class ToolPane : public QWidget
 public:
     explicit ToolPane(QWidget *parent = nullptr);
     ~ToolPane();
-    void focusATool(QString tool);
+    void focusATool(const QString &tool);
 
 signals:
     void toolSelected(Tool *tool);
@@ -23,6 +23,7 @@ signals:
 private slots:
     void onPencilSelected();
     void onEraserSelected();
+    void onFillSelected();
 
 private:
     Ui::ToolPane *ui;

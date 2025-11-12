@@ -30,11 +30,7 @@ Project::Project(const QString &path, QObject *parent)
 
     this->sprite = new Sprite(json.value("sprite").toObject());
     this->currentFrame = json.value("currentFrame").toInteger();
-
-    currentTool = new Pencil();
-    if(json.value("currentTool").toString() == "Eraser"){
-        currentTool = new Eraser();
-    }
+    this->currentTool = toolFromString(json.value("currentTool").toString());
 
     QJsonArray rgb = json.value("currentColor").toArray();
     this->currentColor = QColor(rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger());
