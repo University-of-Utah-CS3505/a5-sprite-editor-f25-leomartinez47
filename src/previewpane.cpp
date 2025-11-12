@@ -15,11 +15,13 @@ PreviewPane::PreviewPane(Project *project, QWidget *parent)
     , ui(new Ui::PreviewPane)
 {
     ui->setupUi(this);
-    ui->frameRateSelector->setRange(0, 60);
-    ui->frameRateSelector->setValue(30);
-    this->timer.setInterval(1000/30);
 
     this->sprite = project->getSprite();
+
+    ui->frameRateSelector->setRange(0, 60);
+    ui->frameRateSelector->setValue(30);
+    this->timer.setInterval(1000/this->sprite->getFrameRate());
+
 
     connect(ui->playPauseButton,
         &QPushButton::clicked,
@@ -41,7 +43,7 @@ PreviewPane::PreviewPane(Project *project, QWidget *parent)
         this,
         [this](int fps) {
             this->timer.setInterval(1000/fps);
-            emit setFrameRate(1000/fps);
+            emit setFrameRate(fps);
         });
 
 }

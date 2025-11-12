@@ -96,3 +96,7 @@ QJsonObject Sprite::toJson()
 void Sprite::setFrameRate(int frameRate) {
     this->frameRate = frameRate;
 }
+
+int Sprite::getFrameRate() {
+    return this->frameRate;
+}

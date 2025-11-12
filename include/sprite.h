@@ -28,7 +28,7 @@ class Sprite {
     /// The frames of this Sprite.
     std::vector<QImage> frames;
     QSize dimensions;
-    /// Frame Rate in ms per frame
+    /// Frame Rate of this Sprite's animation.
     int frameRate;
 
 public:
@@ -53,7 +53,11 @@ public:
     /// Serialize this Sprite to JSON.
     QJsonObject toJson();
 
+    /// Set the frame rate of this Sprite's animation.
     void setFrameRate(int frameRate);
+
+    /// Get the frame rate of this Sprite's animation.
+    int getFrameRate();
 };
 
 #endif
