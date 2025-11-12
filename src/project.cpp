@@ -83,6 +83,25 @@ void Project::onColorChanged(QColor color)
     this->currentColor = color;
 }
 
+void Project::redChanged(int colorValue){
+    QColor red(colorValue);
+    this->currentColor = red;
+}
+
+void Project::blueChanged(int colorValue){
+    QColor blue(colorValue);
+    this->currentColor = blue;
+}
+
+void Project::greenChanged(int colorValue){
+    QColor green(colorValue);
+    this->currentColor = green;
+}
+
+void Project::alphaChanged(int colorValue){
+
+}
+
 void Project::onPixelClicked(QPoint point)
 {
     this->currentTool->apply(point, this->getCurrentFrame(), this->currentColor);
