@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QColor>
 
+
 class colorpicker : public QWidget
 {
 
@@ -19,3 +20,4 @@ private:
 };
 
 #endif // COLORPICKER_H
+
