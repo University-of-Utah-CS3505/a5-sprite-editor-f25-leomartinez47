@@ -7,6 +7,7 @@
 
 #include "previewpane.h"
 #include "ui_previewpane.h"
+#include "sprite.h"
 
 
 PreviewPane::PreviewPane(Project *project, QWidget *parent)
@@ -30,10 +31,19 @@ PreviewPane::PreviewPane(Project *project, QWidget *parent)
             this,
             &PreviewPane::showFrame);
 
+    connect(this,
+            &PreviewPane::setFrameRate,
+            project,
+            &Project::onFrameRateSet);
+
      connect(ui->frameRateSelector,
         &QSpinBox::valueChanged,
         this,
-        [this](int fps){ this->timer.setInterval( 1000/fps);});
+        [this](int fps) {
+            this->timer.setInterval(1000/fps);
+            emit setFrameRate(1000/fps);
+        });
+
 }
 
 PreviewPane::~PreviewPane()

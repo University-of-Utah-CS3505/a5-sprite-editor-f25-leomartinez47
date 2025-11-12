@@ -32,6 +32,11 @@ public slots:
     /// the currentFrameIndex appropriately.
     void showFrame();
 
+signals:
+    /// @brief Sends the frame rate of the animation to the sprite.
+    /// @param - The current frame rate of the animation, in ms per frame.
+    void setFrameRate(int frameRate);
+
 protected:
     /// @brief  Paints the current frame in the animation scaled to fit the
     /// frame widget, and adds a png-style grid background to represent

@@ -51,6 +51,9 @@ public slots:
     void onFrameAdded();
     void onFrameRemoved(int index);
 
+    // From Preview Pane, sets frame rate in the sprite
+    void onFrameRateSet(int frameRate);
+
     // void addFrame();
     // void deleteFrame();
     // void nextFrame();

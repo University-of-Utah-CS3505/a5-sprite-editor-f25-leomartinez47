@@ -29,6 +29,8 @@ class Sprite {
     std::vector<QImage> frames;
     QSize dimensions;
     // Note: the framerate (in gap ms) should probably be stored here to be serialized.
+    /// Frame Rate in ms per frame
+    int frameRate;
 
 public:
     /// Construct a Sprite with dimensions selected by the user.
@@ -51,6 +53,8 @@ public:
 
     /// Serialize this Sprite to JSON.
     QJsonObject toJson();
+
+    void setFrameRate(int frameRate);
 };
 
 #endif

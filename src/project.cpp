@@ -133,6 +133,10 @@ void Project::onFrameRemoved(int index)
     emit this->frameChanged(this->getCurrentFrame());
 }
 
+void Project::onFrameRateSet(int frameRate) {
+    this->sprite->setFrameRate(frameRate);
+}
+
 void Project::save(std::function<QString()> requestPath) {
     if (!this->path) {
         QString userPath = requestPath();
