@@ -53,7 +53,6 @@ void ToolPane::onFillSelected()
 
     this->ui->pencilButton->setDefault(false);
     this->ui->eraserButton->setDefault(false);
-    // emit this->toolSelected(new FillBucket()); TODO
 }
 
 void ToolPane::focusATool(QString tool)
