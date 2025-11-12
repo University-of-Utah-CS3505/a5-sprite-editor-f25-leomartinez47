@@ -63,6 +63,22 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="fillButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>100</horstretch>
+           <verstretch>100</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::FocusPolicy::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
@@ -81,24 +97,7 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QPushButton" name="fillButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>100</horstretch>
-         <verstretch>100</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::FocusPolicy::NoFocus</enum>
-       </property>
-       <property name="text">
-        <string>Fill Bucket</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <layout class="QHBoxLayout" name="horizontalLayout_2"/>
    </item>
   </layout>
  </widget>

@@ -23,6 +23,7 @@ signals:
 private slots:
     void onPencilSelected();
     void onEraserSelected();
+    void onFillSelected();
 
 private:
     Ui::ToolPane *ui;
