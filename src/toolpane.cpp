@@ -3,21 +3,36 @@
 
 #include "tools.h"
 
-ToolPane::ToolPane(QWidget *parent)
+ToolPane::ToolPane(Project *project, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ToolPane)
 {
     this->ui->setupUi(this);
+
+    // Initialize the current tool.
+    this->onToolSelected(&project->getCurrentTool());
+
+    connect(this, &ToolPane::toolSelected,
+            project, &Project::onToolChanged);
+
+    connect(this, &ToolPane::toolSelected,
+            this, &ToolPane::onToolSelected);
+
     this->ui->pencilButton->setIcon(QIcon(":/icons/pencil.png"));
     this->ui->pencilButton->setIconSize(this->ui->pencilButton->size());
+
+    connect(this->ui->pencilButton, &QPushButton::clicked,
+            this, &ToolPane::onPencilSelected);
 
     this->ui->eraserButton->setIcon(QIcon(":/icons/eraser.png"));
     this->ui->eraserButton->setIconSize(this->ui->eraserButton->size());
 
-    connect(this->ui->pencilButton, &QPushButton::clicked,
-            this, &ToolPane::onPencilSelected);
     connect(this->ui->eraserButton, &QPushButton::clicked,
             this, &ToolPane::onEraserSelected);
+
+    this->ui->fillButton->setIcon(QIcon(":/icons/fillbucket.png"));
+    this->ui->fillButton->setIconSize(this->ui->fillButton->size());
+
     connect(this->ui->fillButton, &QPushButton::clicked,
             this, &ToolPane::onFillSelected);
 }
@@ -29,31 +44,34 @@ ToolPane::~ToolPane()
 
 void ToolPane::onPencilSelected()
 {
-    this->ui->pencilButton->setFocus();
     emit this->toolSelected(new Pencil());
 }
 
 void ToolPane::onEraserSelected()
 {
-    this->ui->eraserButton->setFocus();
     emit this->toolSelected(new Eraser());
 }
 
 void ToolPane::onFillSelected()
 {
-    this->ui->fillButton->setFocus();
     emit this->toolSelected(new FillBucket());
 }
 
-void ToolPane::focusATool(const QString &tool)
+void ToolPane::onToolSelected(Tool *tool)
 {
-    if (tool == PENCIL) {
-        this->ui->pencilButton->setFocus();
-    } else if (tool == ERASER) {
-        this->ui->eraserButton->setFocus();
-    } else if (tool == FILL_BUCKET) {
-        this->ui->fillButton->setFocus();
+    this->ui->pencilButton->setDisabled(false);
+    this->ui->eraserButton->setDisabled(false);
+    this->ui->fillButton->setDisabled(false);
+
+    const QString tool_str = tool->toString();
+
+    if (tool_str == PENCIL) {
+        this->ui->pencilButton->setDisabled(true);
+    } else if (tool_str == ERASER) {
+        this->ui->eraserButton->setDisabled(true);
+    } else if (tool_str == FILL_BUCKET) {
+        this->ui->fillButton->setDisabled(true);
     }
 
-    qDebug() << "focus was set to" << tool;
+    qDebug() << "focus set to" << tool_str;
 }

@@ -75,7 +75,7 @@
           <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
-          <string>Bucket</string>
+          <string/>
          </property>
         </widget>
        </item>

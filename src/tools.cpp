@@ -18,28 +18,18 @@ Tool *toolFromString(const QString &val) {
         return new FillBucket();
     }
 
-    // TODO: throw and catch exception.
+    // TODO: throw and catch exceptions.
     return nullptr;
 }
-
 
 void Pencil::apply(QPoint point, QImage &frame,  QColor color)
 {
     setPixel(point, frame, color);
 }
 
-const QString &Pencil::toString() const {
-    return PENCIL;
-}
-
-
 void Eraser::apply(QPoint point, QImage &frame,  QColor /* color unused */)
 {
-    setPixel(point, frame, QColor(255, 255, 255, 0));
-}
-
-const QString &Eraser::toString() const {
-    return FILL_BUCKET;
+    setPixel(point, frame, Qt::transparent);
 }
 
 // This is the AI feature.
@@ -61,7 +51,7 @@ void FillBucket::apply(QPoint point, QImage &frame, QColor color)
         return;
     }
 
-           // 5. Get image dimensions for boundary checking
+    // 5. Get image dimensions for boundary checking
     const int width = frame.width();
     const int height = frame.height();
 
@@ -95,6 +85,3 @@ void FillBucket::apply(QPoint point, QImage &frame, QColor color)
     }
 }
 
-const QString &FillBucket::toString() const {
-    return FILL_BUCKET;
-}

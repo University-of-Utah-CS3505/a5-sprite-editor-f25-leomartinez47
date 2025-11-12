@@ -14,11 +14,8 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
     connect(this->project, &Project::nameChanged,
             this, &ProjectView::handleModelNameChange);
 
-    this->toolPane = new ToolPane();
-    this->toolPane->focusATool(project->getCurrentTool().toString());
+    this->toolPane = new ToolPane(project);
     this->embedWidget(this->ui->toolboxFrame, this->toolPane);
-    connect(this->toolPane, &ToolPane::toolSelected,
-            this->project, &Project::onToolChanged);
 
     // TODO : once it's set up, pass in currentFrameRate from project
     this->previewPane = new PreviewPane();

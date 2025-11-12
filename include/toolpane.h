@@ -2,7 +2,9 @@
 #define TOOLPANE_H
 
 #include <QWidget>
+
 #include "tools.h"
+#include "project.h"
 
 namespace Ui {
 class ToolPane;
@@ -13,9 +15,8 @@ class ToolPane : public QWidget
     Q_OBJECT
 
 public:
-    explicit ToolPane(QWidget *parent = nullptr);
+    explicit ToolPane(Project *project, QWidget *parent = nullptr);
     ~ToolPane();
-    void focusATool(const QString &tool);
 
 signals:
     void toolSelected(Tool *tool);
@@ -24,6 +25,7 @@ private slots:
     void onPencilSelected();
     void onEraserSelected();
     void onFillSelected();
+    void onToolSelected(Tool *tool);
 
 private:
     Ui::ToolPane *ui;
