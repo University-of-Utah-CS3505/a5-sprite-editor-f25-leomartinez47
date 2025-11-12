@@ -28,7 +28,6 @@ class Sprite {
     /// The frames of this Sprite.
     std::vector<QImage> frames;
     QSize dimensions;
-    // Note: the framerate (in gap ms) should probably be stored here to be serialized.
     /// Frame Rate in ms per frame
     int frameRate;
 

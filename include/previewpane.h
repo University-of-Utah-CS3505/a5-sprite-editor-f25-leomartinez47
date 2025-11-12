@@ -16,6 +16,7 @@ namespace Ui {
 class PreviewPane;
 }
 
+/// The Preview Pane displays an animation of the frames of the Sprite.
 class PreviewPane : public QWidget
 {
     Q_OBJECT
@@ -44,6 +45,7 @@ protected:
     void paintEvent(QPaintEvent*) override;
 
 private:
+    /// The ui form for PreviewPane.
     Ui::PreviewPane *ui;
 
     /// A Pointer to the Sprite object held by the current Project.

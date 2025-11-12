@@ -5,17 +5,6 @@ Project::Project(QSize dimensions, QObject *parent)
     : QObject{parent}
 {
     this->sprite = new Sprite(dimensions);
-
-    // DELETE BEFORE MERGE
-    this->sprite->addFrame();
-    this->sprite->addFrame();
-    this->sprite->addFrame();
-    this->sprite->addFrame();
-    this->sprite->addFrame();
-    this->sprite->addFrame();
-    this->sprite->addFrame();
-    this->sprite->addFrame();
-
     this->currentFrame = 0;
     this->path = nullptr;
     this->currentTool = new Pencil();
