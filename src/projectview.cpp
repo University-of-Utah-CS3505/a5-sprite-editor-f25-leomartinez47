@@ -17,9 +17,11 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
     this->toolPane = new ToolPane();
     this->toolPane->focusATool(project->getCurrentTool().toString());
     this->embedWidget(this->ui->toolboxFrame, this->toolPane);
+    // TODO : move this into toolPane. Pass project into toolPane
     connect(this->toolPane, &ToolPane::toolSelected,
             this->project, &Project::onToolChanged);
 
+    // TODO : once it's set up, pass in currentFrameRate from project
     this->previewPane = new PreviewPane();
     this->embedWidget(this->ui->previewFrame, this->previewPane);
 
@@ -28,6 +30,8 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
 
     this->frameSelectionPane = new FrameSelectionPane();
     this->embedWidget(this->ui->frameSelectorFrame, this->frameSelectionPane);
+
+    // TODO : once colorPickerPane is implemented, pass in currentColor from project
 }
 
 ProjectView::~ProjectView()
