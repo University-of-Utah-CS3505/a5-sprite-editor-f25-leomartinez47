@@ -26,14 +26,12 @@ ToolPane::~ToolPane()
 
 void ToolPane::onPencilSelected()
 {
-    qDebug() << "Pencil";
     this->ui->pencilButton->setFocus();
     emit this->toolSelected(new Pencil());
 }
 
 void ToolPane::onEraserSelected()
 {
-    qDebug() << "Eraser";
     this->ui->eraserButton->setFocus();
     emit this->toolSelected(new Eraser());
 }

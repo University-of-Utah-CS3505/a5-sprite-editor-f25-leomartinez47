@@ -29,7 +29,6 @@ Project::Project(const QString &path, QObject *parent)
     }
 
     this->sprite = new Sprite(json.value("sprite").toObject());
-    // TODO: other from JSON
     this->currentFrame = json.value("currentFrame").toInteger();
 
     currentTool = new Pencil();

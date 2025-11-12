@@ -29,6 +29,7 @@ class Sprite {
     std::vector<QImage> frames;
     QSize dimensions;
     // Note: the framerate (in gap ms) should probably be stored here to be serialized.
+    int frameRate = 30;
 
 public:
     /// Construct a Sprite with dimensions selected by the user.
