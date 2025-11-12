@@ -7,7 +7,6 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-
 #include "canvaspane.h"
 #include "project.h"
 
