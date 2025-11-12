@@ -1,7 +1,7 @@
 #include "toolpane.h"
 #include "ui_toolpane.h"
 
-ToolPane::ToolPane(QWidget *parent)
+ToolPane::ToolPane(Project *project, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ToolPane)
 {
@@ -17,6 +17,25 @@ ToolPane::ToolPane(QWidget *parent)
     connect(this->ui->eraserButton, &QPushButton::clicked,
             this, &ToolPane::onEraserSelected);
 
+    //qslider connections here that go to view
+    //sample for the connections for the sliders
+    this->focusATool(project->getCurrentTool().toString());
+    connect(this, &ToolPane::toolSelected,
+            project, &Project::onToolChanged);
+
+    //connect slider changes to the methods in this class
+    //all in here
+    connect(this->ui->redSlider, &QSlider::valueChanged,
+            this, &ToolPane::redSliderValue);
+
+    connect(this->ui->blueSlider, &QSlider::valueChanged,
+            this, &ToolPane::blueSliderValue);
+
+    connect(this->ui->greenSlider, &QSlider::valueChanged,
+            this, &ToolPane::greenSliderValue);
+
+    connect(this->ui->opacitySlider, &QSlider::valueChanged,
+            this, &ToolPane::alphaSliderValue);
 }
 
 ToolPane::~ToolPane()
@@ -49,4 +68,24 @@ void ToolPane::focusATool(QString tool)
         this->ui->eraserButton->setFocus();
         qDebug() << "focus was set to eraser";
     }
+}
+
+void ToolPane::redSliderValue(int value){
+    qDebug() << value;
+    emit this->redSliderUpdate(value);
+}
+
+void ToolPane::blueSliderValue(int value){
+    qDebug() << value;
+    emit this->blueSliderUpdate(value);
+}
+
+void ToolPane::greenSliderValue(int value){
+    qDebug() << value;
+    emit this->greenSliderUpdate(value);
+}
+
+void ToolPane::alphaSliderValue(int value){
+    qDebug() << value;
+    emit this->alphaSliderUpdate(value);
 }

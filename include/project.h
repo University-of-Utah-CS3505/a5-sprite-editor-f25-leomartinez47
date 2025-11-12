@@ -39,7 +39,13 @@ signals:
 
 public slots:
     void onToolChanged(Tool *tool);
-    void onColorChanged(QColor color);
+    void onColorChanged(QColor color); //Split into four slots that get each color value/alpha
+
+    void redChanged(int colorValue);
+    void blueChanged(int colorValue);
+    void greenChanged(int colorValue);
+    void alphaChanged(int colorValue);
+
     void onPixelClicked(QPoint point);
     // From Frame Selection
     void onCurrentFrameChanged(int index);
