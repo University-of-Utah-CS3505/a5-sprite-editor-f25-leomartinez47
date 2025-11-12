@@ -20,16 +20,22 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     // Pane -> Project
     connect(this, &FrameSelectionPane::frameAdded, project, &Project::onFrameAdded);
     connect(this, &FrameSelectionPane::frameDeleted, project, &Project::onFrameRemoved);
+    connect(this, &FrameSelectionPane::requestInitialImages, project, &Project::sendInitialImages);
 
     // Project -> Pane
-    //connect(project, &Project::frameListChanged, this, &FrameSelectionPane::setupQList);
     connect(project, &Project::frameAdded, this, &FrameSelectionPane::addFrame);
     connect(project, &Project::frameRemoved, this, &FrameSelectionPane::deleteFrame);
-    connect(project, &Project::frameSelectionChanged, this, [this](int index){ui->listWidget->setCurrentRow(index);});
+    connect(project, &Project::frameSelectionChanged, this, [this, project](int index) {
+        ui->listWidget->setCurrentRow(index);
+        ui->currentFrame->setText(&"" [index]);
+
+    });
     connect(project, &Project::frameChanged, this, [this, project](const QImage& img){
         this->onUpdate(project->getCurrentFrameIndex(), img);
     });
     connect(project, &Project::initialFrames, this, &FrameSelectionPane::setupQList);
+
+    emit this->requestInitialImages();
 }
 
 FrameSelectionPane::~FrameSelectionPane() {

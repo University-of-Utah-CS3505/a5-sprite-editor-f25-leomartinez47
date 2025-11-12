@@ -11,8 +11,6 @@
 #include "canvaspane.h"
 #include "project.h"
 
->>>>>>> origin/main
-
 CanvasPane::CanvasPane(Project *project, QWidget *parent)
     : QWidget(parent)
 {

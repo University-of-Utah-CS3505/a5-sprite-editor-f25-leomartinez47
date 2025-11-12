@@ -73,6 +73,8 @@ public slots:
     ///
     void onFrameRemoved(int index);
 
+    void sendInitialImages();
+
 
 private:
     QJsonObject toJson();

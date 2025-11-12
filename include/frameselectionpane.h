@@ -20,6 +20,7 @@ public:
 signals:
     void frameAdded(int index);
     void frameDeleted(int index);
+    void requestInitialImages();
 
 
 
@@ -27,7 +28,6 @@ public slots:
 
     void buttonAdd();
     void buttonDelete();
-    void addLast();
     ///
     /// \brief addFrame : adds a frame at the index provided
     /// \param index : the index to add a frame at
@@ -44,6 +44,7 @@ public slots:
     ///
     void onUpdate(int index, const QImage &img);
 
+    void setupQList(std::vector<QImage> frames);
     //void addFrameToList();
 
 private:
@@ -51,7 +52,7 @@ private:
     ///
     /// \brief displaySpriteFrames : private helper method to display all of the frames in the sprite
     ///
-    void setupQList();
+
 
     QPixmap makeIcon(const QImage &img);
 };

@@ -27,7 +27,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="currentFrame">
        <property name="text">
         <string>TextLabel</string>
        </property>

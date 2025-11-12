@@ -1,4 +1,5 @@
 #include "project.h"
+#include "sprite.h"
 
 Project::Project(QSize dimensions, QObject *parent)
     : QObject{parent}
@@ -8,18 +9,37 @@ Project::Project(QSize dimensions, QObject *parent)
     this->path = nullptr;
     this->currentTool = new Pencil();
 
-    emit this->initialFrames(this->initialImages());
+    this->currentColor = QColor(0, 0, 0);
+
 }
 
-Project::Project(const std::string &path, QObject *parent)
+Project::Project(const QString &path, QObject *parent)
     : QObject{parent}
 {
-    this->sprite = new Sprite(path);
-    this->currentFrame = 0;
-    this->path = new std::string(path);
-    this->currentTool = new Pencil();
+    this->path = new std::filesystem::path(path.toStdString());
 
-    emit this->initialFrames(this->initialImages());
+    QFile file = QFile(path);
+    if(!file.open(QIODevice::ReadOnly)){
+        throw std::invalid_argument("File could not be opened.");
+    }
+
+    QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
+    if(!json.contains("sprite") || !json.contains("currentFrame") || !json.contains("currentTool")
+        || !json.contains("currentColor")){
+        throw std::invalid_argument("Project information could not be retrieved.");
+    }
+
+    this->sprite = new Sprite(json.value("sprite").toObject());
+    this->currentFrame = json.value("currentFrame").toInteger();
+
+    currentTool = new Pencil();
+    if(json.value("currentTool").toString() == "Eraser"){
+        currentTool = new Eraser();
+    }
+
+    QJsonArray rgb = json.value("currentColor").toArray();
+    this->currentColor = QColor(rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger());
+
 }
 
 Project::~Project()
@@ -45,6 +65,11 @@ int Project::getCurrentFrameIndex() const
 QImage &Project::getCurrentFrame() const
 {
     return this->sprite->getFrame(this->currentFrame);
+}
+
+Tool &Project::getCurrentTool() const
+{
+    return *(this->currentTool);
 }
 
 void Project::onToolChanged(Tool *tool)
@@ -73,6 +98,7 @@ void Project::onCurrentFrameChanged(int index)
     this->currentFrame = index;
     emit this->frameSelectionChanged(index);
     emit this->frameChanged(this->getCurrentFrame());
+
 }
 
 void Project::onFrameAdded(int index)
@@ -112,10 +138,76 @@ void Project::onFrameRemoved(int index)
     emit this->frameRemoved(index);
 }
 
+void Project::save(std::function<QString()> requestPath) {
+    if (!this->path) {
+        QString userPath = requestPath();
+
+        if (userPath.isEmpty()) {
+            return;
+        }
+
+        this->path = new std::filesystem::path(userPath.toStdString());
+
+        if (!this->path->has_extension()) {
+            this->path->replace_extension(PROJECT_FILE_EXTENSION.toStdString());
+        }
+
+        emit this->nameChanged(this->getName());
+    }
+
+    QFile saveFile = QFile(*this->path);
+
+    if(!saveFile.open(QIODevice::ReadWrite | QIODevice::Truncate)) {
+        throw std::invalid_argument("Could not open selected file.");
+    }
+
+    QTextStream qStream = QTextStream(&saveFile);
+    qStream << QJsonDocument(this->toJson()).toJson(QJsonDocument::Indented);
+    qStream.flush();
+
+    saveFile.close();
+}
+
+QJsonObject Project::toJson()
+{
+    // TODO: add anything else?
+    QJsonArray rgb;
+    rgb.push_back(this->currentColor.red());
+    rgb.push_back(this->currentColor.green());
+    rgb.push_back(this->currentColor.blue());
+
+    return QJsonObject({
+        { "sprite", this->sprite->toJson() },
+        { "currentFrame", this->currentFrame },
+        { "currentTool", this->currentTool->toString() },
+        { "currentColor", rgb }
+    });
+}
+
+QString Project::getName() const {
+    if (this->path != nullptr) {
+        return QString::fromStdString(this->path->stem().string());
+    }
+
+    return QString();
+}
+
+QString Project::getPath() const {
+    if (this->path != nullptr) {
+        return QString::fromStdString(this->path->string());
+    }
+
+    return QString();
+}
+
 std::vector<QImage> Project::initialImages(){
     std::vector<QImage> outList;
     for (int i = 0; i < this->sprite->frameCount(); i++) {
         outList.push_back(this->sprite->getFrame(i));
     }
     return outList;
+}
+
+void Project::sendInitialImages() {
+    emit this->initialFrames(this->initialImages());
 }
