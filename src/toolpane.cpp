@@ -12,11 +12,11 @@ ToolPane::ToolPane(QWidget *parent)
     ui->eraserButton->setIcon(QIcon(":/icons/eraser.png"));
     ui->eraserButton->setIconSize(ui->eraserButton->size());
 
-
     connect(this->ui->pencilButton, &QPushButton::clicked,
             this, &ToolPane::onPencilSelected);
     connect(this->ui->eraserButton, &QPushButton::clicked,
             this, &ToolPane::onEraserSelected);
+
 }
 
 ToolPane::~ToolPane()
