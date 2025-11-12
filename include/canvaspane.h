@@ -9,14 +9,18 @@
 #include <QWidget>
 #include <QLabel>
 
-
 #include "project.h"
 
+
+/// The CanvasPane is the canvas that the user draws the Sprite on.
 class CanvasPane : public QWidget
 {
     Q_OBJECT
 
 public:
+    /// @brief Construct a CanvasPane and draws the current frame of the Sprite.
+    /// @param project - a pointer to the project model.
+    /// @param parent - nullptr because there is no parent.
     explicit CanvasPane(Project *project, QWidget *parent = nullptr);
 
 signals:

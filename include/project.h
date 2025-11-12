@@ -33,6 +33,7 @@ public:
     QString getName() const;
     QString getPath() const;
     void save(std::function<QString()> requestPath);
+    Tool &getCurrentTool() const;
 
 signals:
     // To Canvas, emit whenever the canvas needs to be update

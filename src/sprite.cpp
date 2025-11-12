@@ -14,7 +14,8 @@ const char *FORMAT = "PNG";
 
 Sprite::Sprite(const QJsonObject &sprite)
 {
-    if(!sprite.contains("frames") || !sprite.contains("width") || !sprite.contains("height")) {
+    if(!sprite.contains("frames") || !sprite.contains("width") || !sprite.contains("height")
+        || !sprite.contains("frameRate")) {
         throw std::invalid_argument("Sprite information could not be retrieved.");
     }
 
@@ -23,10 +24,12 @@ Sprite::Sprite(const QJsonObject &sprite)
         sprite.value("height").toInteger()
     );
 
+    this->frameRate = sprite.value("frameRate").toInteger();
+
     QJsonArray jsonFrames = sprite.value("frames").toArray();
     for (QJsonValue &&frame : jsonFrames) {
         QImage image;
-        if(!image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT)){
+        if(!image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT)) {
             throw std::invalid_argument("Unsupported format.");
         }
 
@@ -88,6 +91,7 @@ QJsonObject Sprite::toJson()
 
     return QJsonObject({
         { "frames", jsonFrames },
+        { "frameRate", this->frameRate },
         { "width", this->dimensions.width() },
         { "height", this->dimensions.height() },
     });
