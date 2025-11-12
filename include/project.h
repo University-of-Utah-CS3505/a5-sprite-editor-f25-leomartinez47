@@ -39,12 +39,12 @@ signals:
 
 public slots:
     void onToolChanged(Tool *tool);
-    void onColorChanged(QColor color); //Split into four slots that get each color value/alpha
+    //void onColorChanged(QColor color); //Split into four slots that get each color value/alpha
 
-    void redChanged(int colorValue);
-    void blueChanged(int colorValue);
-    void greenChanged(int colorValue);
-    void alphaChanged(int colorValue);
+    void redChanged(int newRed);
+    void blueChanged(int newBlue);
+    void greenChanged(int newGreen);
+    void alphaChanged(int newOpacity);
 
     void onPixelClicked(QPoint point);
     // From Frame Selection
@@ -67,6 +67,12 @@ private:
     Tool *currentTool;
     QColor currentColor;
     int currentFrame;
+
+    int currentRed;
+    int currentGreen;
+    int currentBlue;
+    int currentOpacity;
+
     std::filesystem::path *path;
 };
 

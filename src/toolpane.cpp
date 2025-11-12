@@ -23,19 +23,20 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
     connect(this, &ToolPane::toolSelected,
             project, &Project::onToolChanged);
 
-    //connect slider changes to the methods in this class
-    //all in here
-    connect(this->ui->redSlider, &QSlider::valueChanged,
-            this, &ToolPane::redSliderValue);
+    //Connects the slider changes to the methods that get the
+    //value from the slider and send them to the project to
+    //update the color.
+    connect(this->ui->redSlider, &QAbstractSlider::valueChanged,
+            project, &Project::redChanged);
 
-    connect(this->ui->blueSlider, &QSlider::valueChanged,
-            this, &ToolPane::blueSliderValue);
+    connect(this->ui->greenSlider, &QAbstractSlider::valueChanged,
+            project, &Project::greenChanged);
 
-    connect(this->ui->greenSlider, &QSlider::valueChanged,
-            this, &ToolPane::greenSliderValue);
+    connect(this->ui->blueSlider, &QAbstractSlider::valueChanged,
+            project, &Project::blueChanged);
 
-    connect(this->ui->opacitySlider, &QSlider::valueChanged,
-            this, &ToolPane::alphaSliderValue);
+    connect(this->ui->opacitySlider, &QAbstractSlider::valueChanged,
+            project, &Project::alphaChanged);
 }
 
 ToolPane::~ToolPane()
@@ -68,24 +69,4 @@ void ToolPane::focusATool(QString tool)
         this->ui->eraserButton->setFocus();
         qDebug() << "focus was set to eraser";
     }
-}
-
-void ToolPane::redSliderValue(int value){
-    qDebug() << value;
-    emit this->redSliderUpdate(value);
-}
-
-void ToolPane::blueSliderValue(int value){
-    qDebug() << value;
-    emit this->blueSliderUpdate(value);
-}
-
-void ToolPane::greenSliderValue(int value){
-    qDebug() << value;
-    emit this->greenSliderUpdate(value);
-}
-
-void ToolPane::alphaSliderValue(int value){
-    qDebug() << value;
-    emit this->alphaSliderUpdate(value);
 }

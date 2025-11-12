@@ -8,7 +8,6 @@ Project::Project(QSize dimensions, QObject *parent)
     this->currentFrame = 0;
     this->path = nullptr;
     this->currentTool = new Pencil();
-
     this->currentColor = QColor(0, 0, 0);
 }
 
@@ -78,27 +77,31 @@ void Project::onToolChanged(Tool *tool)
     }
 }
 
-void Project::onColorChanged(QColor color)
-{
-    this->currentColor = color;
+// void Project::onColorChanged(QColor color)
+// {
+//     this->currentColor = color;
+// }
+
+void Project::redChanged(int newRed){
+    this->currentColor = QColor(newRed, currentGreen, currentBlue);
+    qDebug() << currentColor;
+    currentRed = newRed;
 }
 
-void Project::redChanged(int colorValue){
-    QColor red(colorValue);
-    this->currentColor = red;
+void Project::greenChanged(int newGreen){
+    this->currentColor = QColor(currentRed, newGreen, currentBlue);
+    qDebug() << currentColor;
+    currentGreen = newGreen;
 }
 
-void Project::blueChanged(int colorValue){
-    QColor blue(colorValue);
-    this->currentColor = blue;
+void Project::blueChanged(int newBlue){
+    this->currentColor = QColor(currentRed, currentGreen, newBlue);
+    qDebug() << currentColor;
+    currentBlue = newBlue;
 }
 
-void Project::greenChanged(int colorValue){
-    QColor green(colorValue);
-    this->currentColor = green;
-}
 
-void Project::alphaChanged(int colorValue){
+void Project::alphaChanged(int newOpacity){
 
 }
 
