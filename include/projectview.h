@@ -17,7 +17,7 @@ namespace Ui {
 class ProjectView;
 }
 
-/// The ProjectView represents the view of a Sprite Editor program. ProjectView must always be in a QTabWidget.
+/// The ProjectView represents the view of a project Sprite Editor program. ProjectView must always be in a QTabWidget.
 class ProjectView : public QWidget
 {
     Q_OBJECT
