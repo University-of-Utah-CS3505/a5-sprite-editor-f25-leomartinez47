@@ -95,7 +95,7 @@ void PreviewPane::paintEvent(QPaintEvent*)
     // Transparency grid
     QRect gridArea(xOffset, yOffset, scaledWidth, scaledHeight);
 
-    const int gridSize = qMax(1, scaleFactor/2);
+    const int gridSize = qMax(1, scaleFactor / 2);
     QColor lightGray(0xCC, 0xCC, 0xCC);
     QColor darkGray(0xAA, 0xAA, 0xAA);
 
