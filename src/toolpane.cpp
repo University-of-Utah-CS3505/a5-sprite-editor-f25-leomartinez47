@@ -3,6 +3,7 @@
 
 #include "tools.h"
 
+
 ToolPane::ToolPane(Project *project, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ToolPane)
@@ -35,6 +36,18 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
 
     connect(this->ui->fillButton, &QPushButton::clicked,
             this, &ToolPane::onFillSelected);
+
+    connect(this->ui->redSlider, &QAbstractSlider::valueChanged,
+            project, &Project::redChanged);
+
+    connect(this->ui->greenSlider, &QAbstractSlider::valueChanged,
+            project, &Project::greenChanged);
+
+    connect(this->ui->blueSlider, &QAbstractSlider::valueChanged,
+            project, &Project::blueChanged);
+
+    connect(this->ui->opacitySlider, &QAbstractSlider::valueChanged,
+            project, &Project::alphaChanged);
 }
 
 ToolPane::~ToolPane()
@@ -72,6 +85,4 @@ void ToolPane::onToolSelected(Tool *tool)
     } else if (tool_str == FILL_BUCKET) {
         this->ui->fillButton->setDisabled(true);
     }
-
-    qDebug() << "focus set to" << tool_str;
 }

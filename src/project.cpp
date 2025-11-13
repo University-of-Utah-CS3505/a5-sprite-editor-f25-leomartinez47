@@ -1,5 +1,20 @@
 #include "project.h"
 
+QJsonArray colorToJson(QColor color) {
+    QJsonArray rgb;
+    rgb.push_back(color.red());
+    rgb.push_back(color.green());
+    rgb.push_back(color.blue());
+    return rgb;
+}
+
+QColor colorFromJson(QJsonArray rgb) {
+    return QColor(
+        rgb.takeAt(0).toInteger(),
+        rgb.takeAt(0).toInteger(),
+        rgb.takeAt(0).toInteger()
+    );
+}
 
 Project::Project(QSize dimensions, QObject *parent)
     : QObject{parent}
@@ -8,8 +23,7 @@ Project::Project(QSize dimensions, QObject *parent)
     this->currentFrame = 0;
     this->path = nullptr;
     this->currentTool = new Pencil();
-
-    this->currentColor = QColor(0, 0, 0);
+    this->currentColor = Qt::black;
 }
 
 Project::Project(const QString &path, QObject *parent)
@@ -31,9 +45,7 @@ Project::Project(const QString &path, QObject *parent)
     this->sprite = new Sprite(json.value("sprite").toObject());
     this->currentFrame = json.value("currentFrame").toInteger();
     this->currentTool = toolFromString(json.value("currentTool").toString());
-
-    QJsonArray rgb = json.value("currentColor").toArray();
-    this->currentColor = QColor(rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger());
+    this->currentColor = colorFromJson(json.value("currentColor").toArray());
 }
 
 Project::~Project()
@@ -78,9 +90,44 @@ void Project::onToolChanged(Tool *tool)
     }
 }
 
-void Project::onColorChanged(QColor color)
+/*!
+ * \brief Project::redChanged
+ * \param red is the integer representing the new value
+ * acquired from the red slider to update the red RGB.
+ */
+void Project::redChanged(int red)
 {
-    this->currentColor = color;
+    this->currentColor.setRed(red);
+}
+
+/*!
+ * \brief Project::greenChanged
+ * \param green is the integer representing the new value
+ * acquired from the green slider to update the green RGB.
+ */
+void Project::greenChanged(int green)
+{
+    this->currentColor.setGreen(green);
+}
+
+/*!
+ * \brief Project::blueChanged
+ * \param blue is the integer representing the new value
+ * acquired from the blue slider to update the blue RGB.
+ */
+void Project::blueChanged(int blue)
+{
+    this->currentColor.setBlue(blue);
+}
+
+/*!
+ * \brief Project::alphaChanged
+ * \param alpha is the integer representing the new value
+ * acquired from the opacity slider to update the opacity.
+ */
+void Project::alphaChanged(int alpha)
+{
+    this->currentColor.setAlpha(alpha);
 }
 
 void Project::onPixelClicked(QPoint point)
@@ -165,16 +212,11 @@ void Project::exportFile(const QString &path) {
 
 QJsonObject Project::toJson()
 {
-    QJsonArray rgb;
-    rgb.push_back(this->currentColor.red());
-    rgb.push_back(this->currentColor.green());
-    rgb.push_back(this->currentColor.blue());
-
     return QJsonObject({
         { "sprite", this->sprite->toJson() },
         { "currentFrame", this->currentFrame },
         { "currentTool", this->currentTool->toString() },
-        { "currentColor", rgb }
+        { "currentColor", colorToJson(this->currentColor) }
     });
 }
 

@@ -13,6 +13,7 @@
 #include <QObject>
 #include <QFile>
 #include <QString>
+#include <QColor>
 
 #include "sprite.h"
 #include "tools.h"
@@ -136,6 +137,15 @@ public slots:
     /// @brief Change the current frame.
     /// @param index - Identifies the new current frame.
     ///
+    //void onColorChanged(QColor color); //Split into four slots that get each color value/alpha
+
+    //From toolpane's signals that alert the slider's changed values for the RGB values.
+    void redChanged(int red);
+    void blueChanged(int blue);
+    void greenChanged(int green);
+    void alphaChanged(int alpha);
+
+    // From Frame Selection
     void onCurrentFrameChanged(int index);
 
     // Frame Selection Methods
