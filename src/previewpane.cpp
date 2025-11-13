@@ -92,10 +92,6 @@ void PreviewPane::paintEvent(QPaintEvent*)
     xOffset = (this->width() - scaledWidth) / 2;
     yOffset = (ui->frame->height() - scaledHeight) / 2;
 
-    if(scaledWidth > this->width() || scaledHeight > this->height()){
-        qDebug() << "Scaled width: " << scaledWidth << width() << "Scaled height: " << scaledHeight << height();
-    }
-
     // Transparency grid
     QRect gridArea(xOffset, yOffset, scaledWidth, scaledHeight);
 
@@ -118,9 +114,9 @@ void PreviewPane::paintEvent(QPaintEvent*)
         }
     }
 
-    // Draw the scaled frame
-    // painter.drawPixmap(xOffset, yOffset,
-    //                    framePixmap.scaled(
-    //                        scaledWidth, scaledHeight,
-    //                        Qt::KeepAspectRatio, Qt::FastTransformation));
+    //Draw the scaled frame
+    painter.drawPixmap(xOffset, yOffset,
+                       framePixmap.scaled(
+                           scaledWidth, scaledHeight,
+                           Qt::KeepAspectRatio, Qt::FastTransformation));
 }
