@@ -85,4 +85,4 @@ private:
     FrameSelectionPane *frameSelectionPane;
 };
 
-#endif // PROJECTVIEW_H
+#endif

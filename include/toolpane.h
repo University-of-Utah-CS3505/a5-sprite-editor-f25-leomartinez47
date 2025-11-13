@@ -121,4 +121,4 @@ private:
     Ui::ToolPane *ui;
 };
 
-#endif // TOOLPANE_H
+#endif

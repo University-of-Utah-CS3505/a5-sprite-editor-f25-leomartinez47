@@ -122,22 +122,10 @@ public slots:
     void onToolChanged(Tool *tool);
 
     ///
-    /// @brief Change the current color.
-    /// @param color - The new current color.
-    ///
-    void onColorChanged(QColor color);
-
-    ///
     /// @brief Change the color of the pixel based on current tool and current color.
     /// @param point - The point to change.
     ///
     void onPixelClicked(QPoint point);
-
-    ///
-    /// @brief Change the current frame.
-    /// @param index - Identifies the new current frame.
-    ///
-    //void onColorChanged(QColor color); //Split into four slots that get each color value/alpha
 
     //From toolpane's signals that alert the slider's changed values for the RGB values.
     void redChanged(int red);
@@ -146,6 +134,10 @@ public slots:
     void alphaChanged(int alpha);
 
     // From Frame Selection
+    ///
+    /// @brief Change the current frame.
+    /// @param index - Identifies the new current frame.
+    ///
     void onCurrentFrameChanged(int index);
 
     // Frame Selection Methods
@@ -165,11 +157,6 @@ public slots:
     /// @param frameRate - The new frame rate.
     ///
     void onFrameRateSet(int frameRate);
-
-    // void addFrame();
-    // void deleteFrame();
-    // void nextFrame();
-    // void previousFrame();
 
 private:
     ///
@@ -196,4 +183,4 @@ private:
     std::filesystem::path *path;
 };
 
-#endif // PROJECT_H
+#endif

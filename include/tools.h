@@ -99,4 +99,4 @@ class FillBucket : public Tool {
     const QString &toString() const override { return FILL_BUCKET; }
 };
 
-#endif // TOOLS_H
+#endif

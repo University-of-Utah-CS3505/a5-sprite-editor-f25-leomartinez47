@@ -46,4 +46,4 @@ private:
     Ui::SpriteSetup *ui;
 };
 
-#endif // SPRITESETUP_H
+#endif

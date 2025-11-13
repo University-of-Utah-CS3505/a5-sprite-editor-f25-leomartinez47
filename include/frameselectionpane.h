@@ -24,4 +24,4 @@ private:
     Ui::FrameSelectionPane *ui;
 };
 
-#endif // FRAMESELECTIONPANE_H
+#endif
