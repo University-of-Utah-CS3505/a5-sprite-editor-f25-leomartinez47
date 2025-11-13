@@ -114,7 +114,7 @@ void PreviewPane::paintEvent(QPaintEvent*)
         }
     }
 
-    //Draw the scaled frame
+    // Draw the scaled frame
     painter.drawPixmap(xOffset, yOffset,
                        framePixmap.scaled(
                            scaledWidth, scaledHeight,
