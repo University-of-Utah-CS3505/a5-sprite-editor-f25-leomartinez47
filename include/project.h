@@ -113,6 +113,8 @@ signals:
     /// @param name - The new Project name.
     ///
     void nameChanged(const QString &name);
+    void sendColor(QColor);
+    void sendOpacity(int opacity);
 
 public slots:
     ///

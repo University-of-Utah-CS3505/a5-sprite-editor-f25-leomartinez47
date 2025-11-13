@@ -93,22 +93,27 @@ void Project::onToolChanged(Tool *tool)
 void Project::onRedChanged(int red)
 {
     this->currentColor.setRed(red);
+    emit this->sendColor(currentColor);
+
 }
 
 
 void Project::onGreenChanged(int green)
 {
     this->currentColor.setGreen(green);
+    emit this->sendColor(currentColor);
 }
 
 void Project::onBlueChanged(int blue)
 {
     this->currentColor.setBlue(blue);
+    emit this->sendColor(currentColor);
 }
 
 void Project::onAlphaChanged(int alpha)
 {
     this->currentColor.setAlpha(alpha);
+    emit this->sendOpacity(alpha);
 }
 
 void Project::onPixelClicked(QPoint point)

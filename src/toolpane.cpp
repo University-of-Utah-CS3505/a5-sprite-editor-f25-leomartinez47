@@ -3,7 +3,6 @@
 
 #include "tools.h"
 
-
 ToolPane::ToolPane(Project *project, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ToolPane)
@@ -47,7 +46,13 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
             project, &Project::onBlueChanged);
 
     connect(this->ui->opacitySlider, &QAbstractSlider::valueChanged,
-            project, &Project::onAlphaChanged);
+            project, &Project::alphaChanged);
+
+    connect(project, &Project::sendColor,
+            this, &ToolPane::receiveColor);
+
+    connect(project, &Project::sendOpacity,
+            this, &ToolPane::receiveOpacity);
 }
 
 ToolPane::~ToolPane()
@@ -85,4 +90,15 @@ void ToolPane::onToolSelected(Tool *tool)
     } else if (tool_str == FILL_BUCKET) {
         this->ui->fillButton->setDisabled(true);
     }
+}
+
+void ToolPane::receiveColor(QColor color)
+{
+    this->ui->colorPreview->setStyleSheet(QString("background-color: %1;").arg(color.name()));
+}
+
+void ToolPane::receiveOpacity(int opacity)
+{
+    this->ui->opacityPreview->setStyleSheet(QString("background-color: rgba(255, 255, 255, %1);")
+                                                .arg(opacity));
 }

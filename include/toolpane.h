@@ -95,6 +95,9 @@ signals:
     /// the blue RBG.
     ///
     void alphaSliderUpdate(int value);
+public slots:
+    void receiveColor(QColor);
+    void receiveOpacity(int opacity);
 
 private slots:
     ///
