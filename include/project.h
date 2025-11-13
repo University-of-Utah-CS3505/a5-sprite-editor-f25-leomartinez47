@@ -7,7 +7,6 @@
 #include <QObject>
 #include <QFile>
 #include <QString>
-#include <QGraphicsOpacityEffect>
 #include <QColor>
 
 #include "sprite.h"
