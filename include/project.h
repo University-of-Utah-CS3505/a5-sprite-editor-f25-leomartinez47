@@ -128,10 +128,29 @@ public slots:
     void onPixelClicked(QPoint point);
 
     //From toolpane's signals that alert the slider's changed values for the RGB values.
-    void redChanged(int red);
-    void blueChanged(int blue);
-    void greenChanged(int green);
-    void alphaChanged(int alpha);
+    ///
+    /// @brief Change the red value of the current color.
+    /// @param red - The new red value.
+    ///
+    void onRedChanged(int red);
+
+    ///
+    /// @brief Change the blue value of the current color.
+    /// @param blue - The new blue value.
+    ///
+    void onBlueChanged(int blue);
+
+    ///
+    /// @brief Change the green value of the current color.
+    /// @param green - The new green value.
+    ///
+    void onGreenChanged(int green);
+
+    ///
+    /// @brief Change the alpha value of the current color.
+    /// @param alpha - The new alpha value.
+    ///
+    void onAlphaChanged(int alpha);
 
     // From Frame Selection
     ///

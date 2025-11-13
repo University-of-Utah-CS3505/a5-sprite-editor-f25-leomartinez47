@@ -90,42 +90,23 @@ void Project::onToolChanged(Tool *tool)
     }
 }
 
-/*!
- * \brief Project::redChanged
- * \param red is the integer representing the new value
- * acquired from the red slider to update the red RGB.
- */
-void Project::redChanged(int red)
+void Project::onRedChanged(int red)
 {
     this->currentColor.setRed(red);
 }
 
-/*!
- * \brief Project::greenChanged
- * \param green is the integer representing the new value
- * acquired from the green slider to update the green RGB.
- */
-void Project::greenChanged(int green)
+
+void Project::onGreenChanged(int green)
 {
     this->currentColor.setGreen(green);
 }
 
-/*!
- * \brief Project::blueChanged
- * \param blue is the integer representing the new value
- * acquired from the blue slider to update the blue RGB.
- */
-void Project::blueChanged(int blue)
+void Project::onBlueChanged(int blue)
 {
     this->currentColor.setBlue(blue);
 }
 
-/*!
- * \brief Project::alphaChanged
- * \param alpha is the integer representing the new value
- * acquired from the opacity slider to update the opacity.
- */
-void Project::alphaChanged(int alpha)
+void Project::onAlphaChanged(int alpha)
 {
     this->currentColor.setAlpha(alpha);
 }
