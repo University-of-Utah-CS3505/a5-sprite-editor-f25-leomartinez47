@@ -91,10 +91,10 @@ class FillBucket : public Tool {
     ///
     void apply(QPoint point, QImage &frame, QColor color) override;
 
-      ///
-      /// @brief Format a FillBucket as a QString.
-      /// @return The QString.
-      ///
+    ///
+    /// @brief Format a FillBucket as a QString.
+    /// @return The QString.
+    ///
     const QString &toString() const override { return FILL_BUCKET; }
 };
 

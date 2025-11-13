@@ -26,11 +26,6 @@
 
 /// This represents a Sprite. A Sprite can have multiple frames. Frames are put in an array by their ordering.
 class Sprite {
-    /// The frames of this Sprite.
-    std::vector<QImage> frames;
-    QSize dimensions;
-    /// Frame Rate of this Sprite's animation.
-    int frameRate;
 
 public:
     /// Construct a Sprite with dimensions selected by the user.
@@ -43,7 +38,7 @@ public:
     Sprite(const QJsonObject &json);
 
     ///
-    /// \brief Add a new frame to this Sprite.
+    /// @brief Add a new frame to this Sprite.
     ///
     void addFrame();
 
@@ -86,10 +81,20 @@ public:
     void setFrameRate(int frameRate);
 
     ///
-    /// \brief Get the frame rate of this Sprite's animation.
-    /// \return The frame rate
+    /// @brief Get the frame rate of this Sprite's animation.
+    /// @return The frame rate
     ///
     int getFrameRate();
+
+private:
+    /// The frames of this Sprite.
+    std::vector<QImage> frames;
+
+    /// The dimensions of the QImages that represent each frame.
+    QSize dimensions;
+
+    /// Frame Rate of this Sprite's animation.
+    int frameRate;
 };
 
 #endif

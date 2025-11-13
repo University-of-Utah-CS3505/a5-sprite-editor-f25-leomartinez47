@@ -18,7 +18,7 @@
 const QString PROJECT_FILE_EXTENSION = ".sprite";
 const QString PROJECT_FILE_EXTENSION_DESCRIPTION = "Sprite Project (*.sprite)";
 
-/// This is a Model for a Sprite Editor program. A Sprite can have multiple frames
+/// This is a Model for a Sprite Editor program.
 class Project : public QObject
 {
     Q_OBJECT
@@ -95,13 +95,11 @@ public:
 
     ///
     /// @brief Get the currently selected tool.
-    /// @return A Tool object.
+    /// @return The selected tool.
     ///
     Tool &getCurrentTool() const;
 
 signals:
-    // To Canvas, emit whenever the canvas needs to be update
-    // like on frame change and on editing the image
     ///
     /// @brief Emit when current frame is changed.
     /// @param frame - The new current frame.
@@ -133,18 +131,28 @@ public slots:
     ///
     void onPixelClicked(QPoint point);
 
-    // From Frame Selection
     ///
     /// @brief Change the current frame.
-    /// @param index - Indicates the ordering of the new current frame.
+    /// @param index - Identifies the new current frame.
     ///
     void onCurrentFrameChanged(int index);
 
     // Frame Selection Methods
+    ///
+    /// @brief Add a frame. It is placed last in the frame ordering.
+    ///
     void onFrameAdded();
+
+    ///
+    /// @brief Remove a frame.
+    /// @param index - Indicates the frame to remove.
+    ///
     void onFrameRemoved(int index);
 
-    // From Preview Pane, sets frame rate in the sprite
+    ///
+    /// @brief Set the frame rate of the Sprite.
+    /// @param frameRate - The new frame rate.
+    ///
     void onFrameRateSet(int frameRate);
 
     // void addFrame();
@@ -153,13 +161,27 @@ public slots:
     // void previousFrame();
 
 private:
+    ///
+    /// @brief Serialize this Project as a Json.
+    /// @return A QJsonObject that stores the Project information.
+    ///
     QJsonObject toJson();
 
+    /// The Sprite associated with this Project.
     Sprite *sprite;
 
+    /// The currently selected tool.
     Tool *currentTool;
+
+    /// The currently selected color.
     QColor currentColor;
+
+    /// This indicates the order of the currently selected frame with respect to
+    /// the other frames of the Sprite.
     int currentFrame;
+
+    /// This is the file path to the file this Project saves to. If the Project
+    /// has not been saved, this will be a nullptr.
     std::filesystem::path *path;
 };
 
