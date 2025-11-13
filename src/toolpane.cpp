@@ -3,6 +3,7 @@
 
 #include "tools.h"
 
+
 ToolPane::ToolPane(Project *project, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ToolPane)
@@ -30,13 +31,12 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
     connect(this->ui->eraserButton, &QPushButton::clicked,
             this, &ToolPane::onEraserSelected);
 
-    this->focusATool(project->getCurrentTool().toString());
-    connect(this, &ToolPane::toolSelected,
-            project, &Project::onToolChanged);
+    this->ui->fillButton->setIcon(QIcon(":/icons/fillbucket.png"));
+    this->ui->fillButton->setIconSize(ICON_SIZE);
 
-    /*Connects the slider changes to the methods that get the
-    *value from the slider and send them to the project to
-    *update the color*/
+    connect(this->ui->fillButton, &QPushButton::clicked,
+            this, &ToolPane::onFillSelected);
+
     connect(this->ui->redSlider, &QAbstractSlider::valueChanged,
             project, &Project::redChanged);
 
@@ -48,11 +48,6 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
 
     connect(this->ui->opacitySlider, &QAbstractSlider::valueChanged,
             project, &Project::alphaChanged);
-    this->ui->fillButton->setIcon(QIcon(":/icons/fillbucket.png"));
-    this->ui->fillButton->setIconSize(ICON_SIZE);
-
-    connect(this->ui->fillButton, &QPushButton::clicked,
-            this, &ToolPane::onFillSelected);
 }
 
 ToolPane::~ToolPane()
@@ -90,6 +85,4 @@ void ToolPane::onToolSelected(Tool *tool)
     } else if (tool_str == FILL_BUCKET) {
         this->ui->fillButton->setDisabled(true);
     }
-
-    qDebug() << "focus set to" << tool_str;
 }
