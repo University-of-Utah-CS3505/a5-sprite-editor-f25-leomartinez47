@@ -55,7 +55,6 @@ public:
     ///
     QImage &getCurrentFrame() const;
 
-    // get the sprite pointer?? legal?? - leo and sean previewpane workers
     ///
     /// @brief Get the Sprite associated with this Project.
     /// @return The Sprite.
