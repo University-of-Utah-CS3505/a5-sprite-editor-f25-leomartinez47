@@ -37,7 +37,7 @@ public:
 signals:
 
     ///
-    /// @brief Send the selected tool.
+    /// @brief Emit when tool is selected.
     /// @param tool - The tool selected by the user.
     ///
     void toolSelected(Tool *tool);

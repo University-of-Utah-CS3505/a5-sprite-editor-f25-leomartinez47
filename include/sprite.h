@@ -24,7 +24,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 
-
+/// This represents a Sprite. A Sprite can have multiple frames. Frames are put in an array by their ordering.
 class Sprite {
     /// The frames of this Sprite.
     std::vector<QImage> frames;
