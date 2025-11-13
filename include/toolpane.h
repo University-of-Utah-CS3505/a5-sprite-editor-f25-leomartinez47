@@ -10,6 +10,7 @@ namespace Ui {
 class ToolPane;
 }
 
+const QSize ICON_SIZE = QSize(65, 32);
 class ToolPane : public QWidget
 {
     Q_OBJECT

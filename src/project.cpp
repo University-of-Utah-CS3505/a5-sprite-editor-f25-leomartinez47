@@ -24,7 +24,7 @@ Project::Project(const QString &path, QObject *parent)
 
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
     if(!json.contains("sprite") || !json.contains("currentFrame") || !json.contains("currentTool")
-        || !json.contains("currentColor")){
+        || !json.contains("currentColor")) {
         throw std::invalid_argument("Project information could not be retrieved.");
     }
 

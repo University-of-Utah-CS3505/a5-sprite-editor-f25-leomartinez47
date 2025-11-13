@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QErrorMessage>
 #include <QString>
 
 #include "project.h"

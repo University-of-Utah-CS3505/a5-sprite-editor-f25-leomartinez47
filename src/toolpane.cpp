@@ -19,19 +19,19 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
             this, &ToolPane::onToolSelected);
 
     this->ui->pencilButton->setIcon(QIcon(":/icons/pencil.png"));
-    this->ui->pencilButton->setIconSize(this->ui->pencilButton->size());
+    this->ui->pencilButton->setIconSize(ICON_SIZE);
 
     connect(this->ui->pencilButton, &QPushButton::clicked,
             this, &ToolPane::onPencilSelected);
 
     this->ui->eraserButton->setIcon(QIcon(":/icons/eraser.png"));
-    this->ui->eraserButton->setIconSize(this->ui->eraserButton->size());
+    this->ui->eraserButton->setIconSize(ICON_SIZE);
 
     connect(this->ui->eraserButton, &QPushButton::clicked,
             this, &ToolPane::onEraserSelected);
 
     this->ui->fillButton->setIcon(QIcon(":/icons/fillbucket.png"));
-    this->ui->fillButton->setIconSize(this->ui->fillButton->size());
+    this->ui->fillButton->setIconSize(ICON_SIZE);
 
     connect(this->ui->fillButton, &QPushButton::clicked,
             this, &ToolPane::onFillSelected);

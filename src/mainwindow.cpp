@@ -165,8 +165,10 @@ void MainWindow::onOpenRequested() {
     {
         project = new Project(fileName);
     }
-    catch(std::invalid_argument ex) { //an exception isn't being thrown right now. Project is making a Sprite out of a bad Json
+    catch(std::invalid_argument ex) {
         qWarning() << ex.what();
+        QErrorMessage *msg = new QErrorMessage();
+        msg->showMessage(ex.what());
         return;
     }
     int newIndex = this->tabs->addTab(new ProjectView(project), project->getName());
