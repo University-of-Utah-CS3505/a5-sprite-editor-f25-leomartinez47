@@ -11,7 +11,6 @@
 
 #include "project.h"
 
-
 namespace Ui {
 class PreviewPane;
 }

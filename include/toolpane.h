@@ -8,6 +8,7 @@
 
 #include <QWidget>
 #include <QSlider>
+
 #include "tools.h"
 #include "project.h"
 
