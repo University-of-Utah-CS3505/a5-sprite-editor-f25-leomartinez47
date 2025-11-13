@@ -85,18 +85,21 @@ void PreviewPane::paintEvent(QPaintEvent*)
     // Calculate the scale factor and offsets for the current frame
     int scaleFactorX = ui->frame->width() / currentFrame->width();
     int scaleFactorY = ui->frame->height() / currentFrame->height();
-    scaleFactor = qMax(1, qMin(scaleFactorX, scaleFactorY));
+    scaleFactor = qMax(1, qMin(scaleFactorX, scaleFactorY)); // 2 was 1
 
     int scaledWidth = currentFrame->width() * scaleFactor;
     int scaledHeight = currentFrame->height() * scaleFactor;
     xOffset = (this->width() - scaledWidth) / 2;
     yOffset = (ui->frame->height() - scaledHeight) / 2;
 
+    if(scaledWidth > this->width() || scaledHeight > this->height()){
+        qDebug() << "Scaled width: " << scaledWidth << width() << "Scaled height: " << scaledHeight << height();
+    }
 
     // Transparency grid
     QRect gridArea(xOffset, yOffset, scaledWidth, scaledHeight);
 
-    const int gridSize = scaleFactor / 2;
+    const int gridSize = qMax(1, scaleFactor/2);
     QColor lightGray(0xCC, 0xCC, 0xCC);
     QColor darkGray(0xAA, 0xAA, 0xAA);
 
@@ -116,8 +119,8 @@ void PreviewPane::paintEvent(QPaintEvent*)
     }
 
     // Draw the scaled frame
-    painter.drawPixmap(xOffset, yOffset,
-                       framePixmap.scaled(
-                           scaledWidth, scaledHeight,
-                           Qt::KeepAspectRatio, Qt::FastTransformation));
+    // painter.drawPixmap(xOffset, yOffset,
+    //                    framePixmap.scaled(
+    //                        scaledWidth, scaledHeight,
+    //                        Qt::KeepAspectRatio, Qt::FastTransformation));
 }
