@@ -1,5 +1,5 @@
 /*
-    Written by Kailee Kim, TODO
+    Contributors: Natalie Bonilla, Grant Handy, and Kailee Kim
 */
 
 #ifndef TOOLPANE_H

@@ -1,5 +1,5 @@
 /*
-    Written by Leo Martinez and Kailee Kim
+    Contributors: Kailee Kim and Leo Martinez
 
     This object matches this JSON schema:
 
