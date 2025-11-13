@@ -48,10 +48,10 @@ public slots:
     //void onColorChanged(QColor color); //Split into four slots that get each color value/alpha
 
     //From toolpane's signals that alert the slider's changed values for the RGB values.
-    void redChanged(int newRed);
-    void blueChanged(int newBlue);
-    void greenChanged(int newGreen);
-    void alphaChanged(int newOpacity);
+    void redChanged(int red);
+    void blueChanged(int blue);
+    void greenChanged(int green);
+    void alphaChanged(int alpha);
 
     void onPixelClicked(QPoint point);
 
@@ -78,12 +78,6 @@ private:
     Tool *currentTool;
     QColor currentColor;
     int currentFrame;
-
-    //Instance variables to track and update the individual RGB sliders.
-    int currentRed;
-    int currentGreen;
-    int currentBlue;
-    int currentOpacity;
 
     std::filesystem::path *path;
 };
