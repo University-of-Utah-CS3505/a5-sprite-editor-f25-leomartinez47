@@ -110,20 +110,34 @@ void MainWindow::onFinishSetup(QWidget* setupView, Project *project) {
 }
 
 void MainWindow::onSaveRequested() {
-    ProjectView *currentView = qobject_cast<ProjectView*>(this->tabs->currentWidget());
+    Project* currentProject = this->currentProject();
 
-    // Save has been requested during setup.
-    if (currentView == nullptr) {
+    if (currentProject == nullptr) {
         return;
     }
-
-    Project *currentProject = currentView->getProject();
 
     currentProject->save([this]() {
         return QFileDialog::getSaveFileName(this, "Save Project File",
             QDir::home().absolutePath(),
             PROJECT_FILE_EXTENSION_DESCRIPTION);
     });
+}
+
+void MainWindow::onExportRequested()
+{
+    Project* currentProject = this->currentProject();
+
+    if (currentProject == nullptr) {
+        return;
+    }
+
+    QString path = QFileDialog::getSaveFileName(this, "Export Sprite",
+                                                QDir::home().absolutePath(),
+                                                "GIF Image (*.gif);;Current Frame PNG Image (*.png)");
+
+    // TODO: handle case with no extension returned, which should we pick?
+
+    currentProject->exportFile(path);
 }
 
 void MainWindow::onOpenRequested() {
@@ -151,13 +165,26 @@ void MainWindow::onOpenRequested() {
     {
         project = new Project(fileName);
     }
-    catch(std::invalid_argument ex) { //an exception isn't being thrown right now. Project is making a Sprite out of a bad Json
+    catch(std::invalid_argument ex) {
         qWarning() << ex.what();
+        QErrorMessage *msg = new QErrorMessage();
+        msg->showMessage(ex.what());
         return;
     }
     int newIndex = this->tabs->addTab(new ProjectView(project), project->getName());
     this->tabs->setCurrentIndex(newIndex);
 }
+
+Project *MainWindow::currentProject() {
+    ProjectView *currentView = qobject_cast<ProjectView*>(this->tabs->currentWidget());
+
+    if (currentView == nullptr) {
+        return nullptr;
+    }
+
+    return currentView->getProject();
+}
+
 
 void MainWindow::createMenus()
 {
@@ -165,6 +192,7 @@ void MainWindow::createMenus()
     this->fileMenu->addAction(this->newAct);
     this->fileMenu->addAction(this->openAct);
     this->fileMenu->addAction(this->saveAct);
+    this->fileMenu->addAction(this->exportAct);
     this->fileMenu->addAction(this->exitAct);
 }
 
@@ -181,6 +209,10 @@ void MainWindow::createActions()
     this->saveAct = new QAction("Save", this);
     this->saveAct->setShortcuts(QKeySequence::Save);
     connect(this->saveAct, &QAction::triggered, this, &MainWindow::onSaveRequested);
+
+    this->exportAct = new QAction("Export", this);
+    this->exportAct->setShortcuts(QKeySequence::Print);
+    connect(this->exportAct, &QAction::triggered, this, &MainWindow::onExportRequested);
 
     this->closeTabAct = new QAction(this);
     this->closeTabAct->setShortcuts(QKeySequence::Close);

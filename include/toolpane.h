@@ -10,6 +10,7 @@ namespace Ui {
 class ToolPane;
 }
 
+const QSize ICON_SIZE = QSize(65, 32);
 class ToolPane : public QWidget
 {
     Q_OBJECT
@@ -17,7 +18,6 @@ class ToolPane : public QWidget
 public:
     explicit ToolPane(Project *project, QWidget *parent = nullptr);
     ~ToolPane();
-    void focusATool(QString tool);
 
     /*!
      * \brief redSliderValue
@@ -77,6 +77,8 @@ signals:
 private slots:
     void onPencilSelected();
     void onEraserSelected();
+    void onFillSelected();
+    void onToolSelected(Tool *tool);
 
 private:
     Ui::ToolPane *ui;

@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QErrorMessage>
 #include <QString>
 
 #include "project.h"
@@ -16,6 +17,7 @@ public:
 private:
     void createActions();
     void createMenus();
+    Project *currentProject();
 
     QTabWidget *tabs;
 
@@ -24,11 +26,13 @@ private:
     QAction *newAct;
     QAction *openAct;
     QAction *saveAct;
+    QAction *exportAct;
     QAction *closeTabAct;
     QAction *exitAct;
 
 private slots:
     void onNewProjectRequested();
+    void onExportRequested();
     void onHandleCloseCurrentTabRequested();
     void onHandleCloseTabRequested(int index);
     void onSaveRequested();

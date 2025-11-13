@@ -23,18 +23,13 @@ Project::Project(const QString &path, QObject *parent)
 
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
     if(!json.contains("sprite") || !json.contains("currentFrame") || !json.contains("currentTool")
-        || !json.contains("currentColor")){
+        || !json.contains("currentColor")) {
         throw std::invalid_argument("Project information could not be retrieved.");
     }
 
     this->sprite = new Sprite(json.value("sprite").toObject());
-    // TODO: other from JSON
     this->currentFrame = json.value("currentFrame").toInteger();
-
-    currentTool = new Pencil();
-    if(json.value("currentTool").toString() == "Eraser"){
-        currentTool = new Eraser();
-    }
+    this->currentTool = toolFromString(json.value("currentTool").toString());
 
     QJsonArray rgb = json.value("currentColor").toArray();
     this->currentColor = QColor(rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger());
@@ -63,6 +58,11 @@ int Project::getCurrentFrameIndex() const
 QImage &Project::getCurrentFrame() const
 {
     return this->sprite->getFrame(this->currentFrame);
+}
+
+Sprite *Project::getSprite() const
+{
+    return this->sprite;
 }
 
 Tool &Project::getCurrentTool() const
@@ -163,6 +163,10 @@ void Project::onFrameRemoved(int index)
     emit this->frameChanged(this->getCurrentFrame());
 }
 
+void Project::onFrameRateSet(int frameRate) {
+    this->sprite->setFrameRate(frameRate);
+}
+
 void Project::save(std::function<QString()> requestPath) {
     if (!this->path) {
         QString userPath = requestPath();
@@ -193,9 +197,17 @@ void Project::save(std::function<QString()> requestPath) {
     saveFile.close();
 }
 
+void Project::exportFile(const QString &path) {
+    if (path.endsWith("gif")) {
+        this->sprite->writeToGif(path);
+    } else { // assumed to be .png
+        // TODO: handle errors
+        this->getCurrentFrame().save(path, "PNG");
+    }
+}
+
 QJsonObject Project::toJson()
 {
-    // TODO: add anything else?
     QJsonArray rgb;
     rgb.push_back(this->currentColor.red());
     rgb.push_back(this->currentColor.green());

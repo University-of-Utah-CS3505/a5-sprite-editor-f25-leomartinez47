@@ -26,10 +26,15 @@ public:
 
     const QColor &getCurrentColor() const;
     QImage &getCurrentFrame() const;
+
+    // get the sprite pointer?? legal?? - leo and sean previewpane workers
+    Sprite *getSprite() const;
+
     int getCurrentFrameIndex() const;
     QString getName() const;
     QString getPath() const;
     void save(std::function<QString()> requestPath);
+    void exportFile(const QString &path);
     Tool &getCurrentTool() const;
 
 signals:
@@ -56,6 +61,9 @@ public slots:
     // Frame Selection Methods
     void onFrameAdded();
     void onFrameRemoved(int index);
+
+    // From Preview Pane, sets frame rate in the sprite
+    void onFrameRateSet(int frameRate);
 
     // void addFrame();
     // void deleteFrame();
