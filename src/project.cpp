@@ -98,6 +98,7 @@ void Project::onToolChanged(Tool *tool)
 void Project::redChanged(int red)
 {
     this->currentColor.setRed(red);
+    emit this->sendColor(currentColor);
 }
 
 /*!
@@ -108,6 +109,7 @@ void Project::redChanged(int red)
 void Project::greenChanged(int green)
 {
     this->currentColor.setGreen(green);
+    emit this->sendColor(currentColor);
 }
 
 /*!
@@ -118,6 +120,7 @@ void Project::greenChanged(int green)
 void Project::blueChanged(int blue)
 {
     this->currentColor.setBlue(blue);
+    emit this->sendColor(currentColor);
 }
 
 /*!
@@ -128,6 +131,7 @@ void Project::blueChanged(int blue)
 void Project::alphaChanged(int alpha)
 {
     this->currentColor.setAlpha(alpha);
+    emit this->sendOpacity(alpha);
 }
 
 void Project::onPixelClicked(QPoint point)

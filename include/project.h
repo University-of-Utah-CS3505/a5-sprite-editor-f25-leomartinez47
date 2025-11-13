@@ -41,6 +41,8 @@ signals:
     // like on frame change and on editing the image
     void frameChanged(const QImage &frame);
     void nameChanged(const QString &name);
+    void sendColor(QColor);
+    void sendOpacity(int opacity);
 
 public slots:
     void onToolChanged(Tool *tool);
