@@ -99,6 +99,7 @@ void Project::redChanged(int red)
 {
     this->currentColor.setRed(red);
     emit this->sendColor(currentColor);
+
 }
 
 /*!
