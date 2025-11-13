@@ -30,6 +30,24 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
     connect(this->ui->eraserButton, &QPushButton::clicked,
             this, &ToolPane::onEraserSelected);
 
+    this->focusATool(project->getCurrentTool().toString());
+    connect(this, &ToolPane::toolSelected,
+            project, &Project::onToolChanged);
+
+    /*Connects the slider changes to the methods that get the
+    *value from the slider and send them to the project to
+    *update the color*/
+    connect(this->ui->redSlider, &QAbstractSlider::valueChanged,
+            project, &Project::redChanged);
+
+    connect(this->ui->greenSlider, &QAbstractSlider::valueChanged,
+            project, &Project::greenChanged);
+
+    connect(this->ui->blueSlider, &QAbstractSlider::valueChanged,
+            project, &Project::blueChanged);
+
+    connect(this->ui->opacitySlider, &QAbstractSlider::valueChanged,
+            project, &Project::alphaChanged);
     this->ui->fillButton->setIcon(QIcon(":/icons/fillbucket.png"));
     this->ui->fillButton->setIconSize(ICON_SIZE);
 

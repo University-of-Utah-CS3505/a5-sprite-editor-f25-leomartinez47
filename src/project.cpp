@@ -8,7 +8,6 @@ Project::Project(QSize dimensions, QObject *parent)
     this->currentFrame = 0;
     this->path = nullptr;
     this->currentTool = new Pencil();
-
     this->currentColor = QColor(0, 0, 0);
 }
 
@@ -78,9 +77,53 @@ void Project::onToolChanged(Tool *tool)
     }
 }
 
-void Project::onColorChanged(QColor color)
+// void Project::onColorChanged(QColor color)
+// {
+//     this->currentColor = color;
+// }
+
+/*!
+ * \brief Project::redChanged
+ * \param newRed is the integer representing the new value
+ * acquired from the red slider to update the red RGB.
+ */
+void Project::redChanged(int newRed)
 {
-    this->currentColor = color;
+    this->currentColor = QColor(newRed, currentGreen, currentBlue);
+    currentRed = newRed;
+}
+
+/*!
+ * \brief Project::greenChanged
+ * \param newGreen is the integer representing the new value
+ * acquired from the green slider to update the green RGB.
+ */
+void Project::greenChanged(int newGreen)
+{
+    this->currentColor = QColor(currentRed, newGreen, currentBlue);
+    currentGreen = newGreen;
+}
+
+/*!
+ * \brief Project::blueChanged
+ * \param newBlue is the integer representing the new value
+ * acquired from the blue slider to update the blue RGB.
+ */
+void Project::blueChanged(int newBlue)
+{
+    this->currentColor = QColor(currentRed, currentGreen, newBlue);
+    currentBlue = newBlue;
+}
+
+/*!
+ * \brief Project::alphaChanged
+ * \param newOpacity is the integer representing the new value
+ * acquired from the opacity slider to update the opacity.
+ */
+void Project::alphaChanged(int newOpacity)
+{
+    this->currentColor = QColor(currentRed, currentGreen, currentBlue, newOpacity);
+    currentOpacity = newOpacity;
 }
 
 void Project::onPixelClicked(QPoint point)

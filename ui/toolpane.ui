@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>337</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -114,6 +114,95 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="redLabel">
+     <property name="text">
+      <string>Red Value (0-255):</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QSlider" name="redSlider">
+     <property name="maximum">
+      <number>255</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TickPosition::TicksBelow</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="greenLabel">
+     <property name="text">
+      <string>Green Value (0-255):</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QSlider" name="greenSlider">
+     <property name="maximum">
+      <number>255</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TickPosition::TicksBelow</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="blueLabel">
+     <property name="text">
+      <string>Blue Value (0-255):</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QSlider" name="blueSlider">
+     <property name="maximum">
+      <number>255</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TickPosition::TicksBelow</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="opacityLabel">
+     <property name="text">
+      <string>Alpha Value (0-255):</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QSlider" name="opacitySlider">
+     <property name="maximum">
+      <number>255</number>
+     </property>
+     <property name="singleStep">
+      <number>1</number>
+     </property>
+     <property name="sliderPosition">
+      <number>255</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TickPosition::TicksBelow</enum>
+     </property>
+     <property name="tickInterval">
+      <number>0</number>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
