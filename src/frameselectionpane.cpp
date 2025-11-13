@@ -1,5 +1,6 @@
 #include "frameselectionpane.h"
 #include "project.h"
+#include "qevent.h"
 #include "ui_frameselectionpane.h"
 #include <QPushButton>
 #include <QListWidget>
@@ -11,14 +12,18 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     , ui(new Ui::FrameSelectionPane)
 {
     ui->setupUi(this);
+    proj = project;
 
     // Set up list style
     auto* list = ui->listWidget;
     list->setViewMode(QListView::IconMode);
     list->setMovement(QListView::Static);
     list->setWrapping(false);
-    list->setIconSize(QSize(list->viewport()->height(), list->viewport()->height()));
+
     list->setResizeMode(QListView::Adjust);
+    list->viewport()->resize(100, 100);
+    //list->setIconSize(QSize(95, 95));
+    //list ->setGridSize(QSize(105, 105));
 
     list->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     list->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -43,7 +48,6 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
         ui->listWidget->setCurrentRow(index);
         this->lastSelectedIndex = index;
         ui->currentFrame->setText(QString::number(index));
-
     });
     connect(project, &Project::frameChanged, this, [this, project](const QImage& img){
         this->onUpdate(project->getCurrentFrameIndex(), img);
@@ -59,6 +63,9 @@ FrameSelectionPane::~FrameSelectionPane() {
 
 void FrameSelectionPane::addFrame(int index) {
     auto* item = new QListWidgetItem();
+    adjustSize();
+    qDebug() << "ViewportHeight = " << ui->listWidget->viewport()->height()
+             << "Icon Size = " << ui->listWidget->iconSize();
     const QSize s = ui->listWidget->iconSize();
     QPixmap blank(s);
     blank.fill(Qt::transparent);
@@ -76,35 +83,14 @@ void FrameSelectionPane::onUpdate(int index, const QImage &img) {
 }
 
 void FrameSelectionPane::setupQList(std::vector<QImage> frames) {
-    ui->listWidget->clear();
     for (int i = 0; i < static_cast<int>(frames.size()); i++){
         addFrame(i);
         onUpdate(i, frames[i]);
     }
+    ui->currentFrame->setText("0");
 }
 
 QPixmap FrameSelectionPane::makeIcon(const QImage &img) {
-    /* I tested this but couldnt get it to work
-    const int vpH = ui->listWidget->viewport()->height();
-    const QSize iconSize(vpH, vpH);
-    const qreal dpr = devicePixelRatioF();
-
-    QPixmap pm(QSize(qRound(iconSize.width()*dpr), qRound(iconSize.height()*dpr)));
-    pm.setDevicePixelRatio(dpr);
-    pm.fill(Qt::transparent);
-
-    QPainter p(&pm);
-    p.setRenderHint(QPainter::SmoothPixmapTransform, false);
-
-    const QImage scaled = img.scaled(
-        iconSize, Qt::KeepAspectRatio, Qt::FastTransformation);
-
-    const int xOff = (iconSize.width()  - scaled.width())  / 2;
-    const int yOff = (iconSize.height() - scaled.height()) / 2;
-
-    p.drawImage(QPoint(xOff, yOff), scaled);
-    return pm;
-    */
 
     const int S = ui->listWidget->viewport()->height();
     QPixmap pm(S, S);
@@ -127,6 +113,39 @@ QPixmap FrameSelectionPane::makeIcon(const QImage &img) {
 void FrameSelectionPane::resizeEvent(QResizeEvent* e) {
     QWidget::resizeEvent(e);
 
+    qDebug() << "ViewportHeight = " << ui->listWidget->viewport()->height();
+    adjustSize();
+
+    /*
+    auto* list = ui->listWidget;
+    const int vpH = list->viewport()->height();
+    if (vpH <= 0) return;
+
+    const QSize iconSize(vpH, vpH);
+
+    // only update if it changed
+    if (list->iconSize() == iconSize) return;
+
+    list->setIconSize(iconSize);
+
+    // re-render thumbs at the new size
+    for (int i = 0; i < list->count(); i++) {
+        if (auto* it = list->item(i)) {
+            it->setIcon(QIcon(makeIcon(proj->frameAt(i))));
+        }
+    }
+    */
+}
+
+void FrameSelectionPane::buttonAdd() {
+    emit frameAdded(ui->listWidget->currentRow() + 1);
+}
+
+void FrameSelectionPane::buttonDelete(){
+    emit frameDeleted(ui->listWidget->currentRow());
+}
+
+void FrameSelectionPane::adjustSize(){
     auto* list = ui->listWidget;
     int h = list->viewport()->height();
     if (h <= 0) return;
@@ -141,33 +160,4 @@ void FrameSelectionPane::resizeEvent(QResizeEvent* e) {
     }
 
     update();
-    /*
-    auto* list = ui->listWidget;
-    const int vpH = list->viewport()->height();
-    if (vpH <= 0) return;
-
-    const QSize iconSize(vpH, vpH);
-
-    // only update if it changed
-    if (list->iconSize() == iconSize) return;
-
-    list->setIconSize(iconSize);
-
-    // re-render thumbs at the new size
-    for (int i = 0; i < list->count(); ++i) {
-        if (auto* it = list->item(i)) {
-            //it->setIcon(QIcon(makeThumb(project_->frameAt(i), iconSize)));
-            QPixmap pixmap = it->icon().pixmap(iconSize);
-            it->setIcon(pixmap);
-        }
-    }
-    */
-}
-
-void FrameSelectionPane::buttonAdd() {
-    emit frameAdded(ui->listWidget->currentRow() + 1);
-}
-
-void FrameSelectionPane::buttonDelete(){
-    emit frameDeleted(ui->listWidget->currentRow());
 }

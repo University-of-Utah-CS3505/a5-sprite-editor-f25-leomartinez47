@@ -55,10 +55,11 @@ private:
     ///
     /// \brief displaySpriteFrames : private helper method to display all of the frames in the sprite
     ///
-
+    Project *proj;
 
     QPixmap makeIcon(const QImage &img);
     int lastSelectedIndex = -1;
+    void adjustSize();
 };
 
 #endif // FRAMESELECTIONPANE_H
