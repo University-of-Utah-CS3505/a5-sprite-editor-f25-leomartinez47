@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>337</height>
+    <height>360</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -40,7 +40,7 @@
           </sizepolicy>
          </property>
          <property name="focusPolicy">
-          <enum>Qt::FocusPolicy::NoFocus</enum>
+          <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
           <string/>
@@ -56,7 +56,7 @@
           </sizepolicy>
          </property>
          <property name="focusPolicy">
-          <enum>Qt::FocusPolicy::NoFocus</enum>
+          <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
           <string/>
@@ -72,7 +72,7 @@
           </sizepolicy>
          </property>
          <property name="focusPolicy">
-          <enum>Qt::FocusPolicy::NoFocus</enum>
+          <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
           <string/>
@@ -84,7 +84,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -97,96 +97,122 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-   </item>
-   <item>
-    <widget class="QLabel" name="redLabel">
-     <property name="text">
-      <string>Red Value (0-255):</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QSlider" name="redSlider">
-     <property name="maximum">
-      <number>255</number>
-     </property>
+    <spacer name="verticalSpacer">
      <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="tickPosition">
-      <enum>QSlider::TickPosition::TicksBelow</enum>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
      </property>
-    </widget>
+    </spacer>
    </item>
    <item>
-    <widget class="QLabel" name="greenLabel">
-     <property name="text">
-      <string>Green Value (0-255):</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="redLabel">
+       <property name="text">
+        <string>Red:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="redSlider">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksBelow</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
-    <widget class="QSlider" name="greenSlider">
-     <property name="maximum">
-      <number>255</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::TickPosition::TicksBelow</enum>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="greenLabel">
+       <property name="text">
+        <string>Green:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="greenSlider">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksBelow</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
-    <widget class="QLabel" name="blueLabel">
-     <property name="text">
-      <string>Blue Value (0-255):</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QLabel" name="blueLabel">
+       <property name="text">
+        <string>Blue:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="blueSlider">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksBelow</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
-    <widget class="QSlider" name="blueSlider">
-     <property name="maximum">
-      <number>255</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::TickPosition::TicksBelow</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="opacityLabel">
-     <property name="text">
-      <string>Alpha Value (0-255):</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QSlider" name="opacitySlider">
-     <property name="maximum">
-      <number>255</number>
-     </property>
-     <property name="singleStep">
-      <number>1</number>
-     </property>
-     <property name="sliderPosition">
-      <number>255</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::TickPosition::TicksBelow</enum>
-     </property>
-     <property name="tickInterval">
-      <number>0</number>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <item>
+      <widget class="QLabel" name="opacityLabel">
+       <property name="text">
+        <string>Alpha:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="opacitySlider">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+       <property name="singleStep">
+        <number>1</number>
+       </property>
+       <property name="sliderPosition">
+        <number>255</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksBelow</enum>
+       </property>
+       <property name="tickInterval">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
