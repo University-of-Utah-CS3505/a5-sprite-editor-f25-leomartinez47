@@ -13,6 +13,7 @@
 PreviewPane::PreviewPane(Project *project, QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::PreviewPane)
+    , currentFrameIndex(0)
 {
     ui->setupUi(this);
 
