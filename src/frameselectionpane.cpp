@@ -12,6 +12,17 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
 {
     ui->setupUi(this);
 
+    // Set up list style
+    auto* list = ui->listWidget;
+    list->setViewMode(QListView::IconMode);
+    list->setMovement(QListView::Static);
+    list->setWrapping(false);
+    list->setIconSize(QSize(list->viewport()->height(), list->viewport()->height()));
+    list->setResizeMode(QListView::Adjust);
+
+    list->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    list->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
     // Buttons -> code // TODO: have buttons emit signals instead and connect signals to project slots in mainWindow (more in commit msg)
     connect(ui->AddFrame, &QPushButton::clicked, this, &FrameSelectionPane::buttonAdd);
     connect(ui->DeleteFrame, &QPushButton::clicked, this, &FrameSelectionPane::buttonDelete);
@@ -26,8 +37,12 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     connect(project, &Project::frameAdded, this, &FrameSelectionPane::addFrame);
     connect(project, &Project::frameRemoved, this, &FrameSelectionPane::deleteFrame);
     connect(project, &Project::frameSelectionChanged, this, [this, project](int index) {
+        if (lastSelectedIndex >= 0) {
+            this->onUpdate(lastSelectedIndex, project->frameAt(lastSelectedIndex));
+        }
         ui->listWidget->setCurrentRow(index);
-        ui->currentFrame->setText(&"" [index]);
+        this->lastSelectedIndex = index;
+        ui->currentFrame->setText(QString::number(index));
 
     });
     connect(project, &Project::frameChanged, this, [this, project](const QImage& img){
@@ -44,6 +59,10 @@ FrameSelectionPane::~FrameSelectionPane() {
 
 void FrameSelectionPane::addFrame(int index) {
     auto* item = new QListWidgetItem();
+    const QSize s = ui->listWidget->iconSize();
+    QPixmap blank(s);
+    blank.fill(Qt::transparent);
+    item->setIcon(QIcon(blank));
     ui->listWidget->insertItem(index, item);
 }
 
@@ -64,9 +83,30 @@ void FrameSelectionPane::setupQList(std::vector<QImage> frames) {
     }
 }
 
-// Temporary checkerboard
 QPixmap FrameSelectionPane::makeIcon(const QImage &img) {
-    const int S = 64;
+    /* I tested this but couldnt get it to work
+    const int vpH = ui->listWidget->viewport()->height();
+    const QSize iconSize(vpH, vpH);
+    const qreal dpr = devicePixelRatioF();
+
+    QPixmap pm(QSize(qRound(iconSize.width()*dpr), qRound(iconSize.height()*dpr)));
+    pm.setDevicePixelRatio(dpr);
+    pm.fill(Qt::transparent);
+
+    QPainter p(&pm);
+    p.setRenderHint(QPainter::SmoothPixmapTransform, false);
+
+    const QImage scaled = img.scaled(
+        iconSize, Qt::KeepAspectRatio, Qt::FastTransformation);
+
+    const int xOff = (iconSize.width()  - scaled.width())  / 2;
+    const int yOff = (iconSize.height() - scaled.height()) / 2;
+
+    p.drawImage(QPoint(xOff, yOff), scaled);
+    return pm;
+    */
+
+    const int S = ui->listWidget->viewport()->height();
     QPixmap pm(S, S);
     pm.fill(Qt::transparent);
     QPainter p(&pm);
@@ -82,6 +122,46 @@ QPixmap FrameSelectionPane::makeIcon(const QImage &img) {
     QImage scaled = img.scaled(S, S, Qt::KeepAspectRatio, Qt::FastTransformation);
     p.drawImage(QPoint((S - scaled.width())/2, (S - scaled.height())/2), scaled);
     return pm;
+}
+
+void FrameSelectionPane::resizeEvent(QResizeEvent* e) {
+    QWidget::resizeEvent(e);
+
+    auto* list = ui->listWidget;
+    int h = list->viewport()->height();
+    if (h <= 0) return;
+
+    // Update icon & grid sizes
+    QSize newIcon(h, h);
+    QSize newGrid(h + 8, h + 16);
+
+    if (list->iconSize() != newIcon) {
+        list->setIconSize(newIcon);
+        list->setGridSize(newGrid);
+    }
+
+    update();
+    /*
+    auto* list = ui->listWidget;
+    const int vpH = list->viewport()->height();
+    if (vpH <= 0) return;
+
+    const QSize iconSize(vpH, vpH);
+
+    // only update if it changed
+    if (list->iconSize() == iconSize) return;
+
+    list->setIconSize(iconSize);
+
+    // re-render thumbs at the new size
+    for (int i = 0; i < list->count(); ++i) {
+        if (auto* it = list->item(i)) {
+            //it->setIcon(QIcon(makeThumb(project_->frameAt(i), iconSize)));
+            QPixmap pixmap = it->icon().pixmap(iconSize);
+            it->setIcon(pixmap);
+        }
+    }
+    */
 }
 
 void FrameSelectionPane::buttonAdd() {

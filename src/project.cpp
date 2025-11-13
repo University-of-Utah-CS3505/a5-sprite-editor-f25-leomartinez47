@@ -67,6 +67,11 @@ QImage &Project::getCurrentFrame() const
     return this->sprite->getFrame(this->currentFrame);
 }
 
+const QImage &Project::frameAt(int index) const
+{
+    return this->sprite->getFrame(index);
+}
+
 Tool &Project::getCurrentTool() const
 {
     return *(this->currentTool);

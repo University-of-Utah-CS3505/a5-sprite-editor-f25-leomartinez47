@@ -47,6 +47,9 @@ public slots:
     void setupQList(std::vector<QImage> frames);
     //void addFrameToList();
 
+protected:
+    void resizeEvent(QResizeEvent* e) override;
+
 private:
     Ui::FrameSelectionPane *ui;
     ///
@@ -55,6 +58,7 @@ private:
 
 
     QPixmap makeIcon(const QImage &img);
+    int lastSelectedIndex = -1;
 };
 
 #endif // FRAMESELECTIONPANE_H
