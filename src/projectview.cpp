@@ -25,8 +25,6 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
 
     this->frameSelectionPane = new FrameSelectionPane();
     this->embedWidget(this->ui->frameSelectorFrame, this->frameSelectionPane);
-
-    // TODO : once colorPickerPane is implemented, pass in currentColor from project
 }
 
 ProjectView::~ProjectView()

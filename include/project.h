@@ -1,5 +1,7 @@
 /*
-    Written by TODO
+    Contributors: Natalie Bonilla, Grant Handy, Sean Ho, Kailee Kim, Leo Martinez,
+    and Bryce Wiley.
+    Date: 11/13/2025
 */
 
 #ifndef PROJECT_H

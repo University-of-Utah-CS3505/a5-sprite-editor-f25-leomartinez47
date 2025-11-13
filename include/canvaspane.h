@@ -1,6 +1,6 @@
 /*
-    Contributors: Bryce Wiley and Leo Martinez
-    Date: 11/06/2025
+    Contributors: Leo Martinez and Bryce Wiley
+    Date: 11/13/2025
 */
 
 #ifndef CANVASPANE_H

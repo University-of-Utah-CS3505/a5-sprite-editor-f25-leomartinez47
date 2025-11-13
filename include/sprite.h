@@ -1,5 +1,5 @@
 /*
-    Contributors: Kailee Kim and Leo Martinez
+    Contributors: Grant Handy, Kailee Kim, and Leo Martinez
 
     This object matches this JSON schema:
 
@@ -12,6 +12,8 @@
 
     All frames are checked on deserialization to verify that they
     match the specified width and height.
+
+    Date: 11/13/2025
 */
 
 #ifndef SPRITE_H

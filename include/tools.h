@@ -1,5 +1,6 @@
 /*
-    Written by... TODO
+    Contributors: Natalie Bonilla, Grant Handy, and Kailee Kim
+    Date: 11/13/2025
 */
 
 #ifndef TOOLS_H

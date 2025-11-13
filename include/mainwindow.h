@@ -1,5 +1,6 @@
 /*
-    Written by
+    Contributors: Grant Handy and Kailee Kim
+    Date: 11/13/2025
 */
 
 #ifndef MAINWINDOW_H
