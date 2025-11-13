@@ -101,9 +101,9 @@
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="redLabel">
      <property name="text">
-      <string>Red Value:</string>
+      <string>Red Value (0-255):</string>
      </property>
     </widget>
    </item>
@@ -115,12 +115,15 @@
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
      </property>
+     <property name="tickPosition">
+      <enum>QSlider::TickPosition::TicksBelow</enum>
+     </property>
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="greenLabel">
      <property name="text">
-      <string>Green Value:</string>
+      <string>Green Value (0-255):</string>
      </property>
     </widget>
    </item>
@@ -132,12 +135,15 @@
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
      </property>
+     <property name="tickPosition">
+      <enum>QSlider::TickPosition::TicksBelow</enum>
+     </property>
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="blueLabel">
      <property name="text">
-      <string>Blue Value:</string>
+      <string>Blue Value (0-255):</string>
      </property>
     </widget>
    </item>
@@ -149,12 +155,15 @@
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
      </property>
+     <property name="tickPosition">
+      <enum>QSlider::TickPosition::TicksBelow</enum>
+     </property>
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="opacityLabel">
      <property name="text">
-      <string>Alpha Value:</string>
+      <string>Alpha Value (0-255):</string>
      </property>
     </widget>
    </item>
@@ -166,8 +175,17 @@
      <property name="singleStep">
       <number>1</number>
      </property>
+     <property name="sliderPosition">
+      <number>255</number>
+     </property>
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TickPosition::TicksBelow</enum>
+     </property>
+     <property name="tickInterval">
+      <number>0</number>
      </property>
     </widget>
    </item>

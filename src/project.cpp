@@ -82,27 +82,48 @@ void Project::onToolChanged(Tool *tool)
 //     this->currentColor = color;
 // }
 
-void Project::redChanged(int newRed){
+/*!
+ * \brief Project::redChanged
+ * \param newRed is the integer representing the new value
+ * acquired from the red slider to update the red RGB.
+ */
+void Project::redChanged(int newRed)
+{
     this->currentColor = QColor(newRed, currentGreen, currentBlue);
-    qDebug() << currentColor;
     currentRed = newRed;
 }
 
-void Project::greenChanged(int newGreen){
+/*!
+ * \brief Project::greenChanged
+ * \param newGreen is the integer representing the new value
+ * acquired from the green slider to update the green RGB.
+ */
+void Project::greenChanged(int newGreen)
+{
     this->currentColor = QColor(currentRed, newGreen, currentBlue);
-    qDebug() << currentColor;
     currentGreen = newGreen;
 }
 
-void Project::blueChanged(int newBlue){
+/*!
+ * \brief Project::blueChanged
+ * \param newBlue is the integer representing the new value
+ * acquired from the blue slider to update the blue RGB.
+ */
+void Project::blueChanged(int newBlue)
+{
     this->currentColor = QColor(currentRed, currentGreen, newBlue);
-    qDebug() << currentColor;
     currentBlue = newBlue;
 }
 
-
-void Project::alphaChanged(int newOpacity){
-
+/*!
+ * \brief Project::alphaChanged
+ * \param newOpacity is the integer representing the new value
+ * acquired from the opacity slider to update the opacity.
+ */
+void Project::alphaChanged(int newOpacity)
+{
+    this->currentColor = QColor(currentRed, currentGreen, currentBlue, newOpacity);
+    currentOpacity = newOpacity;
 }
 
 void Project::onPixelClicked(QPoint point)

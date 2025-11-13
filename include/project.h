@@ -7,6 +7,8 @@
 #include <QObject>
 #include <QFile>
 #include <QString>
+#include <QGraphicsOpacityEffect>
+#include <QColor>
 
 #include "sprite.h"
 #include "tools.h"
@@ -41,12 +43,14 @@ public slots:
     void onToolChanged(Tool *tool);
     //void onColorChanged(QColor color); //Split into four slots that get each color value/alpha
 
+    //From toolpane's signals that alert the slider's changed values for the RGB values.
     void redChanged(int newRed);
     void blueChanged(int newBlue);
     void greenChanged(int newGreen);
     void alphaChanged(int newOpacity);
 
     void onPixelClicked(QPoint point);
+
     // From Frame Selection
     void onCurrentFrameChanged(int index);
 
@@ -68,6 +72,7 @@ private:
     QColor currentColor;
     int currentFrame;
 
+    //Instance variables to track and update the individual RGB sliders.
     int currentRed;
     int currentGreen;
     int currentBlue;
