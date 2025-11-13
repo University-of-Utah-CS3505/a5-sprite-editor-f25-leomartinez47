@@ -38,16 +38,16 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
             this, &ToolPane::onFillSelected);
 
     connect(this->ui->redSlider, &QAbstractSlider::valueChanged,
-            project, &Project::redChanged);
+            project, &Project::onRedChanged);
 
     connect(this->ui->greenSlider, &QAbstractSlider::valueChanged,
-            project, &Project::greenChanged);
+            project, &Project::onGreenChanged);
 
     connect(this->ui->blueSlider, &QAbstractSlider::valueChanged,
-            project, &Project::blueChanged);
+            project, &Project::onBlueChanged);
 
     connect(this->ui->opacitySlider, &QAbstractSlider::valueChanged,
-            project, &Project::alphaChanged);
+            project, &Project::onAlphaChanged);
 }
 
 ToolPane::~ToolPane()
