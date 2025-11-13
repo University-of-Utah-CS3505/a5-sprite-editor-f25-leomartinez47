@@ -2,6 +2,6 @@
     <qresource prefix="/icons">
         <file>pencil.png</file>
         <file>eraser.png</file>
-        <file>fillBucket.png</file>
+        <file>fillbucket.png</file>
     </qresource>
 </RCC>

@@ -13,16 +13,33 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="3,1">
    <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Preview Pane</string>
+    <widget class="QWidget" name="frame" native="true"/>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="PreviewPaneLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
-     </property>
-    </widget>
+     <item>
+      <layout class="QHBoxLayout" name="ButtonLayout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+       </property>
+       <item>
+        <widget class="QPushButton" name="playPauseButton">
+         <property name="text">
+          <string>Play</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="frameRateSelector"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
