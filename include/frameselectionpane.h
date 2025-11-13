@@ -1,3 +1,8 @@
+/*
+    Contributors: Sean Ho and Bryce Wiley
+    Date: 11/13/2025
+*/
+
 #ifndef FRAMESELECTIONPANE_H
 #define FRAMESELECTIONPANE_H
 
@@ -19,4 +24,4 @@ private:
     Ui::FrameSelectionPane *ui;
 };
 
-#endif // FRAMESELECTIONPANE_H
+#endif
