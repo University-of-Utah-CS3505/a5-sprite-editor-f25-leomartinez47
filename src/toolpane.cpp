@@ -46,7 +46,7 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
             project, &Project::onBlueChanged);
 
     connect(this->ui->opacitySlider, &QAbstractSlider::valueChanged,
-            project, &Project::alphaChanged);
+            project, &Project::onAlphaChanged);
 
     connect(project, &Project::sendColor,
             this, &ToolPane::receiveColor);
