@@ -85,7 +85,7 @@ void PreviewPane::paintEvent(QPaintEvent*)
     // Calculate the scale factor and offsets for the current frame
     int scaleFactorX = ui->frame->width() / currentFrame->width();
     int scaleFactorY = ui->frame->height() / currentFrame->height();
-    scaleFactor = qMax(1, qMin(scaleFactorX, scaleFactorY)); // 2 was 1
+    scaleFactor = qMax(1, qMin(scaleFactorX, scaleFactorY));
 
     int scaledWidth = currentFrame->width() * scaleFactor;
     int scaledHeight = currentFrame->height() * scaleFactor;
