@@ -102,12 +102,6 @@ public slots:
     ///
     void receivedColor(QColor color);
 
-    ///
-    /// @brief Update the opacity preview.
-    /// @param opacity - The new opacity.
-    ///
-    void receivedOpacity(int opacity);
-
 private slots:
     ///
     /// @brief Tell the model the selected tool is a Pencil.

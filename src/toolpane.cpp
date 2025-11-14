@@ -18,8 +18,6 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
     this->onToolSelected(&project->getCurrentTool());
 
     this->receivedColor(project->getCurrentColor());
-    this->ui->opacityPreview->setStyleSheet(QString("background-color: "
-                    "rgba(255, 255, 255, %1);").arg(project->getCurrentColor().alpha()));
 
     this->ui->redSlider->setValue(project->getCurrentColor().red());
     this->ui->blueSlider->setValue(project->getCurrentColor().blue());
@@ -65,9 +63,6 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
 
     connect(project, &Project::sendColor,
             this, &ToolPane::receivedColor);
-
-    connect(project, &Project::sendOpacity,
-            this, &ToolPane::receivedOpacity);
 }
 
 ToolPane::~ToolPane()
@@ -113,10 +108,4 @@ void ToolPane::receivedColor(QColor color)
             + "," + QString::number(color.green()) + "," + QString::number(color.blue())
             + "," + QString::number(color.alpha()) + ")";
     this->ui->colorPreview->setStyleSheet(styleSheet);
-}
-
-void ToolPane::receivedOpacity(int opacity)
-{
-    this->ui->opacityPreview->setStyleSheet(QString("background-color: "
-                                "rgba(255, 255, 255, %1);").arg(opacity));
 }
