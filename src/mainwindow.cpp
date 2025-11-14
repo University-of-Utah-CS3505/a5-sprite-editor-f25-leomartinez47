@@ -63,8 +63,6 @@ void MainWindow::onHandleCloseTabRequested(int index)
         return;
     }
 
-    // TODO: possibly check if project isn't saved?
-
     QWidget *page = tabs->widget(index);
     this->tabs->removeTab(index);
 
@@ -141,9 +139,15 @@ void MainWindow::onExportRequested()
                                                 QDir::home().absolutePath(),
                                                 "GIF Image (*.gif);;Current Frame PNG Image (*.png)");
 
-    // TODO: handle case with no extension returned, which should we pick?
-
-    currentProject->exportFile(path);
+    try{
+        currentProject->exportFile(path);
+    }
+    catch(std::invalid_argument ex){
+        qWarning() << ex.what();
+        QErrorMessage *msg = new QErrorMessage();
+        msg->showMessage(ex.what());
+        return;
+    }
 }
 
 void MainWindow::onOpenRequested() {
@@ -227,7 +231,6 @@ void MainWindow::createActions()
     // closeTabAct is not registered in the file menu.
     this->addAction(this->closeTabAct);
 
-    // TODO: maybe ask the user if they've saved the file.
     this->exitAct = new QAction("Exit", this);
     this->exitAct->setShortcuts(QKeySequence::Quit);
     connect(this->exitAct, &QAction::triggered, this, &QWidget::close);

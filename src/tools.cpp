@@ -24,7 +24,6 @@ Tool *toolFromString(const QString &val) {
         return new FillBucket();
     }
 
-    // TODO: throw and catch exceptions.
     return nullptr;
 }
 
