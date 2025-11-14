@@ -40,13 +40,15 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     connect(project, &Project::frameAdded, this, &FrameSelectionPane::addFrame);
     connect(project, &Project::frameRemoved, this, &FrameSelectionPane::deleteFrame);
     connect(project, &Project::frameSelectionChanged, this, [this, project](int index) {
-        if (lastSelectedIndex >= 0) {
+        if (lastSelectedIndex >= 0 && lastSelectedIndex <= project->frameCount() - 1) {
             this->onUpdate(lastSelectedIndex, project->frameAt(lastSelectedIndex));
         }
         this->onUpdate(index, project->frameAt(index));
         ui->listWidget->setCurrentRow(index);
         this->lastSelectedIndex = index;
         ui->currentFrame->setText(QString::number(index));
+        qDebug() << "lsi" << lastSelectedIndex;
+        qDebug() << "ind" << index;
     });
     connect(project, &Project::initialFrames, this, &FrameSelectionPane::setupQList);
 

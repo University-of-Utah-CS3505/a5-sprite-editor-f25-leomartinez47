@@ -218,3 +218,8 @@ std::vector<QImage> Project::initialImages(){
 void Project::sendInitialImages() {
     emit this->initialFrames(this->initialImages());
 }
+
+int Project::frameCount() const {
+    return this->sprite->frameCount();
+}
+
