@@ -139,7 +139,15 @@ void MainWindow::onExportRequested()
                                                 QDir::home().absolutePath(),
                                                 "GIF Image (*.gif);;Current Frame PNG Image (*.png)");
 
-    currentProject->exportFile(path);
+    try{
+        currentProject->exportFile(path);
+    }
+    catch(std::invalid_argument ex){
+        qWarning() << ex.what();
+        QErrorMessage *msg = new QErrorMessage();
+        msg->showMessage(ex.what());
+        return;
+    }
 }
 
 void MainWindow::onOpenRequested() {
