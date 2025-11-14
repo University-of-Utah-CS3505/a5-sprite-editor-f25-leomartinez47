@@ -1,3 +1,7 @@
+/*
+    Contributors: Sean Ho, Leo Martinez, Bryce Wiley
+    Date: 13/11/2025
+*/
 #ifndef FRAMESELECTIONPANE_H
 #define FRAMESELECTIONPANE_H
 
@@ -18,41 +22,65 @@ public:
     ~FrameSelectionPane();
 
 signals:
+    ///
+    /// @brief frameAdded : Emitted when the add frame button is pressed.
+    /// @param index : the index to insert the frame to
+    ///
     void frameAdded(int index);
+
+    ///
+    /// @brief frameDeleted : Emitted when the delete frame button is pressed
+    /// @param index : The index to delete
+    ///
     void frameDeleted(int index);
+
+    ///
+    /// @brief requestInitialImages : Emitted when pane is constructed to retrieve the initial list of frames
+    ///
     void requestInitialImages();
 
-
-
 public slots:
-
-    void buttonAdd();
-    void buttonDelete();
     ///
-    /// \brief addFrame : adds a frame at the index provided
-    /// \param index : the index to add a frame at
+    /// @brief buttonAdd : Acts as a middleman between the add button
+    ///                     and the project slot that handles adding
+    ///
+    void buttonAdd();
+
+    ///
+    /// @brief buttonDelete : Middleman between delete button and the
+    ///                     project slot to delete the actual item
+    ///
+    void buttonDelete();
+
+    ///
+    /// @brief addFrame : captures signal from project to reflect changes
+    ///                     after adding.
+    /// @param index : the index to add a frame at
     ///
     void addFrame(int index);
+
     ///
-    /// \brief DeleteFrame : deletes the current frame in view
-    /// \param index : the index to delete a frame at
+    /// @brief DeleteFrame : captures signal from project to reflect changes
+    ///                     after deleting.
+    /// @param index : the index to delete a frame at
     ///
     void deleteFrame(int index);
+
     ///
-    /// \brief onUpdate : updates the view based on changes to the frames
-    /// \param index : the index of the selected frame
+    /// @brief onUpdate : refreshes the icon of the list widget item at the specified index
+    /// @param index : the index of the selected frame
     ///
     void onUpdate(int index, const QImage &img);
 
+    ///
+    /// @brief setupQList : Called by the project whenever the initial list is created to
+    ///                     reflect changes to the list
+    /// @param frames : The vector of QImages to display
+    ///
     void setupQList(std::vector<QImage> frames);
 
 private:
     Ui::FrameSelectionPane *ui;
-    ///
-    /// \brief displaySpriteFrames : private helper method to display all of the frames in the sprite
-    ///
-    Project *proj;
-
     QPixmap makeIcon(const QImage &img);
     int lastSelectedIndex = -1;
     void adjustSize();

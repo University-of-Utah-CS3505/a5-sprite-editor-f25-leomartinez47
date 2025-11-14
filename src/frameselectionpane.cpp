@@ -1,6 +1,9 @@
+/*
+    Contributors: Sean Ho, Leo Martinez, Bryce Wiley
+    Date: 13/11/2025
+*/
 #include "frameselectionpane.h"
 #include "project.h"
-#include "qevent.h"
 #include "ui_frameselectionpane.h"
 #include <QPushButton>
 #include <QListWidget>
@@ -12,7 +15,6 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     , ui(new Ui::FrameSelectionPane)
 {
     ui->setupUi(this);
-    proj = project;
 
     // Set up list style
     auto* list = ui->listWidget;
