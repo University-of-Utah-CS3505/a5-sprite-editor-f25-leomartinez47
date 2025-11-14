@@ -12,6 +12,22 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
     // Initialize the current tool.
     this->onToolSelected(&project->getCurrentTool());
 
+    QString red, green, blue, opacity;
+    red = QString::number(project->getCurrentColor().red());
+    green = QString::number(project->getCurrentColor().green());
+    blue = QString::number(project->getCurrentColor().blue());
+    opacity = QString::number(project->getCurrentColor().alpha());
+    QString styleSheet = "background-color: rgba(" + red + "," + green + "," + blue + "," + opacity + ")";
+    this->ui->colorPreview->setStyleSheet(styleSheet);
+    this->ui->opacityPreview->setStyleSheet(QString("background-color: "
+                    "rgba(255, 255, 255, %1);").arg(project->getCurrentColor().alpha()));
+
+    this->ui->redSlider->setValue(project->getCurrentColor().red());
+    this->ui->blueSlider->setValue(project->getCurrentColor().blue());
+    this->ui->greenSlider->setValue(project->getCurrentColor().green());
+    this->ui->opacitySlider->setValue(project->getCurrentColor().alpha());
+
+
     connect(this, &ToolPane::toolSelected,
             project, &Project::onToolChanged);
 
@@ -49,10 +65,10 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
             project, &Project::onAlphaChanged);
 
     connect(project, &Project::sendColor,
-            this, &ToolPane::receiveColor);
+            this, &ToolPane::receivedColor);
 
     connect(project, &Project::sendOpacity,
-            this, &ToolPane::receiveOpacity);
+            this, &ToolPane::receivedOpacity);
 }
 
 ToolPane::~ToolPane()
@@ -92,13 +108,16 @@ void ToolPane::onToolSelected(Tool *tool)
     }
 }
 
-void ToolPane::receiveColor(QColor color)
+void ToolPane::receivedColor(QColor color)
 {
-    this->ui->colorPreview->setStyleSheet(QString("background-color: %1;").arg(color.name()));
+    QString styleSheet = "background-color: rgba(" + QString::number(color.red())
+            + "," + QString::number(color.green()) + "," + QString::number(color.blue())
+            + "," + QString::number(color.alpha()) + ")";
+    this->ui->colorPreview->setStyleSheet(styleSheet);
 }
 
-void ToolPane::receiveOpacity(int opacity)
+void ToolPane::receivedOpacity(int opacity)
 {
-    this->ui->opacityPreview->setStyleSheet(QString("background-color: rgba(255, 255, 255, %1);")
-                                                .arg(opacity));
+    this->ui->opacityPreview->setStyleSheet(QString("background-color: "
+                                "rgba(255, 255, 255, %1);").arg(opacity));
 }

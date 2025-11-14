@@ -113,6 +113,7 @@ void Project::onBlueChanged(int blue)
 void Project::onAlphaChanged(int alpha)
 {
     this->currentColor.setAlpha(alpha);
+    emit this->sendColor(currentColor);
     emit this->sendOpacity(alpha);
 }
 

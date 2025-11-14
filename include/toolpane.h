@@ -96,8 +96,17 @@ signals:
     ///
     void alphaSliderUpdate(int value);
 public slots:
-    void receiveColor(QColor);
-    void receiveOpacity(int opacity);
+    ///
+    /// @brief Update the current color preview.
+    /// @param color - The new color.
+    ///
+    void receivedColor(QColor color);
+
+    ///
+    /// @brief Update the opacity preview.
+    /// @param opacity - The new opacity.
+    ///
+    void receivedOpacity(int opacity);
 
 private slots:
     ///
