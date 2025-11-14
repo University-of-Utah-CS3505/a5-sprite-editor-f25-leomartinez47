@@ -5,6 +5,7 @@
 */
 
 #include "project.h"
+#include "sprite.h"
 
 QJsonArray colorToJson(QColor color) {
     QJsonArray rgb;
@@ -79,6 +80,11 @@ QImage &Project::getCurrentFrame() const
     return this->sprite->getFrame(this->currentFrame);
 }
 
+const QImage &Project::frameAt(int index) const
+{
+    return this->sprite->getFrame(index);
+}  
+  
 Sprite *Project::getSprite() const
 {
     return this->sprite;
@@ -100,9 +106,7 @@ void Project::onRedChanged(int red)
 {
     this->currentColor.setRed(red);
     emit this->sendColor(currentColor);
-
 }
-
 
 void Project::onGreenChanged(int green)
 {
@@ -134,15 +138,18 @@ void Project::onCurrentFrameChanged(int index)
     }
 
     this->currentFrame = index;
+    emit this->frameSelectionChanged(index);
     emit this->frameChanged(this->getCurrentFrame());
 }
 
-void Project::onFrameAdded()
+void Project::onFrameAdded(int index)
 {
-    this->sprite->addFrame();
-    this->currentFrame++;
+    // adds a frame at the index to the sprite
+    this->sprite->addFrame(index);
+    emit this->frameAdded(index);
 
-    emit this->frameChanged(this->getCurrentFrame());
+    // changes the current frame to the newest frame
+    this->onCurrentFrameChanged(index);
 }
 
 void Project::onFrameRemoved(int index)
@@ -151,12 +158,27 @@ void Project::onFrameRemoved(int index)
         return;
     }
 
-    if (this->currentFrame == index && index != 0) {
-        this->currentFrame--;
+    // 3 Cases:
+    // - only 1 frame in list: skip frame selection signal
+    // - between frames or first frame: stay in same index
+    // - deleting last frame: select previous index
+    int next;
+    if (this->sprite->frameCount() == 1) {
+        next = -1;
+    } else if (index == this->sprite->frameCount() - 1) {
+        next = index - 1;
+    } else {
+        next = index;
     }
 
-    this->sprite->deleteFrame(index);
-    emit this->frameChanged(this->getCurrentFrame());
+    if (next >= 0) {
+
+        emit this->frameRemoved(index);
+        this->sprite->deleteFrame(index);
+        this->onCurrentFrameChanged(next);
+    }
+
+
 }
 
 void Project::onFrameRateSet(int frameRate) {
@@ -229,3 +251,20 @@ QString Project::getPath() const {
 
     return QString();
 }
+
+std::vector<QImage> Project::initialImages(){
+    std::vector<QImage> outList;
+    for (int i = 0; i < this->sprite->frameCount(); i++) {
+        outList.push_back(this->sprite->getFrame(i));
+    }
+    return outList;
+}
+
+void Project::sendInitialImages() {
+    emit this->initialFrames(this->initialImages());
+}
+
+int Project::frameCount() const {
+    return this->sprite->frameCount();
+}
+

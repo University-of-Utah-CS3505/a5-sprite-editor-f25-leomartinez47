@@ -101,6 +101,12 @@ public:
     ///
     Tool &getCurrentTool() const;
 
+    // TEMP: Both getters below are only used for frameSelectionPane
+    // TODO: Either centralize here if we dont want chained getters
+    //       or keep. More info in commit message.
+    int frameCount() const;
+    const QImage &frameAt(int index) const;
+
 signals:
     ///
     /// @brief Emit when current frame is changed.
@@ -114,6 +120,11 @@ signals:
     ///
     void nameChanged(const QString &name);
 
+    // Called when the frame selected is changed (ie, whenever another frame is set active)
+    void frameSelectionChanged(int index);
+    void frameAdded(int index);
+    void frameRemoved(int index);
+    void initialFrames(std::vector<QImage> frames);
     ///
     /// @brief Emit when color is changed.
     ///
@@ -165,16 +176,22 @@ public slots:
     void onCurrentFrameChanged(int index);
 
     // Frame Selection Methods
-    ///
-    /// @brief Add a frame. It is placed last in the frame ordering.
-    ///
-    void onFrameAdded();
 
     ///
-    /// @brief Remove a frame.
-    /// @param index - Indicates the frame to remove.
+    /// \brief onFrameAdded : When a frame needs to be added, adds it at the
+    /// index provided, move current frame to the added frame
+    /// \param index : The index to add a frame
+    ///
+    void onFrameAdded(int index);
+
+    ///
+    /// \brief onFrameRemoved : When a frame needs to be deleted, delete it at
+    /// the index provided, move the current frame to the one before the deleted one.
+    /// \param index ; The index to delete a frame
     ///
     void onFrameRemoved(int index);
+
+    void sendInitialImages();
 
     ///
     /// @brief Set the frame rate of the Sprite.
@@ -205,6 +222,8 @@ private:
     /// This is the file path to the file this Project saves to. If the Project
     /// has not been saved, this will be a nullptr.
     std::filesystem::path *path;
+
+    std::vector<QImage> initialImages();
 };
 
 #endif

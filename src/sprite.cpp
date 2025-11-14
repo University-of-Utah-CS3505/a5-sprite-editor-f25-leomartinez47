@@ -43,13 +43,14 @@ Sprite::Sprite(const QJsonObject &sprite) {
 Sprite::Sprite(QSize dimensions)
     : dimensions(dimensions), frameRate(30)
 {
-    addFrame();
+    addFrame(0);
 }
 
-void Sprite::addFrame() {
-    QImage frame = QImage(dimensions, QImage::Format_ARGB32);
+void Sprite::addFrame(int index)
+{
+    QImage frame(dimensions, QImage::Format_ARGB32);
     frame.fill(Qt::transparent);
-    frames.push_back(frame);
+    frames.insert(frames.begin() + index, frame);
 }
 
 void Sprite::deleteFrame(std::size_t currentFrame) {

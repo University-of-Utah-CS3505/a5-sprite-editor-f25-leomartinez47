@@ -28,7 +28,7 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
     this->canvasPane = new CanvasPane(project);
     this->embedWidget(this->ui->canvasFrame, this->canvasPane);
 
-    this->frameSelectionPane = new FrameSelectionPane();
+    this->frameSelectionPane = new FrameSelectionPane(project);
     this->embedWidget(this->ui->frameSelectorFrame, this->frameSelectionPane);
 }
 
