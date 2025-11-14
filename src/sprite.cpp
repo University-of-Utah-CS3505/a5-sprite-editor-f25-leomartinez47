@@ -14,6 +14,7 @@
 
 #include "sprite.h"
 
+
 // QImage expects a C-style string.
 const char *FORMAT = "PNG";
 

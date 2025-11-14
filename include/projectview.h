@@ -14,6 +14,7 @@
 #include "frameselectionpane.h"
 #include "project.h"
 
+
 namespace Ui {
 class ProjectView;
 }

@@ -7,6 +7,7 @@
 
 #include "tools.h"
 
+
 void setPixel(QPoint point, QImage &frame, QColor color)
 {
     if (frame.valid(point)) {
@@ -89,4 +90,3 @@ void FillBucket::apply(QPoint point, QImage &frame, QColor color)
         queue.enqueue(QPoint(p.x(), p.y() - 1)); // North
     }
 }
-

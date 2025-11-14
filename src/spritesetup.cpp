@@ -6,6 +6,7 @@
 #include "spritesetup.h"
 #include "ui_spritesetup.h"
 
+
 SpriteSetup::SpriteSetup(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::SpriteSetup)

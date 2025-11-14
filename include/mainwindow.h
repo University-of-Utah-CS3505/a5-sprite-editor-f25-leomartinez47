@@ -12,6 +12,7 @@
 
 #include "project.h"
 
+
 /// MainWindow displays the currently opened Sprite projects in tabs.
 class MainWindow : public QMainWindow
 {
@@ -112,6 +113,5 @@ private:
     /// Action taken when window is closed or all tabs
     QAction *exitAct;
 };
-
 
 #endif

@@ -2,13 +2,16 @@
     Contributors: Sean Ho, Leo Martinez, Bryce Wiley
     Date: 13/11/2025
 */
-#include "frameselectionpane.h"
-#include "project.h"
-#include "ui_frameselectionpane.h"
+
 #include <QPushButton>
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QPainter>
+
+#include "frameselectionpane.h"
+#include "project.h"
+#include "ui_frameselectionpane.h"
+
 
 FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     : QWidget(parent)
@@ -33,13 +36,13 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
         ui->AddFrame,
         &QPushButton::clicked,
         this,
-        &FrameSelectionPane::buttonAdd);
+        &FrameSelectionPane::onAddButtonPressed);
 
     connect(
         ui->DeleteFrame,
         &QPushButton::clicked,
         this,
-        &FrameSelectionPane::buttonDelete);
+        &FrameSelectionPane::onDeleteButtonPressed);
 
     connect(
         ui->listWidget,
@@ -71,13 +74,13 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
         project,
         &Project::frameAdded,
         this,
-        &FrameSelectionPane::addFrame);
+        &FrameSelectionPane::onFrameAdded);
 
     connect(
         project,
         &Project::frameRemoved,
         this,
-        &FrameSelectionPane::deleteFrame);
+        &FrameSelectionPane::onFrameDeleted);
 
     connect(
         project,
@@ -86,9 +89,9 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
         [this, project](int index) {
             // If the index we are coming from is not the first or last object, update that frame. This makes the frames show the updates made when clicking off
             if (lastSelectedIndex >= 0 && lastSelectedIndex <= project->frameCount() - 1) {
-                this->onUpdate(lastSelectedIndex, project->frameAt(lastSelectedIndex));
+                this->onFrameUpdate(lastSelectedIndex, project->frameAt(lastSelectedIndex));
             }
-            this->onUpdate(index, project->frameAt(index));
+            this->onFrameUpdate(index, project->frameAt(index));
             ui->listWidget->setCurrentRow(index);
             this->lastSelectedIndex = index;
             ui->currentFrame->setText(QString::number(index));
@@ -98,7 +101,7 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
         project,
         &Project::initialFrames,
         this,
-        &FrameSelectionPane::setupQList);
+        &FrameSelectionPane::onStartingList);
 
     emit this->requestInitialImages();
 }
@@ -107,7 +110,7 @@ FrameSelectionPane::~FrameSelectionPane() {
     delete ui;
 }
 
-void FrameSelectionPane::addFrame(int index) {
+void FrameSelectionPane::onFrameAdded(int index) {
     auto* item = new QListWidgetItem();
     const QSize s = ui->listWidget->iconSize();
     QPixmap blank(s);
@@ -116,19 +119,19 @@ void FrameSelectionPane::addFrame(int index) {
     ui->listWidget->insertItem(index, item);
 }
 
-void FrameSelectionPane::deleteFrame(int index) {
+void FrameSelectionPane::onFrameDeleted(int index) {
     ui->listWidget->takeItem(index);
 }
 
-void FrameSelectionPane::onUpdate(int index, const QImage &img) {
+void FrameSelectionPane::onFrameUpdate(int index, const QImage &img) {
     if (auto* item = ui->listWidget->item(index))
         item->setIcon(QIcon(makeIcon(img)));
 }
 
-void FrameSelectionPane::setupQList(std::vector<QImage> frames) {
+void FrameSelectionPane::onStartingList(std::vector<QImage> frames) {
     for (int i = 0; i < static_cast<int>(frames.size()); i++){
-        addFrame(i);
-        onUpdate(i, frames[i]);
+        onFrameAdded(i);
+        onFrameUpdate(i, frames[i]);
     }
     ui->currentFrame->setText("0");
     ui->listWidget->setCurrentRow(0);
@@ -153,11 +156,10 @@ QPixmap FrameSelectionPane::makeIcon(const QImage &img) {
     return pm;
 }
 
-
-void FrameSelectionPane::buttonAdd() {
+void FrameSelectionPane::onAddButtonPressed() {
     emit frameAdded(ui->listWidget->currentRow() + 1);
 }
 
-void FrameSelectionPane::buttonDelete(){
+void FrameSelectionPane::onDeleteButtonPressed(){
     emit frameDeleted(ui->listWidget->currentRow());
 }

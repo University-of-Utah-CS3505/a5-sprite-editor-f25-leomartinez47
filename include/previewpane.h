@@ -11,6 +11,7 @@
 
 #include "project.h"
 
+
 namespace Ui {
 class PreviewPane;
 }
@@ -67,7 +68,6 @@ protected:
     void paintEvent(QPaintEvent*) override;
 
 private:
-    /// The ui form for PreviewPane.
     Ui::PreviewPane *ui;
 
     /// A Pointer to the Sprite object held by the current Project.

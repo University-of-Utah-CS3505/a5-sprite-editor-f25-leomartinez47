@@ -3,10 +3,11 @@
     Date: 11/13/2025
 */
 
+#include <QTabWidget>
+
 #include "projectview.h"
 #include "ui_projectview.h"
 
-#include <QTabWidget>
 
 ProjectView::ProjectView(Project *project, QWidget *parent)
     : QWidget(parent)
