@@ -218,9 +218,8 @@ void Project::exportFile(const QString &path) {
     if (path.endsWith("gif")) {
         this->sprite->writeToGif(path);
     } else { // assumed to be .png
-        // TODO: handle errors
         if(!this->getCurrentFrame().save(path, "PNG")){
-            //throw?
+            throw std::invalid_argument("File was not saved.");
         }
     }
 }

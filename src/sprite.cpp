@@ -105,7 +105,6 @@ void Sprite::writeToGif(const QString &path) const {
             + QDir::separator()
             + QStringLiteral("frame%1.png").arg(i, 3, 10, QLatin1Char('0'));
 
-        // TODO: check errors
         this->frames[i].save(framePath, FORMAT);
     }
 
