@@ -5,8 +5,8 @@
 
 #include "toolpane.h"
 #include "ui_toolpane.h"
-
 #include "tools.h"
+
 
 ToolPane::ToolPane(Project *project, QWidget *parent)
     : QWidget(parent)

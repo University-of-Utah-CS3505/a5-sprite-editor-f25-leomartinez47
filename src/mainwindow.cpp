@@ -13,6 +13,7 @@
 #include "projectview.h"
 #include "spritesetup.h"
 
+
 const QString NEW_PROJECT_TITLE = "<New Project>";
 
 MainWindow::MainWindow(QWidget *parent)

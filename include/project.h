@@ -18,6 +18,7 @@
 #include "sprite.h"
 #include "tools.h"
 
+
 const QString PROJECT_FILE_EXTENSION = ".sprite";
 const QString PROJECT_FILE_EXTENSION_DESCRIPTION = "Sprite Project (*.sprite)";
 
@@ -101,10 +102,17 @@ public:
     ///
     Tool &getCurrentTool() const;
 
-    // TEMP: Both getters below are only used for frameSelectionPane
-    // TODO: Either centralize here if we dont want chained getters
-    //       or keep. More info in commit message.
+    ///
+    /// @brief Gets the frame count.
+    /// @return The number of frames currently.
+    ///
     int frameCount() const;
+
+    ///
+    /// @brief Gets the frame at the index.
+    /// @param Index of the frame to get.
+    /// @return The image at the index.
+    ///
     const QImage &frameAt(int index) const;
 
 signals:
@@ -121,29 +129,27 @@ signals:
     void nameChanged(const QString &name);
 
     ///
-    /// @brief frameSelectionChanged : Called when the frame
-    /// selected is changed (ie, whenever another frame is set active)
-    /// @param index : The new index to be the active selection.
+    /// @brief Called when the frame selected is changed,
+    /// ie, whenever another frame is set active.
+    /// @param index - The new index to be the active selection.
     ///
     void frameSelectionChanged(int index);
 
     ///
-    /// @brief frameAdded : Emits whenever internal changes to add a frame
-    /// has been applied.
-    /// @param index - The index that the new frame is at
+    /// @brief Emits whenever internal changes to add a frame has been applied.
+    /// @param index - The index that the new frame is at.
     ///
     void frameAdded(int index);
 
     ///
-    /// @brief frameRemoved - Emits whenever internal changes has been applied
+    /// @brief Emits whenever internal changes has been applied
     /// to remove a frame.
     /// @param index - The index of the frame to be deleted
     ///
     void frameRemoved(int index);
 
     ///
-    /// @brief initialFrames - Emits when initial list of frames has beeb
-    /// created.
+    /// @brief Emits when initial list of frames has been created.
     /// @param frames - vector of the initial frames
     ///
     void initialFrames(std::vector<QImage> frames);
@@ -202,19 +208,22 @@ public slots:
     void onCurrentFrameChanged(int index);
 
     ///
-    /// @brief onFrameAdded : When a frame needs to be added, adds it at the
-    /// index provided, move current frame to the added frame
-    /// @param index : The index to add a frame
+    /// @brief When a frame needs to be added, adds it at the
+    /// index provided, move current frame to the added frame.
+    /// @param index - The index to add a frame.
     ///
     void onFrameAdded(int index);
 
     ///
-    /// @brief onFrameRemoved : When a frame needs to be deleted, delete it at
-    /// the index provided, move the current frame to the one before the deleted one.
-    /// @param index ; The index to delete a frame
+    /// @brief When a frame needs to be deleted, delete it at the index
+    /// provided, move the current frame to the one before the deleted one.
+    /// @param index - The index to delete a frame.
     ///
     void onFrameRemoved(int index);
 
+    ///
+    /// @brief Send the initial images to the frame selection pane.
+    ///
     void sendInitialImages();
 
     ///
@@ -247,7 +256,7 @@ private:
     /// has not been saved, this will be a nullptr.
     std::filesystem::path *path;
 
-    /// This is the initial vector of QImages
+    /// This is the initial vector of QImages.
     std::vector<QImage> initialImages();
 };
 

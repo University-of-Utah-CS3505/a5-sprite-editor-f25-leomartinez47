@@ -10,6 +10,7 @@
 #include "canvaspane.h"
 #include "project.h"
 
+
 CanvasPane::CanvasPane(Project *project, QWidget *parent)
     : QWidget(parent)
 {

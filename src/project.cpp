@@ -7,6 +7,7 @@
 #include "project.h"
 #include "sprite.h"
 
+
 QJsonArray colorToJson(QColor color) {
     QJsonArray rgb;
     rgb.push_back(color.red());

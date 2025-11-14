@@ -11,6 +11,7 @@
 
 #include "project.h"
 
+
 /// The CanvasPane is the canvas widget that the user draws the Sprite on.
 class CanvasPane : public QWidget
 {
