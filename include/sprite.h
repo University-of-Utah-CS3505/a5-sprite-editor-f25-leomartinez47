@@ -42,7 +42,7 @@ public:
     ///
     /// @brief Add a new frame to this Sprite.
     ///
-    void addFrame();
+    void addFrame(int index);
 
     ///
     /// @brief Delete the currently selected frame of this Sprite.

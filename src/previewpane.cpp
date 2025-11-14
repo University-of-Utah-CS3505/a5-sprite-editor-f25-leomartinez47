@@ -23,7 +23,6 @@ PreviewPane::PreviewPane(Project *project, QWidget *parent)
     ui->frameRateSelector->setValue(30);
     this->timer.setInterval(1000/this->sprite->getFrameRate());
 
-
     connect(ui->playPauseButton,
         &QPushButton::clicked,
         this,
@@ -39,13 +38,18 @@ PreviewPane::PreviewPane(Project *project, QWidget *parent)
             project,
             &Project::onFrameRateSet);
 
-     connect(ui->frameRateSelector,
+    connect(ui->frameRateSelector,
         &QSpinBox::valueChanged,
         this,
         [this](int fps) {
             this->timer.setInterval(1000/fps);
             emit setFrameRate(fps);
         });
+
+    connect(project,
+            &Project::stopAnimation,
+            this,
+            &PreviewPane::onStopAnimation);
 
 }
 
@@ -60,13 +64,19 @@ void PreviewPane::onPlayPauseClicked()
         this->timer.start();
         this->currentFrameIndex = 0;
         ui->playPauseButton->setText("Pause");
+        this->isPlaying = true;
     }
     else {
-        this->timer.stop();
-        this->currentFrameIndex = 0;
-        ui->playPauseButton->setText("Play");
+        onStopAnimation();
     }
-    this->isPlaying = !this->isPlaying;
+}
+
+void PreviewPane::onStopAnimation()
+{
+    this->timer.stop();
+    this->currentFrameIndex = 0;
+    ui->playPauseButton->setText("Play");
+    this->isPlaying = false;
 }
 
 void PreviewPane::showFrame()

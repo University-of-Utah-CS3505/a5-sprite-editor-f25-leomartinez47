@@ -39,6 +39,12 @@ public slots:
     ///
     void onPlayPauseClicked();
 
+
+    ///
+    /// @brief Stop the animation and reset to first frame.
+    ///
+    void onStopAnimation();
+
     ///
     /// @brief Paint the current frame in the animation, and updates
     /// the currentFrameIndex appropriately.

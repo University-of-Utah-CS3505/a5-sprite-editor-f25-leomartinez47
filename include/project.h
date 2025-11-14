@@ -120,15 +120,43 @@ signals:
     ///
     void nameChanged(const QString &name);
 
-    // Called when the frame selected is changed (ie, whenever another frame is set active)
+    ///
+    /// @brief frameSelectionChanged : Called when the frame
+    /// selected is changed (ie, whenever another frame is set active)
+    /// @param index : The new index to be the active selection.
+    ///
     void frameSelectionChanged(int index);
+
+    ///
+    /// @brief frameAdded : Emits whenever internal changes to add a frame
+    /// has been applied.
+    /// @param index - The index that the new frame is at
+    ///
     void frameAdded(int index);
+
+    ///
+    /// @brief frameRemoved - Emits whenever internal changes has been applied
+    /// to remove a frame.
+    /// @param index - The index of the frame to be deleted
+    ///
     void frameRemoved(int index);
+
+    ///
+    /// @brief initialFrames - Emits when initial list of frames has beeb
+    /// created.
+    /// @param frames - vector of the initial frames
+    ///
     void initialFrames(std::vector<QImage> frames);
+
     ///
     /// @brief Emit when color is changed.
     ///
     void sendColor(QColor);
+
+    ///
+    /// @brief Emit to stop the animation when a frame is added or deleted.
+    ///
+    void stopAnimation();
 
 public slots:
     ///
@@ -143,7 +171,6 @@ public slots:
     ///
     void onPixelClicked(QPoint point);
 
-    //From toolpane's signals that alert the slider's changed values for the RGB values.
     ///
     /// @brief Change the red value of the current color.
     /// @param red - The new red value.
@@ -168,26 +195,23 @@ public slots:
     ///
     void onAlphaChanged(int alpha);
 
-    // From Frame Selection
     ///
     /// @brief Change the current frame.
     /// @param index - Identifies the new current frame.
     ///
     void onCurrentFrameChanged(int index);
 
-    // Frame Selection Methods
-
     ///
-    /// \brief onFrameAdded : When a frame needs to be added, adds it at the
+    /// @brief onFrameAdded : When a frame needs to be added, adds it at the
     /// index provided, move current frame to the added frame
-    /// \param index : The index to add a frame
+    /// @param index : The index to add a frame
     ///
     void onFrameAdded(int index);
 
     ///
-    /// \brief onFrameRemoved : When a frame needs to be deleted, delete it at
+    /// @brief onFrameRemoved : When a frame needs to be deleted, delete it at
     /// the index provided, move the current frame to the one before the deleted one.
-    /// \param index ; The index to delete a frame
+    /// @param index ; The index to delete a frame
     ///
     void onFrameRemoved(int index);
 
@@ -223,6 +247,7 @@ private:
     /// has not been saved, this will be a nullptr.
     std::filesystem::path *path;
 
+    /// This is the initial vector of QImages
     std::vector<QImage> initialImages();
 };
 

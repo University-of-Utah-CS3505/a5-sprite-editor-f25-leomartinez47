@@ -147,6 +147,7 @@ void Project::onFrameAdded(int index)
     // adds a frame at the index to the sprite
     this->sprite->addFrame(index);
     emit this->frameAdded(index);
+    emit this->stopAnimation();
 
     // changes the current frame to the newest frame
     this->onCurrentFrameChanged(index);
@@ -172,13 +173,11 @@ void Project::onFrameRemoved(int index)
     }
 
     if (next >= 0) {
-
+        emit this->stopAnimation();
         emit this->frameRemoved(index);
         this->sprite->deleteFrame(index);
         this->onCurrentFrameChanged(next);
     }
-
-
 }
 
 void Project::onFrameRateSet(int frameRate) {
