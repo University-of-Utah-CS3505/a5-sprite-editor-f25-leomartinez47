@@ -1,3 +1,8 @@
+/*
+    Contributors: Natalie Bonilla, Grant Handy, and Kailee Kim
+    Date: 11/13/2025
+*/
+
 #include <QQueue>
 
 #include "tools.h"
@@ -46,7 +51,7 @@ void FillBucket::apply(QPoint point, QImage &frame, QColor color)
     // 3.Get the color to fill with (the "replacement" color)
     const QColor replacementColor = color;
 
-    //4. If the target and replacement are the same, no work is needed.
+    // 4. If the target and replacement are the same, no work is needed.
     if (targetColor == replacementColor) {
         return;
     }

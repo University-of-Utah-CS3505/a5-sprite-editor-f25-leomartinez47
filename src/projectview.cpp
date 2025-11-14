@@ -1,3 +1,8 @@
+/*
+    Contributors: Grant Handy
+    Date: 11/13/2025
+*/
+
 #include "projectview.h"
 #include "ui_projectview.h"
 

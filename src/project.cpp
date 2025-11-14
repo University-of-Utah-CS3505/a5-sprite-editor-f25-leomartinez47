@@ -1,3 +1,9 @@
+/*
+    Contributors: Natalie Bonilla, Grant Handy, Sean Ho, Kailee Kim, Leo Martinez,
+    and Bryce Wiley.
+    Date: 11/13/2025
+*/
+
 #include "project.h"
 
 QJsonArray colorToJson(QColor color) {
@@ -113,7 +119,7 @@ void Project::onBlueChanged(int blue)
 void Project::onAlphaChanged(int alpha)
 {
     this->currentColor.setAlpha(alpha);
-    emit this->sendOpacity(alpha);
+    emit this->sendColor(currentColor);
 }
 
 void Project::onPixelClicked(QPoint point)
@@ -192,7 +198,9 @@ void Project::exportFile(const QString &path) {
         this->sprite->writeToGif(path);
     } else { // assumed to be .png
         // TODO: handle errors
-        this->getCurrentFrame().save(path, "PNG");
+        if(!this->getCurrentFrame().save(path, "PNG")){
+            //throw?
+        }
     }
 }
 

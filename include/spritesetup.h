@@ -1,7 +1,7 @@
 /*
     Contributors: Grant Handy
     Date: 11/13/2025
- */
+*/
 
 #ifndef SPRITESETUP_H
 #define SPRITESETUP_H

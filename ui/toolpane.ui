@@ -221,13 +221,6 @@
      </item>
     </layout>
    </item>
-   <item>
-    <widget class="QLabel" name="opacityPreview">
-     <property name="text">
-      <string>Opacity Preview</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources/>
