@@ -1,3 +1,8 @@
+/*
+    Contributors: Natalie Bonilla, Grant Handy, and Kailee Kim
+    Date: 11/13/2025
+*/
+
 #include <QQueue>
 
 #include "tools.h"

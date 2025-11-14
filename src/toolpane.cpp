@@ -1,3 +1,8 @@
+/*
+    Contributors: Natalie Bonilla, Grant Handy, and Kailee Kim
+    Date: 11/13/2025
+*/
+
 #include "toolpane.h"
 #include "ui_toolpane.h"
 
@@ -12,13 +17,7 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
     // Initialize the current tool.
     this->onToolSelected(&project->getCurrentTool());
 
-    QString red, green, blue, opacity;
-    red = QString::number(project->getCurrentColor().red());
-    green = QString::number(project->getCurrentColor().green());
-    blue = QString::number(project->getCurrentColor().blue());
-    opacity = QString::number(project->getCurrentColor().alpha());
-    QString styleSheet = "background-color: rgba(" + red + "," + green + "," + blue + "," + opacity + ")";
-    this->ui->colorPreview->setStyleSheet(styleSheet);
+    this->receivedColor(project->getCurrentColor());
     this->ui->opacityPreview->setStyleSheet(QString("background-color: "
                     "rgba(255, 255, 255, %1);").arg(project->getCurrentColor().alpha()));
 

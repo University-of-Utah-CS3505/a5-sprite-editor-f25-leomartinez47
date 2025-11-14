@@ -1,3 +1,9 @@
+/*
+    Contributors: Natalie Bonilla, Grant Handy, Sean Ho, Kailee Kim, Leo Martinez,
+    and Bryce Wiley.
+    Date: 11/13/2025
+*/
+
 #include "project.h"
 
 QJsonArray colorToJson(QColor color) {

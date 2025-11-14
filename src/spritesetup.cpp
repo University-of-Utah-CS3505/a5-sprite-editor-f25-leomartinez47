@@ -1,3 +1,8 @@
+/*
+    Contributors: Grant Handy
+    Date: 11/13/2025
+*/
+
 #include "spritesetup.h"
 #include "ui_spritesetup.h"
 
@@ -16,7 +21,8 @@ SpriteSetup::~SpriteSetup()
     delete ui;
 }
 
-void SpriteSetup::onCreateProject() {
+void SpriteSetup::onCreateProject()
+{
     QSize size = QSize(this->ui->widthSpinBox->value(), this->ui->heightSpinBox->value());
     emit this->setupFinished(this, new Project(size));
 }
