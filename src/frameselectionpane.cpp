@@ -19,11 +19,9 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     list->setViewMode(QListView::IconMode);
     list->setMovement(QListView::Static);
     list->setWrapping(false);
-
     list->setResizeMode(QListView::Adjust);
-    list->viewport()->resize(100, 100);
-    //list->setIconSize(QSize(95, 95));
-    //list ->setGridSize(QSize(105, 105));
+    list->setIconSize(QSize(95, 95));
+    list ->setGridSize(QSize(105, 105));
 
     list->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     list->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -45,12 +43,10 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
         if (lastSelectedIndex >= 0) {
             this->onUpdate(lastSelectedIndex, project->frameAt(lastSelectedIndex));
         }
+        this->onUpdate(index, project->frameAt(index));
         ui->listWidget->setCurrentRow(index);
         this->lastSelectedIndex = index;
         ui->currentFrame->setText(QString::number(index));
-    });
-    connect(project, &Project::frameChanged, this, [this, project](const QImage& img){
-        this->onUpdate(project->getCurrentFrameIndex(), img);
     });
     connect(project, &Project::initialFrames, this, &FrameSelectionPane::setupQList);
 
@@ -63,9 +59,6 @@ FrameSelectionPane::~FrameSelectionPane() {
 
 void FrameSelectionPane::addFrame(int index) {
     auto* item = new QListWidgetItem();
-    adjustSize();
-    qDebug() << "ViewportHeight = " << ui->listWidget->viewport()->height()
-             << "Icon Size = " << ui->listWidget->iconSize();
     const QSize s = ui->listWidget->iconSize();
     QPixmap blank(s);
     blank.fill(Qt::transparent);
@@ -88,54 +81,28 @@ void FrameSelectionPane::setupQList(std::vector<QImage> frames) {
         onUpdate(i, frames[i]);
     }
     ui->currentFrame->setText("0");
+    ui->listWidget->setCurrentRow(0);
 }
 
 QPixmap FrameSelectionPane::makeIcon(const QImage &img) {
-
-    const int S = ui->listWidget->viewport()->height();
-    QPixmap pm(S, S);
+    const int size = 100;
+    QPixmap pm(size, size);
     pm.fill(Qt::transparent);
     QPainter p(&pm);
     p.setRenderHint(QPainter::SmoothPixmapTransform, false);
 
     // checkerboard
     const int tile = 8;
-    for (int y = 0; y < S; y += tile)
-        for (int x = 0; x < S; x += tile)
+    for (int y = 0; y < size; y += tile)
+        for (int x = 0; x < size; x += tile)
             p.fillRect(x, y, tile, tile, ((x/tile + y/tile) & 1) ? QColor(200,200,200) : QColor(240,240,240));
 
     // sprite scaled, centered
-    QImage scaled = img.scaled(S, S, Qt::KeepAspectRatio, Qt::FastTransformation);
-    p.drawImage(QPoint((S - scaled.width())/2, (S - scaled.height())/2), scaled);
+    QImage scaled = img.scaled(size, size, Qt::KeepAspectRatio, Qt::FastTransformation);
+    p.drawImage(QPoint((size - scaled.width())/2, (size - scaled.height())/2), scaled);
     return pm;
 }
 
-void FrameSelectionPane::resizeEvent(QResizeEvent* e) {
-    QWidget::resizeEvent(e);
-
-    qDebug() << "ViewportHeight = " << ui->listWidget->viewport()->height();
-    adjustSize();
-
-    /*
-    auto* list = ui->listWidget;
-    const int vpH = list->viewport()->height();
-    if (vpH <= 0) return;
-
-    const QSize iconSize(vpH, vpH);
-
-    // only update if it changed
-    if (list->iconSize() == iconSize) return;
-
-    list->setIconSize(iconSize);
-
-    // re-render thumbs at the new size
-    for (int i = 0; i < list->count(); i++) {
-        if (auto* it = list->item(i)) {
-            it->setIcon(QIcon(makeIcon(proj->frameAt(i))));
-        }
-    }
-    */
-}
 
 void FrameSelectionPane::buttonAdd() {
     emit frameAdded(ui->listWidget->currentRow() + 1);
@@ -143,21 +110,4 @@ void FrameSelectionPane::buttonAdd() {
 
 void FrameSelectionPane::buttonDelete(){
     emit frameDeleted(ui->listWidget->currentRow());
-}
-
-void FrameSelectionPane::adjustSize(){
-    auto* list = ui->listWidget;
-    int h = list->viewport()->height();
-    if (h <= 0) return;
-
-    // Update icon & grid sizes
-    QSize newIcon(h, h);
-    QSize newGrid(h + 8, h + 16);
-
-    if (list->iconSize() != newIcon) {
-        list->setIconSize(newIcon);
-        list->setGridSize(newGrid);
-    }
-
-    update();
 }

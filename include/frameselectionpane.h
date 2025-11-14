@@ -45,10 +45,6 @@ public slots:
     void onUpdate(int index, const QImage &img);
 
     void setupQList(std::vector<QImage> frames);
-    //void addFrameToList();
-
-protected:
-    void resizeEvent(QResizeEvent* e) override;
 
 private:
     Ui::FrameSelectionPane *ui;

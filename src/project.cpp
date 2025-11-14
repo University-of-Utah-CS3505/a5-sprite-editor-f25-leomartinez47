@@ -136,11 +136,13 @@ void Project::onFrameRemoved(int index)
     }
 
     if (next >= 0) {
+
+        emit this->frameRemoved(index);
+        this->sprite->deleteFrame(index);
         this->onCurrentFrameChanged(next);
     }
 
-    this->sprite->deleteFrame(index);
-    emit this->frameRemoved(index);
+
 }
 
 void Project::save(std::function<QString()> requestPath) {
