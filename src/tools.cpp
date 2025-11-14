@@ -3,13 +3,11 @@
     Date: 11/13/2025
 */
 
-#include <QQueue>
-
 #include "tools.h"
 
+#include <QQueue>
 
-void setPixel(QPoint point, QImage &frame, QColor color)
-{
+void setPixel(QPoint point, QImage &frame, QColor color) {
     if (frame.valid(point)) {
         frame.setPixelColor(point, color);
     }
@@ -27,19 +25,16 @@ Tool *toolFromString(const QString &val) {
     return nullptr;
 }
 
-void Pencil::apply(QPoint point, QImage &frame,  QColor color)
-{
+void Pencil::apply(QPoint point, QImage &frame, QColor color) {
     setPixel(point, frame, color);
 }
 
-void Eraser::apply(QPoint point, QImage &frame,  QColor /* color unused */)
-{
+void Eraser::apply(QPoint point, QImage &frame, QColor /* color unused */) {
     setPixel(point, frame, Qt::transparent);
 }
 
 // This is the AI feature.
-void FillBucket::apply(QPoint point, QImage &frame, QColor color)
-{
+void FillBucket::apply(QPoint point, QImage &frame, QColor color) {
     // 1. Check if the starting point is valid
     if (!frame.valid(point)) {
         return;
@@ -76,7 +71,8 @@ void FillBucket::apply(QPoint point, QImage &frame, QColor color)
 
         // 9. Check if this pixel has the color we're trying to replace
         if (frame.pixelColor(p) != targetColor) {
-            continue; // Not the target color, so we don't fill or spread from here
+            continue; // Not the target color, so we don't fill or spread from
+                      // here
         }
 
         // 10. It's the right color and in bounds. Change it!

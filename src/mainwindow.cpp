@@ -3,22 +3,20 @@
     Date: 11/13/2025
 */
 
+#include "mainwindow.h"
+
 #include <QAction>
+#include <QFileDialog>
 #include <QMenuBar>
 #include <QRect>
 #include <QTabBar>
-#include <QFileDialog>
 
-#include "mainwindow.h"
 #include "projectview.h"
 #include "spritesetup.h"
 
-
 const QString NEW_PROJECT_TITLE = "<New Project>";
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-{
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     this->setGeometry(QRect(0, 0, 1000, 800));
     this->setWindowTitle("Sprite Editor");
 
@@ -29,8 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->tabs->tabBar()->setMovable(true);
     this->tabs->setTabsClosable(true);
 
-    connect(this->tabs, &QTabWidget::tabCloseRequested,
-            this, &MainWindow::onHandleCloseTabRequested);
+    connect(this->tabs, &QTabWidget::tabCloseRequested, this,
+            &MainWindow::onHandleCloseTabRequested);
 
     this->setCentralWidget(tabs);
 
@@ -38,12 +36,11 @@ MainWindow::MainWindow(QWidget *parent)
     this->onNewProjectRequested();
 }
 
-void MainWindow::onNewProjectRequested()
-{
+void MainWindow::onNewProjectRequested() {
     SpriteSetup *setup = new SpriteSetup();
 
-    connect(setup, &SpriteSetup::setupFinished,
-            this, &MainWindow::onFinishSetup);
+    connect(setup, &SpriteSetup::setupFinished, this,
+            &MainWindow::onFinishSetup);
 
     int newIndex = this->tabs->addTab(setup, NEW_PROJECT_TITLE);
 
@@ -52,8 +49,7 @@ void MainWindow::onNewProjectRequested()
     }
 }
 
-void MainWindow::onHandleCloseTabRequested(int index)
-{
+void MainWindow::onHandleCloseTabRequested(int index) {
     if (index < 0 || index >= tabs->count()) {
         return;
     }
@@ -75,12 +71,11 @@ void MainWindow::onHandleCloseCurrentTabRequested() {
     this->onHandleCloseTabRequested(this->tabs->currentIndex());
 }
 
-void MainWindow::onUpdateTabViewTitle(QWidget* senderView, const QString& newTitle)
-{
+void MainWindow::onUpdateTabViewTitle(QWidget *senderView,
+                                      const QString &newTitle) {
     int index = this->tabs->indexOf(senderView);
 
-    if (index == -1)
-    {
+    if (index == -1) {
         qWarning() << "Update failed: sender view not found in QTabWidget.";
         return;
     }
@@ -88,7 +83,7 @@ void MainWindow::onUpdateTabViewTitle(QWidget* senderView, const QString& newTit
     this->tabs->setTabText(index, newTitle);
 }
 
-void MainWindow::onFinishSetup(QWidget* setupView, Project *project) {
+void MainWindow::onFinishSetup(QWidget *setupView, Project *project) {
     int index = this->tabs->indexOf(setupView);
 
     if (index == -1) {
@@ -98,8 +93,8 @@ void MainWindow::onFinishSetup(QWidget* setupView, Project *project) {
 
     ProjectView *view = new ProjectView(project);
 
-    connect(view, &ProjectView::wantsTabTitleUpdate,
-            this, &MainWindow::onUpdateTabViewTitle);
+    connect(view, &ProjectView::wantsTabTitleUpdate, this,
+            &MainWindow::onUpdateTabViewTitle);
 
     // Remove the old setup view
     this->tabs->removeTab(index);
@@ -114,7 +109,7 @@ void MainWindow::onFinishSetup(QWidget* setupView, Project *project) {
 }
 
 void MainWindow::onSaveRequested() {
-    Project* currentProject = this->currentProject();
+    Project *currentProject = this->currentProject();
 
     if (currentProject == nullptr) {
         return;
@@ -122,27 +117,25 @@ void MainWindow::onSaveRequested() {
 
     currentProject->save([this]() {
         return QFileDialog::getSaveFileName(this, "Save Project File",
-            QDir::home().absolutePath(),
-            PROJECT_FILE_EXTENSION_DESCRIPTION);
+                                            QDir::home().absolutePath(),
+                                            PROJECT_FILE_EXTENSION_DESCRIPTION);
     });
 }
 
-void MainWindow::onExportRequested()
-{
-    Project* currentProject = this->currentProject();
+void MainWindow::onExportRequested() {
+    Project *currentProject = this->currentProject();
 
     if (currentProject == nullptr) {
         return;
     }
 
-    QString path = QFileDialog::getSaveFileName(this, "Export Sprite",
-                                                QDir::home().absolutePath(),
-                                                "GIF Image (*.gif);;Current Frame PNG Image (*.png)");
+    QString path = QFileDialog::getSaveFileName(
+        this, "Export Sprite", QDir::home().absolutePath(),
+        "GIF Image (*.gif);;Current Frame PNG Image (*.png)");
 
-    try{
+    try {
         currentProject->exportFile(path);
-    }
-    catch(std::invalid_argument ex){
+    } catch (std::invalid_argument &ex) {
         qWarning() << ex.what();
         QErrorMessage *msg = new QErrorMessage();
         msg->showMessage(ex.what());
@@ -151,9 +144,9 @@ void MainWindow::onExportRequested()
 }
 
 void MainWindow::onOpenRequested() {
-    QString fileName = QFileDialog::getOpenFileName(this, "Open Project File",
-                                                    QDir::home().absolutePath(),
-                                                    PROJECT_FILE_EXTENSION_DESCRIPTION);
+    QString fileName = QFileDialog::getOpenFileName(
+        this, "Open Project File", QDir::home().absolutePath(),
+        PROJECT_FILE_EXTENSION_DESCRIPTION);
 
     // Dialog was canceled
     if (fileName.isEmpty()) {
@@ -162,31 +155,31 @@ void MainWindow::onOpenRequested() {
 
     // Don't open the same file multiple times.
     for (int i = 0; i < this->tabs->count(); i++) {
-        ProjectView *view = qobject_cast<ProjectView*>(this->tabs->widget(i));
+        ProjectView *view = qobject_cast<ProjectView *>(this->tabs->widget(i));
 
         if (view != nullptr && fileName == view->getProject()->getPath()) {
             this->tabs->setCurrentIndex(i);
             return;
         }
     }
-  
+
     Project *project;
-    try
-    {
+    try {
         project = new Project(fileName);
-    }
-    catch(std::invalid_argument ex) {
+    } catch (std::invalid_argument &ex) {
         qWarning() << ex.what();
         QErrorMessage *msg = new QErrorMessage();
         msg->showMessage(ex.what());
         return;
     }
-    int newIndex = this->tabs->addTab(new ProjectView(project), project->getName());
+    int newIndex =
+        this->tabs->addTab(new ProjectView(project), project->getName());
     this->tabs->setCurrentIndex(newIndex);
 }
 
 Project *MainWindow::currentProject() {
-    ProjectView *currentView = qobject_cast<ProjectView*>(this->tabs->currentWidget());
+    ProjectView *currentView =
+        qobject_cast<ProjectView *>(this->tabs->currentWidget());
 
     if (currentView == nullptr) {
         return nullptr;
@@ -195,9 +188,7 @@ Project *MainWindow::currentProject() {
     return currentView->getProject();
 }
 
-
-void MainWindow::createMenus()
-{
+void MainWindow::createMenus() {
     this->fileMenu = this->menuBar()->addMenu("File");
     this->fileMenu->addAction(this->newAct);
     this->fileMenu->addAction(this->openAct);
@@ -206,28 +197,31 @@ void MainWindow::createMenus()
     this->fileMenu->addAction(this->exitAct);
 }
 
-void MainWindow::createActions()
-{
+void MainWindow::createActions() {
     this->newAct = new QAction("New", this);
     this->newAct->setShortcuts(QKeySequence::New);
-    connect(this->newAct, &QAction::triggered, this, &MainWindow::onNewProjectRequested);
+    connect(this->newAct, &QAction::triggered, this,
+            &MainWindow::onNewProjectRequested);
 
     this->openAct = new QAction("Open", this);
     this->openAct->setShortcuts(QKeySequence::Open);
-    connect(this->openAct, &QAction::triggered, this, &MainWindow::onOpenRequested);
+    connect(this->openAct, &QAction::triggered, this,
+            &MainWindow::onOpenRequested);
 
     this->saveAct = new QAction("Save", this);
     this->saveAct->setShortcuts(QKeySequence::Save);
-    connect(this->saveAct, &QAction::triggered, this, &MainWindow::onSaveRequested);
+    connect(this->saveAct, &QAction::triggered, this,
+            &MainWindow::onSaveRequested);
 
     this->exportAct = new QAction("Export", this);
     this->exportAct->setShortcuts(QKeySequence::Print);
-    connect(this->exportAct, &QAction::triggered, this, &MainWindow::onExportRequested);
+    connect(this->exportAct, &QAction::triggered, this,
+            &MainWindow::onExportRequested);
 
     this->closeTabAct = new QAction(this);
     this->closeTabAct->setShortcuts(QKeySequence::Close);
-    connect(this->closeTabAct, &QAction::triggered,
-            this, &MainWindow::onHandleCloseCurrentTabRequested);
+    connect(this->closeTabAct, &QAction::triggered, this,
+            &MainWindow::onHandleCloseCurrentTabRequested);
     // closeTabAct is not registered in the file menu.
     this->addAction(this->closeTabAct);
 

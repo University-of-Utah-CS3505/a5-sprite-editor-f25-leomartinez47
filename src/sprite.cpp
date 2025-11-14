@@ -2,6 +2,8 @@
     Written by Leo Martinez, Kailee Kim, and Grant Handy
 */
 
+#include "sprite.h"
+
 #include <QBuffer>
 #include <QDebug>
 #include <QIODevice>
@@ -11,9 +13,6 @@
 #include <QStringList>
 #include <QStringLiteral>
 #include <QTemporaryDir>
-
-#include "sprite.h"
-
 
 // QImage expects a C-style string.
 const char *FORMAT = "PNG";
@@ -33,7 +32,8 @@ Sprite::Sprite(const QJsonObject &sprite) {
     QJsonArray jsonFrames = sprite.value("frames").toArray();
     for (QJsonValue &&frame : jsonFrames) {
         QImage image;
-        if (!image.loadFromData(QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT)) {
+        if (!image.loadFromData(
+                QByteArray::fromBase64(frame.toString().toUtf8()), FORMAT)) {
             throw std::invalid_argument("Unsupported format.");
         }
 
@@ -41,14 +41,11 @@ Sprite::Sprite(const QJsonObject &sprite) {
     }
 }
 
-Sprite::Sprite(QSize dimensions)
-    : dimensions(dimensions), frameRate(30)
-{
+Sprite::Sprite(QSize dimensions) : dimensions(dimensions), frameRate(30) {
     addFrame(0);
 }
 
-void Sprite::addFrame(int index)
-{
+void Sprite::addFrame(int index) {
     QImage frame(dimensions, QImage::Format_ARGB32);
     frame.fill(Qt::transparent);
     frames.insert(frames.begin() + index, frame);
@@ -90,21 +87,20 @@ QJsonObject Sprite::toJson() {
     }
 
     return QJsonObject({
-        { "frames", jsonFrames },
-        { "frameRate", this->frameRate },
-        { "width", this->dimensions.width() },
-        { "height", this->dimensions.height() },
+        {"frames", jsonFrames},
+        {"frameRate", this->frameRate},
+        {"width", this->dimensions.width()},
+        {"height", this->dimensions.height()},
     });
 }
 
 void Sprite::writeToGif(const QString &path) const {
     QTemporaryDir *dir = new QTemporaryDir();
-    // TODO: check dir->isValid()
 
     for (std::size_t i = 0; i < this->frames.size(); i++) {
-        QString framePath = dir->path()
-            + QDir::separator()
-            + QStringLiteral("frame%1.png").arg(i, 3, 10, QLatin1Char('0'));
+        QString framePath =
+            dir->path() + QDir::separator() +
+            QStringLiteral("frame%1.png").arg(i, 3, 10, QLatin1Char('0'));
 
         this->frames[i].save(framePath, FORMAT);
     }
@@ -112,10 +108,12 @@ void Sprite::writeToGif(const QString &path) const {
     QStringList ffmpegArgs;
     ffmpegArgs
         // Framerate settings:
-        << "-framerate" << QString::number(this->frameRate)
+        << "-framerate"
+        << QString::number(this->frameRate)
 
         // Input sources schema:
-        << "-i" << (dir->path() + QDir::separator() + "frame%03d.png")
+        << "-i"
+        << (dir->path() + QDir::separator() + "frame%03d.png")
 
         // Palette/Filter Settings:
         << "-filter_complex"
@@ -175,7 +173,7 @@ void Sprite::writeToGif(const QString &path) const {
                      });
 
     qDebug() << "Starting ffmpeg with args:" << ffmpegArgs;
-    process->start("ffmpeg", ffmpegArgs); 
+    process->start("ffmpeg", ffmpegArgs);
 }
 
 void Sprite::setFrameRate(int frameRate) {

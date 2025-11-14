@@ -6,12 +6,11 @@
 #ifndef TOOLPANE_H
 #define TOOLPANE_H
 
-#include <QWidget>
 #include <QSlider>
+#include <QWidget>
 
-#include "tools.h"
 #include "project.h"
-
+#include "tools.h"
 
 namespace Ui {
 class ToolPane;
@@ -20,11 +19,10 @@ class ToolPane;
 const QSize ICON_SIZE = QSize(65, 32);
 
 /// The ToolPane displays Sprite editing tools.
-class ToolPane : public QWidget
-{
+class ToolPane : public QWidget {
     Q_OBJECT
 
-public:
+  public:
     ///
     /// @brief Construct a ToolPane.
     /// @param project - Model for the Sprite Editor.
@@ -61,7 +59,7 @@ public:
     ///
     void alphaSliderValue(int value);
 
-signals:
+  signals:
 
     ///
     /// @brief Emit when tool is selected.
@@ -77,33 +75,36 @@ signals:
     void redSliderUpdate(int value);
 
     ///
-    /// @brief greenSliderUpdate redSliderUpdate is signal for Project's greenChanged
+    /// @brief greenSliderUpdate redSliderUpdate is signal for Project's
+    /// greenChanged
     /// @param value is the integer sent to Project to update
     /// the green RBG.
     ///
     void greenSliderUpdate(int value);
 
     ///
-    /// @brief blueSliderUpdate redSliderUpdate is signal for Project's blueChanged
+    /// @brief blueSliderUpdate redSliderUpdate is signal for Project's
+    /// blueChanged
     /// @param value is the integer sent to Project to update
     /// the blue RBG.
     ///
     void blueSliderUpdate(int value);
 
     ///
-    /// @brief alphaSliderUpdate redSliderUpdate is signal for Project's opacityChanged
+    /// @brief alphaSliderUpdate redSliderUpdate is signal for Project's
+    /// opacityChanged
     /// @param value is the integer sent to Project to update
     /// the blue RBG.
     ///
     void alphaSliderUpdate(int value);
-public slots:
+  public slots:
     ///
     /// @brief Update the current color preview.
     /// @param color - The new color.
     ///
     void receivedColor(QColor color);
 
-private slots:
+  private slots:
     ///
     /// @brief Tell the model the selected tool is a Pencil.
     ///
@@ -125,7 +126,7 @@ private slots:
     ///
     void onToolSelected(Tool *tool);
 
-private:
+  private:
     Ui::ToolPane *ui;
 };
 

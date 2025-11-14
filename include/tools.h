@@ -6,10 +6,9 @@
 #ifndef TOOLS_H
 #define TOOLS_H
 
-#include <QPoint>
 #include <QColor>
 #include <QImage>
-
+#include <QPoint>
 
 const QString PENCIL = "pencil";
 const QString FILL_BUCKET = "fillbucket";
@@ -17,7 +16,7 @@ const QString ERASER = "eraser";
 
 /// The general interface for various tools.
 class Tool {
-public:
+  public:
     ///
     /// @brief The destructor for Tool.
     ///
@@ -29,7 +28,7 @@ public:
     /// @param frame - The QImage to color.
     /// @param color - Color to be applied.
     ///
-    virtual void apply(QPoint point, QImage &frame,  QColor color) = 0;
+    virtual void apply(QPoint point, QImage &frame, QColor color) = 0;
 
     ///
     /// @brief Format a Tool as a QString.
@@ -45,9 +44,10 @@ public:
 ///
 Tool *toolFromString(const QString &val);
 
-/// Sets the color to the current color to be applied to the current frames pixel point.
+/// Sets the color to the current color to be applied to the current frames
+/// pixel point.
 class Pencil : public Tool {
-public:   
+  public:
     ///
     /// @brief Apply a color to a given point in a QImage.
     /// @param point - A point in the QImage.
@@ -60,12 +60,14 @@ public:
     /// @brief Format a Pencil as a QString.
     /// @return The QString.
     ///
-    const QString &toString() const override { return PENCIL; }
+    const QString &toString() const override {
+        return PENCIL;
+    }
 };
 
 /// Sets the color to white to be applied to the current frames pixel point.
 class Eraser : public Tool {
-public:
+  public:
     ///
     /// @brief Make a given point in a QImage completely transparent.
     /// @param point - A point in the QImage.
@@ -78,7 +80,9 @@ public:
     /// @brief Format Eraser as a QString.
     /// @return The QString.
     ///
-    const QString &toString() const override  { return ERASER; }
+    const QString &toString() const override {
+        return ERASER;
+    }
 };
 
 /// Fills all the adjacent space around the given point with the color.
@@ -96,7 +100,9 @@ class FillBucket : public Tool {
     /// @brief Format a FillBucket as a QString.
     /// @return The QString.
     ///
-    const QString &toString() const override { return FILL_BUCKET; }
+    const QString &toString() const override {
+        return FILL_BUCKET;
+    }
 };
 
 #endif

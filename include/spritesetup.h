@@ -10,18 +10,16 @@
 
 #include "project.h"
 
-
 namespace Ui {
 class SpriteSetup;
 }
 
 /// The SpriteSetup prompts the user to input desired Sprite dimensions before
 /// directing them to the Sprite Editor program.
-class SpriteSetup : public QWidget
-{
+class SpriteSetup : public QWidget {
     Q_OBJECT
 
-public:
+  public:
     ///
     /// @brief Construct the SpriteSetup.
     /// @param parent
@@ -29,7 +27,7 @@ public:
     explicit SpriteSetup(QWidget *parent = nullptr);
     ~SpriteSetup();
 
-signals:
+  signals:
     ///
     /// @brief Emit when user confirms their input.
     /// @param me - This instance of SpriteSetup.
@@ -37,13 +35,13 @@ signals:
     ///
     void setupFinished(QWidget *me, Project *project);
 
-private slots:
+  private slots:
     ///
     /// @brief Create a Project with user's dimensions specifications.
     ///
     void onCreateProject();
 
-private:
+  private:
     Ui::SpriteSetup *ui;
 };
 

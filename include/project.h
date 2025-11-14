@@ -1,33 +1,29 @@
 /*
-    Contributors: Natalie Bonilla, Grant Handy, Sean Ho, Kailee Kim, Leo Martinez,
-    and Bryce Wiley.
-    Date: 11/13/2025
+    Contributors: Natalie Bonilla, Grant Handy, Sean Ho, Kailee Kim, Leo
+   Martinez, and Bryce Wiley. Date: 11/13/2025
 */
 
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include <filesystem>
-#include <functional>
-
-#include <QObject>
-#include <QFile>
-#include <QString>
 #include <QColor>
+#include <QFile>
+#include <QObject>
+#include <QString>
 
 #include "sprite.h"
 #include "tools.h"
-
+#include <filesystem>
+#include <functional>
 
 const QString PROJECT_FILE_EXTENSION = ".sprite";
 const QString PROJECT_FILE_EXTENSION_DESCRIPTION = "Sprite Project (*.sprite)";
 
 /// This is a Model for a Sprite Editor program.
-class Project : public QObject
-{
+class Project : public QObject {
     Q_OBJECT
 
-public:
+  public:
     ///
     /// @brief Construct a new Project.
     /// @param dimensions - The dimensions of the Sprite in this project.
@@ -115,7 +111,7 @@ public:
     ///
     const QImage &frameAt(int index) const;
 
-signals:
+  signals:
     ///
     /// @brief Emit when current frame is changed.
     /// @param frame - The new current frame.
@@ -164,7 +160,7 @@ signals:
     ///
     void stopAnimation();
 
-public slots:
+  public slots:
     ///
     /// @brief Change the current tool.
     /// @param tool - The new current tool.
@@ -172,7 +168,8 @@ public slots:
     void onToolChanged(Tool *tool);
 
     ///
-    /// @brief Change the color of the pixel based on current tool and current color.
+    /// @brief Change the color of the pixel based on current tool and current
+    /// color.
     /// @param point - The point to change.
     ///
     void onPixelClicked(QPoint point);
@@ -232,7 +229,7 @@ public slots:
     ///
     void onFrameRateSet(int frameRate);
 
-private:
+  private:
     ///
     /// @brief Serialize this Project as a Json.
     /// @return A QJsonObject that stores the Project information.

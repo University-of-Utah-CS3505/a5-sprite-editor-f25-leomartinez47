@@ -19,18 +19,18 @@
 #ifndef SPRITE_H
 #define SPRITE_H
 
-#include <vector>
-
 #include <QImage>
-#include <QSize>
 #include <QJsonArray>
 #include <QJsonObject>
+#include <QSize>
 
+#include <vector>
 
-/// This represents a Sprite. A Sprite can have multiple frames. Frames are put in an array by their ordering.
+/// This represents a Sprite. A Sprite can have multiple frames. Frames are put
+/// in an array by their ordering.
 class Sprite {
 
-public:
+  public:
     /// Construct a Sprite with dimensions selected by the user.
     Sprite(QSize dimensions);
 
@@ -47,9 +47,10 @@ public:
 
     ///
     /// @brief Delete the currently selected frame of this Sprite.
-    /// @param currentFrame - The index of 'frames' where the current frame is stored
+    /// @param currentFrame - The index of 'frames' where the current frame is
+    /// stored
     ///
-    void deleteFrame(std::size_t currentFrame); 
+    void deleteFrame(std::size_t currentFrame);
 
     ///
     /// @brief Get a frame by its index.
@@ -57,7 +58,6 @@ public:
     /// @return The frame held in 'frames' at index
     ///
     QImage &getFrame(std::size_t index);
-
 
     ///
     /// @brief Get the number of frames this Sprite contains.
@@ -89,7 +89,7 @@ public:
     ///
     int getFrameRate();
 
-private:
+  private:
     /// The frames of this Sprite.
     std::vector<QImage> frames;
 

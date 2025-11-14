@@ -6,22 +6,20 @@
 #ifndef PREVIEWPANE_H
 #define PREVIEWPANE_H
 
-#include <QWidget>
 #include <QTimer>
+#include <QWidget>
 
 #include "project.h"
-
 
 namespace Ui {
 class PreviewPane;
 }
 
 /// The Preview Pane widget displays an animation of the frames of the Sprite.
-class PreviewPane : public QWidget
-{
+class PreviewPane : public QWidget {
     Q_OBJECT
 
-public:
+  public:
     ///
     /// @brief Construct a new PreviewPane.
     /// @param project - A pointer to the project model.
@@ -34,12 +32,11 @@ public:
     ///
     ~PreviewPane();
 
-public slots:
+  public slots:
     ///
     /// @brief Receive when the user starts/stops the animation preview.
     ///
     void onPlayPauseClicked();
-
 
     ///
     /// @brief Stop the animation and reset to first frame.
@@ -52,22 +49,22 @@ public slots:
     ///
     void showFrame();
 
-signals:
+  signals:
     ///
     /// @brief Send the frame rate of the animation to the sprite.
     /// @param - The current frame rate of the animation, in ms per frame.
     ///
     void setFrameRate(int frameRate);
 
-protected:
+  protected:
     ///
     /// @brief Paint the current frame in the animation scaled to fit the
     /// frame widget, and add a png-style grid background to represent
     /// the transparent parts of the frame.
     ///
-    void paintEvent(QPaintEvent*) override;
+    void paintEvent(QPaintEvent *) override;
 
-private:
+  private:
     Ui::PreviewPane *ui;
 
     /// A Pointer to the Sprite object held by the current Project.

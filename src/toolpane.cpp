@@ -4,14 +4,12 @@
 */
 
 #include "toolpane.h"
-#include "ui_toolpane.h"
-#include "tools.h"
 
+#include "tools.h"
+#include "ui_toolpane.h"
 
 ToolPane::ToolPane(Project *project, QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::ToolPane)
-{
+    : QWidget(parent), ui(new Ui::ToolPane) {
     this->ui->setupUi(this);
 
     // Initialize the current tool.
@@ -24,69 +22,60 @@ ToolPane::ToolPane(Project *project, QWidget *parent)
     this->ui->greenSlider->setValue(project->getCurrentColor().green());
     this->ui->opacitySlider->setValue(project->getCurrentColor().alpha());
 
+    connect(this, &ToolPane::toolSelected, project, &Project::onToolChanged);
 
-    connect(this, &ToolPane::toolSelected,
-            project, &Project::onToolChanged);
-
-    connect(this, &ToolPane::toolSelected,
-            this, &ToolPane::onToolSelected);
+    connect(this, &ToolPane::toolSelected, this, &ToolPane::onToolSelected);
 
     this->ui->pencilButton->setIcon(QIcon(":/icons/pencil.png"));
     this->ui->pencilButton->setIconSize(ICON_SIZE);
 
-    connect(this->ui->pencilButton, &QPushButton::clicked,
-            this, &ToolPane::onPencilSelected);
+    connect(this->ui->pencilButton, &QPushButton::clicked, this,
+            &ToolPane::onPencilSelected);
 
     this->ui->eraserButton->setIcon(QIcon(":/icons/eraser.png"));
     this->ui->eraserButton->setIconSize(ICON_SIZE);
 
-    connect(this->ui->eraserButton, &QPushButton::clicked,
-            this, &ToolPane::onEraserSelected);
+    connect(this->ui->eraserButton, &QPushButton::clicked, this,
+            &ToolPane::onEraserSelected);
 
     this->ui->fillButton->setIcon(QIcon(":/icons/fillbucket.png"));
     this->ui->fillButton->setIconSize(ICON_SIZE);
 
-    connect(this->ui->fillButton, &QPushButton::clicked,
-            this, &ToolPane::onFillSelected);
+    connect(this->ui->fillButton, &QPushButton::clicked, this,
+            &ToolPane::onFillSelected);
 
-    connect(this->ui->redSlider, &QAbstractSlider::valueChanged,
-            project, &Project::onRedChanged);
+    connect(this->ui->redSlider, &QAbstractSlider::valueChanged, project,
+            &Project::onRedChanged);
 
-    connect(this->ui->greenSlider, &QAbstractSlider::valueChanged,
-            project, &Project::onGreenChanged);
+    connect(this->ui->greenSlider, &QAbstractSlider::valueChanged, project,
+            &Project::onGreenChanged);
 
-    connect(this->ui->blueSlider, &QAbstractSlider::valueChanged,
-            project, &Project::onBlueChanged);
+    connect(this->ui->blueSlider, &QAbstractSlider::valueChanged, project,
+            &Project::onBlueChanged);
 
-    connect(this->ui->opacitySlider, &QAbstractSlider::valueChanged,
-            project, &Project::onAlphaChanged);
+    connect(this->ui->opacitySlider, &QAbstractSlider::valueChanged, project,
+            &Project::onAlphaChanged);
 
-    connect(project, &Project::sendColor,
-            this, &ToolPane::receivedColor);
+    connect(project, &Project::sendColor, this, &ToolPane::receivedColor);
 }
 
-ToolPane::~ToolPane()
-{
-    delete ui;
+ToolPane::~ToolPane() {
+    delete this->ui;
 }
 
-void ToolPane::onPencilSelected()
-{
+void ToolPane::onPencilSelected() {
     emit this->toolSelected(new Pencil());
 }
 
-void ToolPane::onEraserSelected()
-{
+void ToolPane::onEraserSelected() {
     emit this->toolSelected(new Eraser());
 }
 
-void ToolPane::onFillSelected()
-{
+void ToolPane::onFillSelected() {
     emit this->toolSelected(new FillBucket());
 }
 
-void ToolPane::onToolSelected(Tool *tool)
-{
+void ToolPane::onToolSelected(Tool *tool) {
     this->ui->pencilButton->setDisabled(false);
     this->ui->eraserButton->setDisabled(false);
     this->ui->fillButton->setDisabled(false);
@@ -102,10 +91,10 @@ void ToolPane::onToolSelected(Tool *tool)
     }
 }
 
-void ToolPane::receivedColor(QColor color)
-{
-    QString styleSheet = "background-color: rgba(" + QString::number(color.red())
-            + "," + QString::number(color.green()) + "," + QString::number(color.blue())
-            + "," + QString::number(color.alpha()) + ")";
+void ToolPane::receivedColor(QColor color) {
+    QString styleSheet =
+        "background-color: rgba(" + QString::number(color.red()) + "," +
+        QString::number(color.green()) + "," + QString::number(color.blue()) +
+        "," + QString::number(color.alpha()) + ")";
     this->ui->colorPreview->setStyleSheet(styleSheet);
 }

@@ -8,23 +8,22 @@
 
 #include <QWidget>
 
-#include "toolpane.h"
-#include "previewpane.h"
 #include "canvaspane.h"
 #include "frameselectionpane.h"
+#include "previewpane.h"
 #include "project.h"
-
+#include "toolpane.h"
 
 namespace Ui {
 class ProjectView;
 }
 
-/// The ProjectView represents the view of a project Sprite Editor program. ProjectView must always be in a QTabWidget.
-class ProjectView : public QWidget
-{
+/// The ProjectView represents the view of a project Sprite Editor program.
+/// ProjectView must always be in a QTabWidget.
+class ProjectView : public QWidget {
     Q_OBJECT
 
-public:
+  public:
     ///
     /// @brief Construct a new ProjectView, taking *ownership* over `project`.
     /// @param project - The model for the Sprite Editor.
@@ -43,23 +42,24 @@ public:
     ///
     Project *getProject();
 
-signals:
+  signals:
     ///
-    /// @brief Emit when tab title of this view's QTabWidget needs to be updated.
-    /// @param sender - The sender of this signal. In this case, sender is always
-    /// an instance of ProjectView.
+    /// @brief Emit when tab title of this view's QTabWidget needs to be
+    /// updated.
+    /// @param sender - The sender of this signal. In this case, sender is
+    /// always an instance of ProjectView.
     /// @param newTitle - The new title of the tab.
     ///
-    void wantsTabTitleUpdate(QWidget* sender, const QString& newTitle);
+    void wantsTabTitleUpdate(QWidget *sender, const QString &newTitle);
 
-private slots:
+  private slots:
     ///
     /// @brief Update the tab name when the model name has changed.
     /// @param name - The new name.
     ///
     void handleModelNameChange(const QString &name);
 
-private:
+  private:
     ///
     /// @brief Embeds a widget in a container.
     /// @param container - The container.
