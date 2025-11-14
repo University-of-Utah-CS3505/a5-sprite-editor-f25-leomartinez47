@@ -199,7 +199,9 @@ void Project::exportFile(const QString &path) {
         this->sprite->writeToGif(path);
     } else { // assumed to be .png
         // TODO: handle errors
-        this->getCurrentFrame().save(path, "PNG");
+        if(!this->getCurrentFrame().save(path, "PNG")){
+            //throw?
+        }
     }
 }
 
