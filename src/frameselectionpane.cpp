@@ -28,31 +28,77 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     list->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     list->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-    // Buttons -> code // TODO: have buttons emit signals instead and connect signals to project slots in mainWindow (more in commit msg)
-    connect(ui->AddFrame, &QPushButton::clicked, this, &FrameSelectionPane::buttonAdd);
-    connect(ui->DeleteFrame, &QPushButton::clicked, this, &FrameSelectionPane::buttonDelete);
-    connect(ui->listWidget, &QListWidget::currentRowChanged, project, &Project::onCurrentFrameChanged);
+    // Buttons -> code
+    connect(
+        ui->AddFrame,
+        &QPushButton::clicked,
+        this,
+        &FrameSelectionPane::buttonAdd);
+
+    connect(
+        ui->DeleteFrame,
+        &QPushButton::clicked,
+        this,
+        &FrameSelectionPane::buttonDelete);
+
+    connect(
+        ui->listWidget,
+        &QListWidget::currentRowChanged,
+        project,
+        &Project::onCurrentFrameChanged);
 
     // Pane -> Project
-    connect(this, &FrameSelectionPane::frameAdded, project, &Project::onFrameAdded);
-    connect(this, &FrameSelectionPane::frameDeleted, project, &Project::onFrameRemoved);
-    connect(this, &FrameSelectionPane::requestInitialImages, project, &Project::sendInitialImages);
+    connect(
+        this,
+        &FrameSelectionPane::frameAdded,
+        project,
+        &Project::onFrameAdded);
+
+    connect(
+        this,
+        &FrameSelectionPane::frameDeleted,
+        project,
+        &Project::onFrameRemoved);
+
+    connect(
+        this,
+        &FrameSelectionPane::requestInitialImages,
+        project,
+        &Project::sendInitialImages);
 
     // Project -> Pane
-    connect(project, &Project::frameAdded, this, &FrameSelectionPane::addFrame);
-    connect(project, &Project::frameRemoved, this, &FrameSelectionPane::deleteFrame);
-    connect(project, &Project::frameSelectionChanged, this, [this, project](int index) {
-        if (lastSelectedIndex >= 0 && lastSelectedIndex <= project->frameCount() - 1) {
-            this->onUpdate(lastSelectedIndex, project->frameAt(lastSelectedIndex));
-        }
-        this->onUpdate(index, project->frameAt(index));
-        ui->listWidget->setCurrentRow(index);
-        this->lastSelectedIndex = index;
-        ui->currentFrame->setText(QString::number(index));
-        qDebug() << "lsi" << lastSelectedIndex;
-        qDebug() << "ind" << index;
-    });
-    connect(project, &Project::initialFrames, this, &FrameSelectionPane::setupQList);
+    connect(
+        project,
+        &Project::frameAdded,
+        this,
+        &FrameSelectionPane::addFrame);
+
+    connect(
+        project,
+        &Project::frameRemoved,
+        this,
+        &FrameSelectionPane::deleteFrame);
+
+    connect(
+        project,
+        &Project::frameSelectionChanged,
+        this,
+        [this, project](int index) {
+            // If the index we are coming from is not the first or last object, update that frame. This makes the frames show the updates made when clicking off
+            if (lastSelectedIndex >= 0 && lastSelectedIndex <= project->frameCount() - 1) {
+                this->onUpdate(lastSelectedIndex, project->frameAt(lastSelectedIndex));
+            }
+            this->onUpdate(index, project->frameAt(index));
+            ui->listWidget->setCurrentRow(index);
+            this->lastSelectedIndex = index;
+            ui->currentFrame->setText(QString::number(index));
+        });
+
+    connect(
+        project,
+        &Project::initialFrames,
+        this,
+        &FrameSelectionPane::setupQList);
 
     emit this->requestInitialImages();
 }
