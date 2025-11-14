@@ -25,8 +25,8 @@ FrameSelectionPane::FrameSelectionPane(Project *project, QWidget *parent)
     list->setMovement(QListView::Static);
     list->setWrapping(false);
     list->setResizeMode(QListView::Adjust);
-    list->setIconSize(QSize(95, 95));
-    list ->setGridSize(QSize(105, 105));
+    list->setIconSize(QSize(123, 123));
+    list ->setGridSize(QSize(128, 128));
 
     list->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     list->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
