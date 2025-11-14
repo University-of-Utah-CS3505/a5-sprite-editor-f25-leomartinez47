@@ -1,5 +1,27 @@
+/*
+    Contributors: Natalie Bonilla, Grant Handy, Sean Ho, Kailee Kim, Leo Martinez,
+    and Bryce Wiley.
+    Date: 11/13/2025
+*/
+
 #include "project.h"
 #include "sprite.h"
+
+QJsonArray colorToJson(QColor color) {
+    QJsonArray rgb;
+    rgb.push_back(color.red());
+    rgb.push_back(color.green());
+    rgb.push_back(color.blue());
+    return rgb;
+}
+
+QColor colorFromJson(QJsonArray rgb) {
+    return QColor(
+        rgb.takeAt(0).toInteger(),
+        rgb.takeAt(0).toInteger(),
+        rgb.takeAt(0).toInteger()
+    );
+}
 
 Project::Project(QSize dimensions, QObject *parent)
     : QObject{parent}
@@ -8,9 +30,7 @@ Project::Project(QSize dimensions, QObject *parent)
     this->currentFrame = 0;
     this->path = nullptr;
     this->currentTool = new Pencil();
-
-    this->currentColor = QColor(0, 0, 0);
-
+    this->currentColor = Qt::black;
 }
 
 Project::Project(const QString &path, QObject *parent)
@@ -25,21 +45,14 @@ Project::Project(const QString &path, QObject *parent)
 
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
     if(!json.contains("sprite") || !json.contains("currentFrame") || !json.contains("currentTool")
-        || !json.contains("currentColor")){
+        || !json.contains("currentColor")) {
         throw std::invalid_argument("Project information could not be retrieved.");
     }
 
     this->sprite = new Sprite(json.value("sprite").toObject());
     this->currentFrame = json.value("currentFrame").toInteger();
-
-    currentTool = new Pencil();
-    if(json.value("currentTool").toString() == "Eraser"){
-        currentTool = new Eraser();
-    }
-
-    QJsonArray rgb = json.value("currentColor").toArray();
-    this->currentColor = QColor(rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger(), rgb.takeAt(0).toInteger());
-
+    this->currentTool = toolFromString(json.value("currentTool").toString());
+    this->currentColor = colorFromJson(json.value("currentColor").toArray());
 }
 
 Project::~Project()
@@ -70,6 +83,11 @@ QImage &Project::getCurrentFrame() const
 const QImage &Project::frameAt(int index) const
 {
     return this->sprite->getFrame(index);
+}  
+  
+Sprite *Project::getSprite() const
+{
+    return this->sprite;
 }
 
 Tool &Project::getCurrentTool() const
@@ -84,9 +102,28 @@ void Project::onToolChanged(Tool *tool)
     }
 }
 
-void Project::onColorChanged(QColor color)
+void Project::onRedChanged(int red)
 {
-    this->currentColor = color;
+    this->currentColor.setRed(red);
+    emit this->sendColor(currentColor);
+}
+
+void Project::onGreenChanged(int green)
+{
+    this->currentColor.setGreen(green);
+    emit this->sendColor(currentColor);
+}
+
+void Project::onBlueChanged(int blue)
+{
+    this->currentColor.setBlue(blue);
+    emit this->sendColor(currentColor);
+}
+
+void Project::onAlphaChanged(int alpha)
+{
+    this->currentColor.setAlpha(alpha);
+    emit this->sendColor(currentColor);
 }
 
 void Project::onPixelClicked(QPoint point)
@@ -103,7 +140,6 @@ void Project::onCurrentFrameChanged(int index)
     this->currentFrame = index;
     emit this->frameSelectionChanged(index);
     emit this->frameChanged(this->getCurrentFrame());
-
 }
 
 void Project::onFrameAdded(int index)
@@ -145,6 +181,10 @@ void Project::onFrameRemoved(int index)
 
 }
 
+void Project::onFrameRateSet(int frameRate) {
+    this->sprite->setFrameRate(frameRate);
+}
+
 void Project::save(std::function<QString()> requestPath) {
     if (!this->path) {
         QString userPath = requestPath();
@@ -175,19 +215,24 @@ void Project::save(std::function<QString()> requestPath) {
     saveFile.close();
 }
 
+void Project::exportFile(const QString &path) {
+    if (path.endsWith("gif")) {
+        this->sprite->writeToGif(path);
+    } else { // assumed to be .png
+        // TODO: handle errors
+        if(!this->getCurrentFrame().save(path, "PNG")){
+            //throw?
+        }
+    }
+}
+
 QJsonObject Project::toJson()
 {
-    // TODO: add anything else?
-    QJsonArray rgb;
-    rgb.push_back(this->currentColor.red());
-    rgb.push_back(this->currentColor.green());
-    rgb.push_back(this->currentColor.blue());
-
     return QJsonObject({
         { "sprite", this->sprite->toJson() },
         { "currentFrame", this->currentFrame },
         { "currentTool", this->currentTool->toString() },
-        { "currentColor", rgb }
+        { "currentColor", colorToJson(this->currentColor) }
     });
 }
 

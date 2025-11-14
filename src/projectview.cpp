@@ -1,3 +1,8 @@
+/*
+    Contributors: Grant Handy
+    Date: 11/13/2025
+*/
+
 #include "projectview.h"
 #include "ui_projectview.h"
 
@@ -14,14 +19,10 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
     connect(this->project, &Project::nameChanged,
             this, &ProjectView::handleModelNameChange);
 
-    this->toolPane = new ToolPane();
-    this->toolPane->focusATool(project->getCurrentTool().toString());
+    this->toolPane = new ToolPane(project);
     this->embedWidget(this->ui->toolboxFrame, this->toolPane);
-    connect(this->toolPane, &ToolPane::toolSelected,
-            this->project, &Project::onToolChanged);
 
-    // TODO : once it's set up, pass in currentFrameRate from project
-    this->previewPane = new PreviewPane();
+    this->previewPane = new PreviewPane(project);
     this->embedWidget(this->ui->previewFrame, this->previewPane);
 
     this->canvasPane = new CanvasPane(project);
@@ -29,8 +30,6 @@ ProjectView::ProjectView(Project *project, QWidget *parent)
 
     this->frameSelectionPane = new FrameSelectionPane(project);
     this->embedWidget(this->ui->frameSelectorFrame, this->frameSelectionPane);
-
-    // TODO : once colorPickerPane is implemented, pass in currentColor from project
 }
 
 ProjectView::~ProjectView()

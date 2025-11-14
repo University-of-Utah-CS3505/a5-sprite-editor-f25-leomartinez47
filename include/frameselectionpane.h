@@ -86,4 +86,4 @@ private:
     void adjustSize();
 };
 
-#endif // FRAMESELECTIONPANE_H
+#endif
