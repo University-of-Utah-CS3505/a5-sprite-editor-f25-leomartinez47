@@ -6,26 +6,24 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 #include <QErrorMessage>
+#include <QMainWindow>
 #include <QString>
 
 #include "project.h"
 
-
 /// MainWindow displays the currently opened Sprite projects in tabs.
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
-public:
+  public:
     ///
     /// @brief Construct the MainWindow.
     /// @param parent
     ///
     MainWindow(QWidget *parent = nullptr);
 
-private slots:
+  private slots:
     ///
     /// @brief Open a tab and display a SpriteSetup.
     ///
@@ -42,7 +40,8 @@ private slots:
     void onHandleCloseCurrentTabRequested();
 
     ///
-    /// @brief Close a tab. If there are no other tabs, then this window will close.
+    /// @brief Close a tab. If there are no other tabs, then this window will
+    /// close.
     /// @param index - The index of the tab being closed.
     ///
     void onHandleCloseTabRequested(int index);
@@ -58,21 +57,21 @@ private slots:
     void onOpenRequested();
 
     ///
-    /// @brief Open a new Sprite project in the current tab based on specifications
-    /// inputed by the user in a SpriteSetup.
+    /// @brief Open a new Sprite project in the current tab based on
+    /// specifications inputed by the user in a SpriteSetup.
     /// @param senderView - Use to find the SpriteSetup tab.
     /// @param project - The new project.
     ///
-    void onFinishSetup(QWidget* senderView, Project *project);
+    void onFinishSetup(QWidget *senderView, Project *project);
 
     ///
     /// @brief Update the name of a tab.
     /// @param senderView - Use to find the desired tab.
     /// @param newTitle - The new name of the tab.
     ///
-    void onUpdateTabViewTitle(QWidget* senderView, const QString& newTitle);
+    void onUpdateTabViewTitle(QWidget *senderView, const QString &newTitle);
 
-private:
+  private:
     ///
     /// @brief Set up the events associated with the menu bar.
     ///

@@ -6,22 +6,21 @@
 #ifndef FRAMESELECTIONPANE_H
 #define FRAMESELECTIONPANE_H
 
-#include <QWidget>
 #include <QListWidget>
+#include <QWidget>
 
 #include "project.h"
-
 
 namespace Ui {
 class FrameSelectionPane;
 }
 
-/// The FrameSelectionPane is where the user can add, delete, and select Sprite frames.
-class FrameSelectionPane : public QWidget
-{
+/// The FrameSelectionPane is where the user can add, delete, and select Sprite
+/// frames.
+class FrameSelectionPane : public QWidget {
     Q_OBJECT
 
-public:
+  public:
     ///
     /// @brief Constructs a FrameSelectionPane from a Project.
     /// @param project - The Project associated with this pane.
@@ -34,7 +33,7 @@ public:
     ///
     ~FrameSelectionPane();
 
-signals:
+  signals:
     ///
     /// @brief Emitted when the add frame button is pressed.
     /// @param index - the index to insert the frame to.
@@ -48,18 +47,21 @@ signals:
     void frameDeleted(int index);
 
     ///
-    /// @brief Emitted when pane is constructed to retrieve the initial list of frames.
+    /// @brief Emitted when pane is constructed to retrieve the initial list of
+    /// frames.
     ///
     void requestInitialImages();
 
-public slots:
+  public slots:
     ///
-    /// @brief Acts as a middleman between the add button and the project slot that handles adding.
+    /// @brief Acts as a middleman between the add button and the project slot
+    /// that handles adding.
     ///
     void onAddButtonPressed();
 
     ///
-    /// @brief Middleman between delete button and the project slot to delete the actual item.
+    /// @brief Middleman between delete button and the project slot to delete
+    /// the actual item.
     ///
     void onDeleteButtonPressed();
 
@@ -76,18 +78,20 @@ public slots:
     void onFrameDeleted(int index);
 
     ///
-    /// @brief Refreshes the icon of the list widget item at the specified index.
+    /// @brief Refreshes the icon of the list widget item at the specified
+    /// index.
     /// @param index - the index of the selected frame.
     ///
     void onFrameUpdate(int index, const QImage &img);
 
     ///
-    /// @brief Called by the project whenever the initial list is created to reflect changes to the list.
+    /// @brief Called by the project whenever the initial list is created to
+    /// reflect changes to the list.
     /// @param frames - The vector of QImages to display.
     ///
     void onStartingList(std::vector<QImage> frames);
 
-private:
+  private:
     Ui::FrameSelectionPane *ui;
 
     ///

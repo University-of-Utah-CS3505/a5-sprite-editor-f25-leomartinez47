@@ -4,26 +4,23 @@
 */
 
 #include "spritesetup.h"
+
 #include "ui_spritesetup.h"
 
-
 SpriteSetup::SpriteSetup(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::SpriteSetup)
-{
+    : QWidget(parent), ui(new Ui::SpriteSetup) {
     ui->setupUi(this);
 
-    connect(this->ui->createButton, &QPushButton::clicked,
-            this, &SpriteSetup::onCreateProject);
+    connect(this->ui->createButton, &QPushButton::clicked, this,
+            &SpriteSetup::onCreateProject);
 }
 
-SpriteSetup::~SpriteSetup()
-{
-    delete ui;
+SpriteSetup::~SpriteSetup() {
+    delete this->ui;
 }
 
-void SpriteSetup::onCreateProject()
-{
-    QSize size = QSize(this->ui->widthSpinBox->value(), this->ui->heightSpinBox->value());
+void SpriteSetup::onCreateProject() {
+    QSize size = QSize(this->ui->widthSpinBox->value(),
+                       this->ui->heightSpinBox->value());
     emit this->setupFinished(this, new Project(size));
 }

@@ -6,18 +6,16 @@
 #ifndef CANVASPANE_H
 #define CANVASPANE_H
 
-#include <QWidget>
 #include <QLabel>
+#include <QWidget>
 
 #include "project.h"
 
-
 /// The CanvasPane is the canvas widget that the user draws the Sprite on.
-class CanvasPane : public QWidget
-{
+class CanvasPane : public QWidget {
     Q_OBJECT
 
-public:
+  public:
     ///
     /// @brief Construct a CanvasPane and draws the current frame of the Sprite.
     /// @param project - a pointer to the project model.
@@ -25,7 +23,7 @@ public:
     ///
     explicit CanvasPane(Project *project, QWidget *parent = nullptr);
 
-signals:
+  signals:
     ///
     /// @brief Signal to the project model that the user has clicked on the
     /// canvas at a specific coordinate point.
@@ -34,14 +32,14 @@ signals:
     ///
     void pixelClicked(QPoint coordinates);
 
-public slots:
+  public slots:
     ///
     /// @brief Recieve a QImage frame from the project model and display it.
     /// @param frame - A QImage to be displayed in the CanvasPane QWidget.
     ///
     void onFrameChanged(const QImage &frame);
 
-protected:
+  protected:
     ///
     /// @brief Sets isDrawing to true and emit pointClicked.
     /// @param event - A mouse press QMouseEvent.
@@ -65,9 +63,9 @@ protected:
     /// and adds a png-style grid background to represent the transparent
     /// parts of the frame.
     ///
-    void paintEvent(QPaintEvent*) override;
+    void paintEvent(QPaintEvent *) override;
 
-private:
+  private:
     /// If the user is currently drawing on the frame,
     /// that is they have clicked on the canvas and are yet to release.
     bool isDrawing;

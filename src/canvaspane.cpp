@@ -3,64 +3,52 @@
     Date: 11/13/2025
 */
 
-#include <QPixmap>
+#include "canvaspane.h"
+
 #include <QMouseEvent>
 #include <QPainter>
+#include <QPixmap>
 
-#include "canvaspane.h"
 #include "project.h"
 
-
-CanvasPane::CanvasPane(Project *project, QWidget *parent)
-    : QWidget(parent)
-{
+CanvasPane::CanvasPane(Project *project, QWidget *parent) : QWidget(parent) {
     // Draw the initial frame
-    onFrameChanged(project->getCurrentFrame());
+    this->onFrameChanged(project->getCurrentFrame());
 
     this->setMinimumSize(200, 200);
 
-    connect(project,
-            &Project::frameChanged,
-            this,
-            &CanvasPane::onFrameChanged);
+    this->connect(project, &Project::frameChanged, this, &CanvasPane::onFrameChanged);
 
-    connect(this,
-            &CanvasPane::pixelClicked,
-            project,
-            &Project::onPixelClicked);
+    this->connect(this, &CanvasPane::pixelClicked, project, &Project::onPixelClicked);
 }
 
-void CanvasPane::onFrameChanged(const QImage &frame)
-{
-    currentFrame = &frame;
-    update();
+void CanvasPane::onFrameChanged(const QImage &frame) {
+    this->currentFrame = &frame;
+    this->update();
 }
 
-void CanvasPane::mousePressEvent(QMouseEvent *event)
-{
+void CanvasPane::mousePressEvent(QMouseEvent *event) {
     if (event->button() != Qt::LeftButton) {
         return;
     }
 
-    isDrawing = true;
+    this->isDrawing = true;
 
     QPoint spritePos = mapToSprite(event->pos());
     if (spritePos.x() >= 0) {
-        emit pixelClicked(spritePos);
+        emit this->pixelClicked(spritePos);
     }
 
-    update();
+    this->update();
 }
 
-void CanvasPane::mouseReleaseEvent(QMouseEvent *event)
-{
+void CanvasPane::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton && this->isDrawing) {
         this->isDrawing = false;
     }
 }
 
-void CanvasPane::mouseMoveEvent(QMouseEvent *event)
-{
+void CanvasPane::mouseMoveEvent(QMouseEvent *event) {
     if (!rect().contains(event->pos()) || !this->isDrawing) {
         return;
     }
@@ -73,13 +61,12 @@ void CanvasPane::mouseMoveEvent(QMouseEvent *event)
     update();
 }
 
-void CanvasPane::paintEvent(QPaintEvent*)
-{
+void CanvasPane::paintEvent(QPaintEvent *) {
     if (this->currentFrame->isNull()) {
         return;
     }
 
-    QPainter painter(this);
+    QPainter painter = QPainter(this);
     QPixmap framePixmap = QPixmap::fromImage(*this->currentFrame);
 
     // Calculate the scale factor and offsets for the current frame
@@ -92,7 +79,6 @@ void CanvasPane::paintEvent(QPaintEvent*)
     this->xOffset = (this->width() - scaledWidth) / 2;
     this->yOffset = (this->height() - scaledHeight) / 2;
 
-
     // Transparency grid
     QRect gridArea(this->xOffset, this->yOffset, scaledWidth, scaledHeight);
 
@@ -104,8 +90,11 @@ void CanvasPane::paintEvent(QPaintEvent*)
     for (int y = gridArea.top(); y < gridArea.bottom(); y += gridSize) {
         for (int x = gridArea.left(); x < gridArea.right(); x += gridSize) {
             QColor squareColor = (((x - this->xOffset) / gridSize +
-                                   (y - this->yOffset) / gridSize)
-                                      % 2 == 0) ? lightGray : darkGray;
+                                   (y - this->yOffset) / gridSize) %
+                                      2 ==
+                                  0)
+                                     ? lightGray
+                                     : darkGray;
 
             int drawWidth = qMin(gridSize, gridArea.right() - x);
             int drawHeight = qMin(gridSize, gridArea.bottom() - y);
@@ -117,14 +106,12 @@ void CanvasPane::paintEvent(QPaintEvent*)
 
     // Draw the scaled frame
     painter.drawPixmap(this->xOffset, this->yOffset,
-                       framePixmap.scaled(
-                           scaledWidth, scaledHeight,
-                           Qt::KeepAspectRatio, Qt::FastTransformation));
-
+                       framePixmap.scaled(scaledWidth, scaledHeight,
+                                          Qt::KeepAspectRatio,
+                                          Qt::FastTransformation));
 }
 
-QPoint CanvasPane::mapToSprite(const QPoint &widgetPos) const
-{
+QPoint CanvasPane::mapToSprite(const QPoint &widgetPos) const {
     if (this->currentFrame->isNull()) {
         // Invalid QPoint if no frame
         return QPoint(-1, -1);
@@ -133,8 +120,8 @@ QPoint CanvasPane::mapToSprite(const QPoint &widgetPos) const
     int imgX = (widgetPos.x() - this->xOffset) / this->scaleFactor;
     int imgY = (widgetPos.y() - this->yOffset) / this->scaleFactor;
 
-    if (imgX < 0 || imgX >= this->currentFrame->width() ||
-        imgY < 0 || imgY >= this->currentFrame->height()) {
+    if (imgX < 0 || imgX >= this->currentFrame->width() || imgY < 0 ||
+        imgY >= this->currentFrame->height()) {
         // Invalid QPoint if out of bounds
         return QPoint(-1, -1);
     }
